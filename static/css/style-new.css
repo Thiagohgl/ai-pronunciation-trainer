@@ -1,0 +1,471 @@
+body {
+	background: #f2f2f2;
+}
+
+
+.expanded {
+	margin: auto;
+	align-content: center;
+}
+
+p {
+	overflow: auto;
+}
+
+h1 {
+	margin-left: 2%;
+}
+
+a.disabled {
+	pointer-events: none;
+	color: #ccc;
+	background-color: #ccc;
+}
+
+
+.horizontal-flexbox {
+	height: 100%;
+	width: 100%;
+	display: flex;
+}
+
+/* ############## Next button ##### */
+.button-next {
+	border-radius: 4px;
+	display: block;
+	border: none;
+	color: #FFFFFF;
+	text-align: left;
+	font-size: 3em;
+	box-sizing: border-box;
+	position: absolute;
+	top: 0;
+	left: 0%;
+	right: 2%;
+	bottom: 2%;
+	background-color: #58636d;
+	width: 10em;
+
+	transition: all 0.5s;
+	cursor: pointer;
+}
+
+.button-next:hover {
+	background-color: #6383a1 !important;
+}
+
+.button-next span {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+}
+
+/*
+.button-next span:after {
+	content: '\00bb';
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	right: -20px;
+	transition: 0.5s;
+
+}*/
+
+.button-next:hover span {
+	padding-right: 25px;
+}
+
+.button-next:hover span:after {
+	opacity: 1;
+	right: 0;
+}
+
+
+
+/* ############# Texts ##############  */
+
+.main-text {
+	font-size: 2.5em;
+	max-width: 87%;
+}
+
+.ipa-text {
+	font-size: 1.8em;
+	max-width: 87%;
+}
+
+.ipa-text-small {
+	font-size: 1.5em;
+}
+
+.accuracy-text {
+	/*font-family: "Dank Mono", ui-monospace, monospace;*/
+	background: linear-gradient(to right,
+			rgb(54, 56, 80),
+			rgb(21, 60, 87));
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-align: center;
+	font-size: 2em;
+	margin-left: 2%;
+	left: 0%;
+}
+
+.main-text-div {
+	overflow-y: auto;
+	position: absolute;
+	left: 10%;
+	right: 10%;
+	top: 2%;
+	bottom: 2%;
+}
+
+/* ############# Card Container ##############  */
+.container {
+	display: block;
+	position: absolute;
+	left: 2%;
+	top: 18%;
+	transform: translate(-0%, -0%);
+	height: 59%;
+	width: 96%;
+	max-width: 96%;
+	background: #ffff;
+	overflow: hidden;
+	border-radius: 20px;
+	box-shadow: 0 0 20px 8px #d0d0d0;
+}
+
+.container-small {
+	position: fixed;
+	left: 68%;
+	top: 79%;
+	transform: translate(-0%, -0%);
+	height: 7%;
+	width: 30%;
+	background: #ffff;
+	overflow: hidden;
+	border-radius: 20px;
+	box-shadow: 0 0 20px 8px #d0d0d0;
+}
+
+/* ############# Icon Button ##############  */
+
+.round-button {
+	box-sizing: border-box;
+	display: block;
+	width: 3em;
+	/* 80px */
+	height: 3em;
+	left: 0%;
+	padding-top: 14px;
+	padding-left: 0px;
+	line-height: 0px;
+	border: 6px solid #fff;
+	border-radius: 50%;
+	color: #f5f5f5;
+	text-align: center;
+	text-decoration: none;
+	background-color: #467387;
+	font-size: 20px;
+	font-weight: bold;
+	transition: all 0.3s ease;
+}
+
+.round-button:hover {
+	background-color: rgba(0, 0, 0, 0.8);
+	box-shadow: 0px 0px 10px #61a4d4;
+	text-shadow: 0px 0px 10px #61a4d4;
+}
+
+.icon-text {
+	font-size: 1em !important;
+	text-align: center;
+}
+
+.round-button-mic {
+	box-sizing: border-box;
+	display: block;
+	width: 4.5em;
+	/* 80px */
+	height: 4.5em;
+	padding-top: 14px;
+	padding-left: -2.25em;
+	line-height: 0px;
+	border: 6px solid #fff;
+	border-radius: 50%;
+	color: #f5f5f5;
+	text-align: center;
+	text-decoration: none;
+	background-color: #49d67d;
+	/*#467387;*/
+	font-size: 20px;
+	font-weight: bold;
+	transition: all 0.3s ease;
+}
+
+.round-button-mic:hover {
+	background-color: #477c5b;
+	/*rgba(0,0,0,0.8);*/
+	box-shadow: 0px 0px 10px #61a4d4;
+	text-shadow: 0px 0px 10px #61a4d4;
+}
+
+.icon-text-mic {
+	font-size: 2.5em !important;
+}
+
+.icon-text-home {
+	font-size: 3.5em !important;
+}
+
+.mic-button-div {
+	position: fixed;
+	left: 50%;
+	top: 80%
+}
+
+/*############### Drop-down ############# */
+.dropbtn {
+	background-color: #ffffff;
+	color: rgb(50, 71, 165);
+	padding: 0px;
+	font-size: 16px;
+	border: none;
+}
+
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #ffffff;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+.dropdown-content a:hover {
+	background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+.dropdown:hover .dropbtn {
+	background-color: #3e8e41;
+}
+
+/* ############# Arrow ############## position: relative;  position: absolute;*/
+.load-more {
+	position: fixed;
+	cursor: pointer;
+	width: 100px;
+	height: 100px;
+	margin: -0px 0 0 -0px;
+	min-width: 10px;
+	min-height: 10px;
+
+	left: 90%;
+	top: 45%;
+	border-width: 2px;
+	border-style: solid;
+	border-color: transparent;
+	border-bottom-color: #000;
+	border-right-color: #000;
+	border-radius: 0 0 5px 0;
+
+	transform: translate(-0%, -0%) rotate(-45deg);
+}
+
+/* ######## Radio Buttons ############## */
+.radio {
+	background: #f6f7fd;
+	padding: 4px;
+	border-radius: 3px;
+	box-shadow: inset 0 0 0 3px rgba(35, 33, 45, 0.3),
+		0 0 0 3px rgba(185, 185, 185, 0.3);
+	position: relative;
+}
+
+.radio input {
+	width: max-content;
+	height: 100%;
+	appearance: none;
+	outline: none;
+	cursor: pointer;
+	border-radius: 2px;
+	padding: 4px 8px;
+	background: #454857;
+	color: #bdbdbdbd;
+	font-size: 0.8em;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		"Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	transition: all 100ms linear;
+}
+
+.radio input:checked {
+	background-image: linear-gradient(180deg, #4e70ce, #5197d8);
+	color: #fff;
+	box-shadow: 0 1px 1px #0000002e;
+	text-shadow: 0 1px 0px #79485f7a;
+}
+
+.radio input:before {
+	content: attr(label);
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+}
+
+/* ############ Links and credits ####*/
+
+.link-icon-div {
+	position: fixed;
+	left: 90.0%;
+	top: 0.0%;
+	vertical-align: middle;
+	align-content: flex-start;
+}
+
+.credits-icon-div {
+	position: fixed;
+	left: 90.5%;
+	top: 95%;
+	font-size: x-small;
+}
+
+.svg-icon {
+	padding-top: 1em;
+	width: 50px;
+	height: 50px;
+
+}
+
+
+/* ######## Switch ############## */
+@media only screen and (max-width: 1200px) {
+	.round-button {
+		box-sizing: border-box;
+		display: block;
+		width: 2em;
+		/* 80px */
+		height: 2em;
+		left: -2.5%;
+		padding-top: 0.3em;
+		padding-left: 0px;
+		line-height: 0px;
+		border: 6px solid #fff;
+		border-radius: 50%;
+		color: #f5f5f5;
+		text-align: center;
+		text-decoration: none;
+		background-color: #467387;
+		font-size: 1em;
+		font-weight: bold;
+		transition: all 0.3s ease;
+	}
+
+	.container {
+		display: block;
+		position: absolute;
+		left: 2%;
+		top: 22%;
+		transform: translate(-0%, -0%);
+		height: 55%;
+		width: 96%;
+		max-width: 96%;
+		background: #ffff;
+		overflow: hidden;
+		border-radius: 20px;
+		box-shadow: 0 0 20px 8px #d0d0d0;
+	}
+
+	.icon-text {
+		font-size: 0.8em !important;
+		text-align: center;
+	}
+
+	.ipa-text-small {
+		font-size: small;
+	}
+
+	.round-button-mic {
+		box-sizing: border-box;
+		display: block;
+		width: 3.5em;
+		/* 80px */
+		height: 3.5em;
+		padding-top: 0.4em;
+		left: 40%;
+		line-height: 0px;
+		border: 6px solid #fff;
+		border-radius: 50%;
+		color: #f5f5f5;
+		text-align: center;
+		text-decoration: none;
+		background-color: #49d67d;
+		font-size: 20px;
+		font-weight: bold;
+		transition: all 0.3s ease;
+	}
+
+	.mic-button-div {
+		position: fixed;
+		left: 40%;
+		top: 80%
+	}
+
+	.link-icon-div {
+		position: fixed;
+		left: 89.0%;
+		top: 0.0%;
+		vertical-align: middle;
+	}
+
+	.credits-icon-div {
+		position: fixed;
+		left: 78.5%;
+		top: 95%;
+		font-size: x-small;
+	}
+
+	.svg-icon {
+		padding-top: 1em;
+		width: 40px;
+		height: 40px;
+	}
+
+
+	.icon-text-home {
+		font-size: 2.5em !important;
+	}
+
+	.accuracy-text {
+		font-family: "Dank Mono", ui-monospace, monospace;
+		background: linear-gradient(to right,
+				rgb(54, 56, 80),
+				rgb(21, 60, 87));
+		left: -5.0%;
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		text-align: center;
+		font-size: 0.8em;
+	}
+
+}
