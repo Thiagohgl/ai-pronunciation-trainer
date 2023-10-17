@@ -76,7 +76,7 @@ def get_best_path_from_distance_matrix(word_distance_matrix):
             mapped_indices.append(
                 (solver.Value(estimated_words_order[word_idx])))
 
-        return np.array(mapped_indices, dtype=np.int)
+        return np.array(mapped_indices, dtype=int)
     except:
         return []
 
@@ -88,7 +88,7 @@ def get_resulting_string(mapped_indices: np.array, words_estimated: list, words_
     number_of_real_words = len(words_real)
     for word_idx in range(number_of_real_words):
         position_of_real_word_indices = np.where(
-            mapped_indices == word_idx)[0].astype(np.int)
+            mapped_indices == word_idx)[0].astype(int)
 
         if len(position_of_real_word_indices) == 0:
             mapped_words.append(WORD_NOT_FOUND_TOKEN)
