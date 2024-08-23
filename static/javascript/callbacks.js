@@ -29,6 +29,17 @@ let startTime, endTime;
 // API related variables 
 let AILanguage = "de"; // Standard is German
 
+// Checking if language is saved in local storage
+let savedLanguage = localStorage.getItem("ai-language");
+if (savedLanguage) {
+    AILanguage = savedLanguage;
+}
+
+// Displaying initial language name
+window.addEventListener('load', () => {
+    document.getElementById("languageBox").innerHTML = AILanguage === 'de' ? "German" : "English";
+})
+
 
 let STScoreAPIKey = 'rll5QsTiv83nti99BW6uCmvs9BDVxSB39SVFceYb'; // Public Key. If, for some reason, you would like a private one, send-me a message and we can discuss some possibilities
 let apiMainPathSample = '';// 'http://127.0.0.1:3001';// 'https://a3hj0l2j2m.execute-api.eu-central-1.amazonaws.com/Prod';
@@ -57,7 +68,7 @@ const unblockUI = () => {
 
     if (currentSoundRecorded)
         document.getElementById("playRecordedAudio").classList.remove('disabled');
-
+   
 
 };
 
@@ -133,7 +144,12 @@ const cacheSoundFiles = async () => {
 
 const getNextSample = async () => {
 
-
+    // Chrome don't allow enabled automaticly
+    // the sound context. The user should perfom
+    // an interaction to start it.
+    ctx.resume().then(() => {
+        console.debug("Sound countext resumed");
+    })
 
     blockUI();
 
@@ -249,6 +265,7 @@ const recordSample = async () => {
 const changeLanguage = (language, generateNewSample = false) => {
     voices = synth.getVoices();
     AILanguage = language;
+    localStorage.setItem("ai-language", AILanguage);  // To be retrieved on the next session
     languageFound = false;
     let languageIdentifier, languageName;
     switch (language) {
