@@ -4,12 +4,12 @@ import numpy as np
 from string import punctuation
 from dtwalign import dtw_from_distance_matrix
 import time
-
+from typing import List, Tuple
 offset_blank = 1
 TIME_THRESHOLD_MAPPING = 5.0
 
 
-def get_word_distance_matrix(words_estimated: list, words_real: list) -> np.array:
+def get_word_distance_matrix(words_estimated: list, words_real: list) -> np.ndarray:
     number_of_real_words = len(words_real)
     number_of_estimated_words = len(words_estimated)
 
@@ -76,19 +76,19 @@ def get_best_path_from_distance_matrix(word_distance_matrix):
             mapped_indices.append(
                 (solver.Value(estimated_words_order[word_idx])))
 
-        return np.array(mapped_indices, dtype=np.int)
+        return np.array(mapped_indices, dtype=int)
     except:
         return []
 
 
-def get_resulting_string(mapped_indices: np.array, words_estimated: list, words_real: list) -> list:
+def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, words_real: list) -> Tuple[List,List]:
     mapped_words = []
     mapped_words_indices = []
     WORD_NOT_FOUND_TOKEN = '-'
     number_of_real_words = len(words_real)
     for word_idx in range(number_of_real_words):
         position_of_real_word_indices = np.where(
-            mapped_indices == word_idx)[0].astype(np.int)
+            mapped_indices == word_idx)[0].astype(int)
 
         if len(position_of_real_word_indices) == 0:
             mapped_words.append(WORD_NOT_FOUND_TOKEN)
