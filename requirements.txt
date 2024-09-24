@@ -1,9 +1,9 @@
 -f https://download.pytorch.org/whl/torch_stable.html
-torch==1.10.1
-torchaudio==0.10.1
-soundfile==0.10.3.post1
+torch 
+torchaudio 
+soundfile 
 omegaconf
-epitran==1.15
+epitran 
 audioread
 requests
 dtwalign
@@ -15,4 +15,5 @@ pickle-mixin
 sqlalchemy
 transformers
 sentencepiece
-ortools==9.2.9972
+transformers
+ortools 
