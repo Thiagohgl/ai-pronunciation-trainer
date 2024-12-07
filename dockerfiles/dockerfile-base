@@ -1,0 +1,72 @@
+# Include global ARGs at the dockerfile top
+ARG ARCH="x86_64"
+ARG WORKDIR_ROOT="/var/task"
+
+
+FROM python:3.12-bookworm AS builder_global
+
+ARG ARCH
+ARG WORKDIR_ROOT
+ARG POETRY_NO_INTERACTION
+ARG POETRY_VIRTUALENVS_IN_PROJECT
+ARG POETRY_VIRTUALENVS_CREATE
+ARG POETRY_CACHE_DIR
+ARG ZLIB1G="http://ftp.it.debian.org/debian/pool/main/z/zlib/zlib1g_1.3.dfsg-3+b1_amd64.deb"
+ENV PYTHONPATH="${WORKDIR_ROOT}:${PYTHONPATH}:/usr/local/lib/python3/dist-packages"
+ENV MPLCONFIGDIR=/tmp/matplotlib
+ARG USER="999"
+
+
+RUN echo "ARCH: $ARCH, ARG POETRY_CACHE_DIR: ${POETRY_CACHE_DIR}, ENV PYTHONPATH: $PYTHONPATH, USER: $USER ..."
+# RUN groupadd -g 999 python && useradd -r -u 999 -g python python
+
+# Set working directory to function root directory
+WORKDIR ${WORKDIR_ROOT}
+COPY --chown=python:python requirements.txt ${WORKDIR_ROOT}/
+
+# avoid segment-geospatial exception caused by missing libGL.so.1 library
+RUN echo "BUILDER: check libz.s* before start" && ls -l /usr/lib/${ARCH}-linux-gnu/libz.so*
+RUN apt update && apt install -y curl ffmpeg libgl1 python3-pip && apt clean
+COPY --chown=python:python ./dockerfiles/apt_preferences /etc/apt/preferences
+COPY --chown=python:python ./dockerfiles/debian.sources /etc/apt/sources.list.d/debian.sources
+RUN apt update && apt install -t trixie zlib1g -y && apt clean
+RUN echo "BUILDER: check libz.s* after install from trixie" && ls -l /usr/lib/${ARCH}-linux-gnu/libz.so*
+
+RUN ls -l /etc/apt/sources* /etc/apt/preferences*
+
+# poetry installation path is NOT within ${WORKDIR_ROOT}: not needed for runtime docker image
+RUN python3 -m venv ${WORKDIR_ROOT}/.venv
+ENV PATH="${WORKDIR_ROOT}/.venv/bin:$PATH"
+RUN . ${WORKDIR_ROOT}/.venv/bin/activate && python -m pip install -r ${WORKDIR_ROOT}/requirements.txt
+
+# USER 999
+
+
+FROM python:3.12-slim-bookworm AS runtime
+
+RUN groupadd -g 999 python && useradd -r -u 999 -g python python
+
+ARG ARCH
+ARG WORKDIR_ROOT
+ENV PYTHONPATH="${WORKDIR_ROOT}:${WORKDIR_ROOT}/.venv:${PYTHONPATH}:/usr/local/lib/python3/dist-packages"
+ENV MPLCONFIGDIR=/tmp/matplotlib
+
+ENV VIRTUAL_ENV=${WORKDIR_ROOT}/.venv PATH="${WORKDIR_ROOT}/.venv/bin:$PATH"
+
+RUN apt update && apt install -y ffmpeg && apt clean
+RUN echo "COPY --chown=python:python --from=builder_global /usr/lib/${ARCH}-linux-gnu/libGL.so* /usr/lib/${ARCH}-linux-gnu/"
+RUN echo "RUNTIME: check libz.s* before upgrade" && ls -l /usr/lib/${ARCH}-linux-gnu/libz.so*
+RUN echo "RUNTIME: remove libz.s* to force upgrade" && rm /usr/lib/${ARCH}-linux-gnu/libz.so*
+COPY --chown=python:python --from=builder_global /usr/lib/${ARCH}-linux-gnu/libz.so* /usr/lib/${ARCH}-linux-gnu/
+COPY --chown=python:python --from=builder_global /lib/${ARCH}-linux-gnu/libexpat.so* /lib/${ARCH}-linux-gnu/
+RUN echo "RUNTIME: check libz.s* after copy" && ls -l /usr/lib/${ARCH}-linux-gnu/libz.so*
+COPY --chown=python:python --from=builder_global ${WORKDIR_ROOT}/.venv ${WORKDIR_ROOT}/.venv
+RUN echo "check ffmpeg files..."
+RUN ls -ld /usr/share/ffmpeg || echo "ffpeg folder not found!"
+RUN ls -l /usr/bin/ff* || echo "ffpeg bin not found!"
+RUN ls -l /usr/share/ffmpeg || echo "ffpeg folder share not found!"
+RUN . ${WORKDIR_ROOT}/.venv && which python && pip list
+
+RUN echo "new WORKDIR_ROOT after hidden venv COPY --chown=python:python => ${WORKDIR_ROOT}"
+RUN ls -ld ${WORKDIR_ROOT}/
+RUN ls -lA ${WORKDIR_ROOT}/

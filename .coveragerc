@@ -1,0 +1,9 @@
+[run]
+source = samgis
+omit = ./venv/*,__version__.py,*tests*,*apps.py,*manage.py,*__init__.py,*migrations*,*asgi*,*wsgi*,*admin.py,*urls.py,./tests/*,aip_trainer/lambdas/js.py
+
+[report]
+omit = ./venv/*,*tests*,*apps.py,*manage.py,*__init__.py,*migrations*,*asgi*,*wsgi*,*admin.py,*urls.py,./tests/*,aip_trainer/lambdas/js.py
+
+exclude_lines =
+     if __name__ == .__main__.:

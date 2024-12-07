@@ -1,0 +1,2910 @@
+[job-id] 42d72ce0f8364995805eab0cbf12ef20
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Sub 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category - 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 0c70bc25c6f5474ebeef6fd100345320
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Sub 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category - 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] 067c1f3c5e3c488e9623b9f7d171fcc3
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Mul 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category * 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 62ab747b251e4f73980d46bf39628dba
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Mul 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category * 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] 9b155e5135b14e9a9f82dd0dfa85b8ca
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Div 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category / 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] aecd35a569304ee8807139ef4f5d5d56
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Div 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category / 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] 776ac7b217964579a5a6d8025ab7753a
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_FloorDiv 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category // 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] e5425d9138fc47a5a120eef3904b7080
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_FloorDiv 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category // 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] 5a885f0f71ed4d70a14a325048af4c9d
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Mod 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category % 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 22e0519206ce4fd3a3347d00b516c5b6
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Mod 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category % 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] adbe52d593ca421c96d8ba85b0c964b5
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Pow 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category ** 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 21f1466f13104764a69ac64504e13ed4
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_Pow 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category ** 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] edfc7256b13f44108a889e2d89493216
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_RShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category >> 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 5f7bb5bd66eb49fd90fdc1c0d1118496
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_RShift 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category >> 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] be98faeb063d4968b2d1229ad3df6306
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_LShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category << 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 184a75231bc04694a4932305c2f320b8
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_LShift 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category << 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] c2db45f70b4648d1ad5d200a03275424
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_BitOr 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category | 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] fb1d26a0859a4989988cb1aa24051e1b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_BitOr 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category | 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] ad15c41967e44b5d9760f7316e351aea
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_BitAnd 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category & 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] c212f9a5bfec4b6a8a9452d37e729657
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_BitAnd 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category & 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] 86b1976de4bf4ad29b35e70019867a04
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_BitXor 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category ^ 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 9a2c715f0ce44f56b87aeb8ae6fded4e
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Add_BitXor 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category ^ 1
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] 0c03a98197034562b517bfabf127ed0e
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_Add 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) + 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 9b3d6f260bba4002aaecdbb4cbbf9d8e
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_Mul 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) * 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] debaf34c846442289e88214fd9c32228
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_Div 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) / 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 68d1e16ac9c7450f80108b31c9a7ad04
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_FloorDiv 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) // 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 3e9191f1d4f341ed9007de87cd4f6e72
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_Mod 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) % 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] dd56237e8ec2430cbfa537422f25ac2b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_Pow 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) ** 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 27b7c25f160945f5907ac256b7d8f3c4
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_RShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) >> 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] efaf8b1605ae4a5fb7464b33855b0cf3
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_LShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) << 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] deba1e73baf74fa8bdfdec923fce98b9
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_BitOr 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) | 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 9646dbf864964845b1f7dbeec80f5204
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_BitAnd 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) & 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 7568d3cd808843f085ae352af039a91f
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Sub_BitXor 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) ^ 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] ad48cfbb4f624b8099ebc3d59559c15e
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Add 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER + "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] aaee2177c39748ee9bdfd1ee542b7fbe
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Add 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" + "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 4bc8950803e745b2975a4b2377cd0192
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Add 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder + 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] b6dc287cf0d445ada542e02ae88f1e11
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Add 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder + f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] 3aaf481d92ac49f78a6e9068aae0392a
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Add 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder + f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] a829bffa61594cc785ca6f4ce6f8f56d
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Sub 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER - "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 33a2f11aabf44a82bb10ea106ea856ba
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Sub 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" - "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 38a1a88f851c42e8b0cb37e89ecd14ae
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Sub 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder - 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] 5fe365272a6b41bdbc0089a13b0f9956
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Sub 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder - f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] e3489e8fbc9f4561a05fb273068d9b96
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Sub 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder - f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] f2f230fadc7a4479bfc2920a73b00611
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mul 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER * "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 590cef885e0646f6ac28d36d48e40a62
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mul 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" * "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 40a2045540bf4d2491021922bee63d84
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mul 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder * 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] 37aef5474ca74d3b989094a35abee871
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mul 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder * f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] 3ed969ae897a43fc97cd4111c2770fe9
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mul 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder * f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 152588adb8ea4f058bab82b6eedfec5b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_FloorDiv 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER // "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 45d67c1db8b649e38bbafcc169a3ba6b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_FloorDiv 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" // "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] b0082880649e45b085ab9e5a7b84eeae
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_FloorDiv 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder // 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] a19fc62b899449abaa1d92561e21c31e
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_FloorDiv 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder // f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] aa138ca5b7f14464b616f436d13e0fca
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_FloorDiv 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder // f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 4037cacacd194beb97e8a09ccbd49e88
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mod 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER % "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 60696ce3075f42259c189341958a9284
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mod 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" % "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 9e28aa15c2dc46cbab05b53838432261
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mod 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder % 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] 828d7ee1da184a8eb5fbde9d83de6560
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mod 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder % f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] 4b9247acc105467f8699b9f1c04501a4
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Mod 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder % f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 00b685040d434282b74ba77069699986
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Pow 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER ** "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 22985b9d81594f3f85ade440143b6bcc
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Pow 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" ** "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 48efcb020c0f4c86a242854429e60d94
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Pow 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder ** 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] 7c34437632804b60bac4f722839f76e9
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Pow 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder ** f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] 8e5c19663ac341458cb906dd8bf0fd8b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_Pow 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder ** f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 499bc42b2fb34d0f86dd769239f2ef69
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_RShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER >> "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 38637845fe6d4845b19ead86d43f8e5a
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_RShift 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" >> "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] dfe005ff4ab443d0932b6d708a25729c
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_RShift 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder >> 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] f1dd8f82ae2b4909bf5eeb146e3e8fb4
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_RShift 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder >> f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] abe38f1eea3d482bae481c5c866a8e3f
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_RShift 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder >> f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 5b734d0c32a24cb0af94773baf47845a
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_LShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER << "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 5bc3db142150436c972bb52a59e29976
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_LShift 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" << "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 1557ab3b29cf4fa2a64e3e817cf48ac0
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_LShift 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder << 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] a70e3d4f246a465887a3eb310a160c5d
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_LShift 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder << f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] 6e6c7695c8604a0ca264da0a2caea685
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_LShift 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder << f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 8fb0bf4c125c47fc8d7ba1115e8447fd
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitOr 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER | "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 1da28de1e690455499f99a7ac3ccbbee
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitOr 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" | "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] c519f851143547e981422490b9ce16f8
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitOr 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder | 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] ab5ca751ab8442fcb1db50c7650f33c0
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitOr 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder | f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] 17a59406e83d42a8b63a9f2df903eff0
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitOr 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder | f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 4c70103f1d7b40fcb5b1a20d3c23dfb4
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitAnd 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER & "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] e979603744ae4b7896ec06b8c22e536b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitAnd 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" & "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 0d310b56d64545d58e348b94e98ed0a6
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitAnd 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder & 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] eaeb7f5de1674e6ca58f08e75410e080
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitAnd 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder & f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] e2579b965aa2478d96db0ae152ba2d7b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitAnd 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder & f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] b268e601d3994c83a7d18ffea9f9369a
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitXor 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER ^ "aip_trainer" / "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] abd95f5cb22d46f38ff630bcfb2d370f
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitXor 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -37,7 +37,7 @@
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+-sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
++sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" ^ "lambdas")
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+============
+[job-id] 934c5fa4b62a4989986a6da13bc51676
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitXor 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -41,7 +41,7 @@
+ lambda_database = {}
+ lambda_ipa_converter = {}
+ 
+-with open(sample_folder / 'data_de_en_with_categories.json', 'r') as src:
++with open(sample_folder ^ 'data_de_en_with_categories.json', 'r') as src:
+     df = pd.read_json(src)
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+============
+[job-id] 51a85394b9e1439fa3c6339e5a06633b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitXor 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -97,7 +97,7 @@
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
++    with open(custom_folder ^ f'{custom_pickle_filename_no_ext}.pickle', 'rb') as handle:
+         df2 = pickle.load(handle)
+         pass
+         df2["de_category"] = df2["de_sentence"].apply(getSentenceCategory)
+============
+[job-id] ba8d61ff35e3465f970a25eeb10f1820
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_Div_BitXor 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -105,7 +105,7 @@
+         df2["en_category"] = df2["en_sentence"].apply(getSentenceCategory)
+         print("en_category added")
+     df_json = df2.to_json()
+-    with open(custom_folder / f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
++    with open(custom_folder ^ f'{custom_pickle_filename_no_ext}.json', 'w') as dst:
+         dst.write(df_json)
+         print("data_de_en_with_categories.json written")
+ 
+============
+[job-id] 0d6c05e129f146439c33384613bc1c04
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_Add 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path + str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] e85055f86a464f56af2504f94980e9ae
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_Sub 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path - str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] e8bf20672c3a490684fa027539ec9406
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_Mul 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path * str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] 4cd4492feee44b788737f0e210d927e8
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_Div 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path / str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] 91c211d3d8e44567b1b29565ecb6eadd
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_FloorDiv 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path // str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] f891f5d3e1954f4883668d002ff60982
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_Mod 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path % str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] e5445cbe1f354d42a7dab9a14420d05a
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_Pow 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path ** str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] 7f8b748b570e4b69a76598714342ca65
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_RShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path >> str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] 2bdcd55ec8284ec3ae897c7685b21cca
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_LShift 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path << str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] 6191a766f80c442dae738bb2aed3d563
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_BitAnd 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path & str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] 17b123568f2b49b1a14de8341a612b17
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceBinaryOperator_BitOr_BitXor 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -93,7 +93,7 @@
+ 
+ 
+ def get_pickle2json_dataframe(
+-        custom_pickle_filename_no_ext: Path | str = 'data_de_en_2',
++        custom_pickle_filename_no_ext: Path ^ str = 'data_de_en_2',
+         custom_folder: Path = sample_folder
+     ):
+     custom_folder = Path(custom_folder)
+============
+[job-id] 753f462e1a1d44eb9b151393c9b41371
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Eq_NotEq 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -24,7 +24,7 @@
+         return self.number_of_samples
+ 
+     def get_category_from_df_by_language(self, language: str, category_value:int):
+-        selector = self.table_dataframe[f"{language}_category"] == category_value
++        selector = self.table_dataframe[f"{language}_category"] != category_value
+         df_by_category = self.table_dataframe[selector]
+         return df_by_category
+ 
+============
+[job-id] 3172a5713d114ec6aa3ebfbba6551fa4
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Eq_Lt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -24,7 +24,7 @@
+         return self.number_of_samples
+ 
+     def get_category_from_df_by_language(self, language: str, category_value:int):
+-        selector = self.table_dataframe[f"{language}_category"] == category_value
++        selector = self.table_dataframe[f"{language}_category"] < category_value
+         df_by_category = self.table_dataframe[selector]
+         return df_by_category
+ 
+============
+[job-id] 01e8086266b74c6da0a3322753bce2d6
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Eq_LtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -24,7 +24,7 @@
+         return self.number_of_samples
+ 
+     def get_category_from_df_by_language(self, language: str, category_value:int):
+-        selector = self.table_dataframe[f"{language}_category"] == category_value
++        selector = self.table_dataframe[f"{language}_category"] <= category_value
+         df_by_category = self.table_dataframe[selector]
+         return df_by_category
+ 
+============
+[job-id] da2fe52cb64b42a9aea91833bbb7903f
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Eq_Gt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -24,7 +24,7 @@
+         return self.number_of_samples
+ 
+     def get_category_from_df_by_language(self, language: str, category_value:int):
+-        selector = self.table_dataframe[f"{language}_category"] == category_value
++        selector = self.table_dataframe[f"{language}_category"] > category_value
+         df_by_category = self.table_dataframe[selector]
+         return df_by_category
+ 
+============
+[job-id] f7606ea03ff549dea22526d6f73f1cb4
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Eq_GtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -24,7 +24,7 @@
+         return self.number_of_samples
+ 
+     def get_category_from_df_by_language(self, language: str, category_value:int):
+-        selector = self.table_dataframe[f"{language}_category"] == category_value
++        selector = self.table_dataframe[f"{language}_category"] >= category_value
+         df_by_category = self.table_dataframe[selector]
+         return df_by_category
+ 
+============
+[job-id] 4b1944d75ac24f7f821ce922f87262f7
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Eq_Is 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -24,7 +24,7 @@
+         return self.number_of_samples
+ 
+     def get_category_from_df_by_language(self, language: str, category_value:int):
+-        selector = self.table_dataframe[f"{language}_category"] == category_value
++        selector = self.table_dataframe[f"{language}_category"] is category_value
+         df_by_category = self.table_dataframe[selector]
+         return df_by_category
+ 
+============
+[job-id] 13f2154a95e24bc390cfb0b67c7e97f2
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Eq_IsNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -24,7 +24,7 @@
+         return self.number_of_samples
+ 
+     def get_category_from_df_by_language(self, language: str, category_value:int):
+-        selector = self.table_dataframe[f"{language}_category"] == category_value
++        selector = self.table_dataframe[f"{language}_category"] is not category_value
+         df_by_category = self.table_dataframe[selector]
+         return df_by_category
+ 
+============
+[job-id] 17840597b61346e0a7a7331519787579
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_Eq 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if self.language == '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] 0edb7e44f3dd441cb3ca69326ad415d9
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_Eq 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if category_value ==0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] ddbcf9db93ab4ac99f7269230054ff54
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_Lt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if self.language < '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] f3721f190f8b4588be76d3e70669bd32
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_Lt 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if category_value <0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] b2b299fe70144237a28e1b40b244e8d5
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_LtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if self.language <= '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] 7bd195570790456e92d24ea3bc112b7e
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_LtE 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if category_value <=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] c8f8f3e58d944c9b8b1de7928a274d0b
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_Gt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if self.language > '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] 0a3c1c8a9fa04850a187c0cd718488c8
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_Gt 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if category_value >0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] d03e0002e8394137add68c1c68c8e912
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_GtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if self.language >= '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] f451a32294024e519b6bf0e037b5e68d
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_GtE 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if category_value >=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] 811f3d214c524c5fbec812dfdeee55ff
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_Is 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if self.language is '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] 28701b11bcdb4bd8bafc826ee2845239
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_NotEq_IsNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if self.language is not '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] 65c9d7a87b044dd8be5e36a4189e49be
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Lt_Eq 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] == number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 24312eafeaf0474b92216eee7ae463ce
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Lt_NotEq 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] != number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] a61da68b90f34afeb56900b464faa43f
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Lt_LtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] <= number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] af78f916bc3d43f8b74bef3d851ff44c
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Lt_Gt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] > number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] eda4ea12ba7b41558a466e7d3bdc1173
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Lt_GtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] >= number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] e3257b03506d4e90bf2757d27773c545
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Lt_Is 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] is number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] e90c12d9c18e4f1da57dd9eedffc735c
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_Lt_IsNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] is not number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] d4dc5c0866cb47feba95de5acc6381e6
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_LtE_Eq 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words == categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 672b1bcd9d5b48fe86ba6f8376c01477
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_LtE_NotEq 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words != categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 3032435c6873480b8105ec01fe015239
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_LtE_Lt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words < categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 0fb03755d56b49fead3b04ef72ade6f0
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_LtE_Gt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words > categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 6938aee4612944eba029ff82e8a0fc65
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_LtE_GtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words >= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] b2cf5ae34d8846098574c1f0f0f68ecc
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_LtE_Is 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words is categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 0daa16aaaa804365a54ca6c2ab8c24b3
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceComparisonOperator_LtE_IsNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words is not categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] e79b262c01ae4a57abb2b2fc209a64d7
+aip_trainer/lambdas/lambdaGetSample.py core/AddNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -16,7 +16,7 @@
+         self.language = language
+ 
+     def __getitem__(self, idx):
+-        language_sentence = f"{self.language}_sentence" if self.language != '-' else 'sentence'
++        language_sentence = f"{self.language}_sentence" if not self.language != '-' else 'sentence'
+         language_series = self.table_dataframe[language_sentence]
+         return [language_series.iloc[idx]]
+ 
+============
+[job-id] 3602ad1624764e06b1446f423311f5da
+aip_trainer/lambdas/lambdaGetSample.py core/AddNot 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if not category_value !=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] cd66bdbe8d984a039cf1bb23641bcf3f
+aip_trainer/lambdas/lambdaGetSample.py core/AddNot 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -64,7 +64,7 @@
+         current_transcript = str(body["transcript"])
+     except KeyError:
+         current_transcript = get_random_selection(language, category, is_gradio_output=False)
+-    current_transcript = current_transcript if isinstance(current_transcript, str) else current_transcript[0]
++    current_transcript = current_transcript if not isinstance(current_transcript, str) else current_transcript[0]
+     current_ipa = lambda_ipa_converter[language].convertToPhonem(current_transcript)
+ 
+     app_logger.info(f"real_transcript='{current_transcript}', ipa_transcript='{current_ipa}'.")
+============
+[job-id] d0e4a470f069484bb31bad71de68ef07
+aip_trainer/lambdas/lambdaGetSample.py core/AddNot 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -81,7 +81,7 @@
+     lambda_df_lang = lambda_database[language]
+     current_transcript = lambda_df_lang.get_random_sample_from_df(language, category)
+     app_logger.info(f"category={category}, language={language}, current_transcript={current_transcript}.")
+-    return current_transcript[0] if is_gradio_output else current_transcript
++    return current_transcript[0] if not is_gradio_output else current_transcript
+ 
+ 
+ def getSentenceCategory(sentence) -> int:
+============
+[job-id] 818212f2ec34492f94e8dbcff2481b2e
+aip_trainer/lambdas/lambdaGetSample.py core/AddNot 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if not categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+ 
+============
+[job-id] 9693b76a4ee943149d059b7601623e72
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceTrueWithFalse 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -77,7 +77,7 @@
+     return json.dumps(result)
+ 
+ 
+-def get_random_selection(language: str, category: int, is_gradio_output=True):
++def get_random_selection(language: str, category: int, is_gradio_output=False):
+     lambda_df_lang = lambda_database[language]
+     current_transcript = lambda_df_lang.get_random_sample_from_df(language, category)
+     app_logger.info(f"category={category}, language={language}, current_transcript={current_transcript}.")
+============
+[job-id] 62c07e8977a34948a2f8aa14b253bc8a
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceFalseWithTrue 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -46,7 +46,7 @@
+ 
+ lambda_database['de'] = TextDataset(df, 'de')
+ lambda_database['en'] = TextDataset(df, 'en')
+-lambda_translate_new_sample = False
++lambda_translate_new_sample = True
+ lambda_ipa_converter['de'] = RuleBasedModels.EpitranPhonemConverter(
+     epitran.Epitran('deu-Latn'))
+ lambda_ipa_converter['en'] = RuleBasedModels.EngPhonemConverter()
+============
+[job-id] 2ec185737bd64ff6b7f6ec59c7048fd6
+aip_trainer/lambdas/lambdaGetSample.py core/ReplaceFalseWithTrue 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -63,7 +63,7 @@
+     try:
+         current_transcript = str(body["transcript"])
+     except KeyError:
+-        current_transcript = get_random_selection(language, category, is_gradio_output=False)
++        current_transcript = get_random_selection(language, category, is_gradio_output=True)
+     current_transcript = current_transcript if isinstance(current_transcript, str) else current_transcript[0]
+     current_ipa = lambda_ipa_converter[language].convertToPhonem(current_transcript)
+ 
+============
+[job-id] 73f99bd64832450abbd34a142c8022a2
+aip_trainer/lambdas/lambdaGetSample.py core/ExceptionReplacer 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -57,7 +57,7 @@
+ 
+     try:
+         category = int(body['category'])
+-    except KeyError:
++    except CosmicRayTestingException:
+         category = 0
+     language = body['language']
+     try:
+============
+[job-id] 19f2e67432f649cc9fc68c7c21f0ac17
+aip_trainer/lambdas/lambdaGetSample.py core/ExceptionReplacer 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -62,7 +62,7 @@
+     language = body['language']
+     try:
+         current_transcript = str(body["transcript"])
+-    except KeyError:
++    except CosmicRayTestingException:
+         current_transcript = get_random_selection(language, category, is_gradio_output=False)
+     current_transcript = current_transcript if isinstance(current_transcript, str) else current_transcript[0]
+     current_ipa = lambda_ipa_converter[language].convertToPhonem(current_transcript)
+============
+[job-id] 362d4380ee244a3683f0303108854eeb
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -30,7 +30,7 @@
+ 
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+-        choice = self.table_dataframe.sample(n=1)
++        choice = self.table_dataframe.sample(n= 2)
+         if category_value !=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+============
+[job-id] 5ea8998353df4be8a4234a40717f6771
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -30,7 +30,7 @@
+ 
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+-        choice = self.table_dataframe.sample(n=1)
++        choice = self.table_dataframe.sample(n= 0)
+         if category_value !=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+============
+[job-id] 49c64bc946784ccbb93bcb5429c9539b
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if category_value != 1:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] 406f7b63c2a6445eb4a191241d7ef329
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -31,7 +31,7 @@
+     def get_random_sample_from_df(self, language: str, category_value:int):
+         app_logger.info(f"language={language}, category_value={category_value}.")
+         choice = self.table_dataframe.sample(n=1)
+-        if category_value !=0:
++        if category_value != -1:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+         return [choice[f"{language}_sentence"].iloc[0]]
+============
+[job-id] 276c16029b324e398c521a74a6fb273e
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -33,7 +33,7 @@
+         choice = self.table_dataframe.sample(n=1)
+         if category_value !=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+-            choice = df_language_filtered_by_category_and_language.sample(n=1)
++            choice = df_language_filtered_by_category_and_language.sample(n= 2)
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+============
+[job-id] 112c59c2992041688b0d8ed08ef261c3
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 5
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -33,7 +33,7 @@
+         choice = self.table_dataframe.sample(n=1)
+         if category_value !=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+-            choice = df_language_filtered_by_category_and_language.sample(n=1)
++            choice = df_language_filtered_by_category_and_language.sample(n= 0)
+         return [choice[f"{language}_sentence"].iloc[0]]
+ 
+ 
+============
+[job-id] 68e40ba0dd8241c491a8b58953fd3fc9
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 6
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -34,7 +34,7 @@
+         if category_value !=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+-        return [choice[f"{language}_sentence"].iloc[0]]
++        return [choice[f"{language}_sentence"].iloc[ 1]]
+ 
+ 
+ sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
+============
+[job-id] 08d6af953b9f49f18ec93192d8bfece3
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 7
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -34,7 +34,7 @@
+         if category_value !=0:
+             df_language_filtered_by_category_and_language = self.get_category_from_df_by_language(language, category_value)
+             choice = df_language_filtered_by_category_and_language.sample(n=1)
+-        return [choice[f"{language}_sentence"].iloc[0]]
++        return [choice[f"{language}_sentence"].iloc[ -1]]
+ 
+ 
+ sample_folder = Path(PROJECT_ROOT_FOLDER / "aip_trainer" / "lambdas")
+============
+[job-id] 84a17611bc424ac4abd9c190187ba779
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 8
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -58,7 +58,7 @@
+     try:
+         category = int(body['category'])
+     except KeyError:
+-        category = 0
++        category = 1
+     language = body['language']
+     try:
+         current_transcript = str(body["transcript"])
+============
+[job-id] dfddb52528ed42a3988b33783e70139f
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 9
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -58,7 +58,7 @@
+     try:
+         category = int(body['category'])
+     except KeyError:
+-        category = 0
++        category = -1
+     language = body['language']
+     try:
+         current_transcript = str(body["transcript"])
+============
+[job-id] c783f88a777647a981e4cd5a54fc2579
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 10
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -64,7 +64,7 @@
+         current_transcript = str(body["transcript"])
+     except KeyError:
+         current_transcript = get_random_selection(language, category, is_gradio_output=False)
+-    current_transcript = current_transcript if isinstance(current_transcript, str) else current_transcript[0]
++    current_transcript = current_transcript if isinstance(current_transcript, str) else current_transcript[ 1]
+     current_ipa = lambda_ipa_converter[language].convertToPhonem(current_transcript)
+ 
+     app_logger.info(f"real_transcript='{current_transcript}', ipa_transcript='{current_ipa}'.")
+============
+[job-id] a3a844680d254fd4a0f5d75e8abc2870
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 11
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -64,7 +64,7 @@
+         current_transcript = str(body["transcript"])
+     except KeyError:
+         current_transcript = get_random_selection(language, category, is_gradio_output=False)
+-    current_transcript = current_transcript if isinstance(current_transcript, str) else current_transcript[0]
++    current_transcript = current_transcript if isinstance(current_transcript, str) else current_transcript[ -1]
+     current_ipa = lambda_ipa_converter[language].convertToPhonem(current_transcript)
+ 
+     app_logger.info(f"real_transcript='{current_transcript}', ipa_transcript='{current_ipa}'.")
+============
+[job-id] 39d2d950df84448a803210234f9876ef
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 12
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -81,7 +81,7 @@
+     lambda_df_lang = lambda_database[language]
+     current_transcript = lambda_df_lang.get_random_sample_from_df(language, category)
+     app_logger.info(f"category={category}, language={language}, current_transcript={current_transcript}.")
+-    return current_transcript[0] if is_gradio_output else current_transcript
++    return current_transcript[ 1] if is_gradio_output else current_transcript
+ 
+ 
+ def getSentenceCategory(sentence) -> int:
+============
+[job-id] 0e779c6a7141405eb8baf0954c797f83
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 13
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -81,7 +81,7 @@
+     lambda_df_lang = lambda_database[language]
+     current_transcript = lambda_df_lang.get_random_sample_from_df(language, category)
+     app_logger.info(f"category={category}, language={language}, current_transcript={current_transcript}.")
+-    return current_transcript[0] if is_gradio_output else current_transcript
++    return current_transcript[ -1] if is_gradio_output else current_transcript
+ 
+ 
+ def getSentenceCategory(sentence) -> int:
+============
+[job-id] a22aa0fa54e545898774f596854b3eeb
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 14
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [ 1, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] 8adfb17c55974eef807687b830b59675
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 15
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [ -1, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] 0255dc93c95b4564bcf273c51ba5e632
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 16
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [0, 9, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] 7a6a816321104ac4a737e86eafab8a19
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 17
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [0, 7, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] f52f63cceb984975b348dc1830d6178e
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 18
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [0, 8, 21, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] 2e689b3a02c64b779e8bc3643d8752f8
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 19
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [0, 8, 19, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] 4e4196490c4c459ba6df204d5d86170c
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 20
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [0, 8, 20, 100001]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] fc64793709ef4c3eb57c7c37caa8a0e3
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 21
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -86,7 +86,7 @@
+ 
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+-    categories_word_limits = [0, 8, 20, 100000]
++    categories_word_limits = [0, 8, 20, 99999]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+============
+[job-id] 85e38a5cda434a7b880819a5de81fb4e
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 22
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) - 2):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 7db4529ad2714a5eab16fc0cb04370da
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 23
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.SURVIVED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in range(len(categories_word_limits) - 0):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+[job-id] 4db0287cc4b346be9059230740b05f72
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 24
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 2]:
+             return category + 1
+ 
+ 
+============
+[job-id] 01f176487ddd48be874037915fd17502
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 25
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -88,7 +88,7 @@
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+-        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
++        if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 0]:
+             return category + 1
+ 
+ 
+============
+[job-id] 5b16ad9a7b354b46ae6a1d03b63caf0f
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 26
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category + 2
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] db2ea6637c3b4c20909af8b4c3867c87
+aip_trainer/lambdas/lambdaGetSample.py core/NumberReplacer 27
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -89,7 +89,7 @@
+     categories_word_limits = [0, 8, 20, 100000]
+     for category in range(len(categories_word_limits) - 1):
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+-            return category + 1
++            return category + 0
+ 
+ 
+ def get_pickle2json_dataframe(
+============
+[job-id] 37c42149eea1466ba489d91e521ddb25
+aip_trainer/lambdas/lambdaGetSample.py core/ZeroIterationForLoop 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+=== DIFF ===
+--- mutation diff ---
+--- aaip_trainer/lambdas/lambdaGetSample.py
++++ baip_trainer/lambdas/lambdaGetSample.py
+@@ -87,7 +87,7 @@
+ def getSentenceCategory(sentence) -> int:
+     number_of_words = len(sentence.split())
+     categories_word_limits = [0, 8, 20, 100000]
+-    for category in range(len(categories_word_limits) - 1):
++    for category in []:
+         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
+             return category + 1
+ 
+============
+total jobs: 171
+complete: 171 (100.00%)
+surviving mutants: 32 (18.71%)

@@ -1,0 +1,52 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@playwright/test':
+        specifier: ^1.49.0
+        version: 1.49.0
+
+packages:
+
+  '@playwright/test@1.49.0':
+    resolution: {integrity: sha512-DMulbwQURa8rNIQrf94+jPJQ4FmOVdpE5ZppRNvWVjvhC+6sOeo28r8MgIpQRYouXRtt/FCCXU7zn20jnHR4Qw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
+  playwright-core@1.49.0:
+    resolution: {integrity: sha512-R+3KKTQF3npy5GTiKH/T+kdhoJfJojjHESR1YEWhYuEKRVfVaxH3+4+GvXE5xyCngCxhxnykk0Vlah9v8fs3jA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.49.0:
+    resolution: {integrity: sha512-eKpmys0UFDnfNb3vfsf8Vx2LEOtflgRebl0Im2eQQnYMA4Aqd+Zw8bEOB+7ZKvN76901mRnqdsiOGKxzVTbi7A==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+snapshots:
+
+  '@playwright/test@1.49.0':
+    dependencies:
+      playwright: 1.49.0
+
+  fsevents@2.3.2:
+    optional: true
+
+  playwright-core@1.49.0: {}
+
+  playwright@1.49.0:
+    dependencies:
+      playwright-core: 1.49.0
+    optionalDependencies:
+      fsevents: 2.3.2

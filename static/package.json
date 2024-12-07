@@ -1,0 +1,16 @@
+{
+  "name": "ai-pronunciation-trainer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "for x in chromium firefox webkit MobileChrome MobileSafari; do echo '# $x #''; pnpm playwright test --workers 1 --project=$x --retries=3; done"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

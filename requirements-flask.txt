@@ -1,8 +1,9 @@
-asgi-correlation-id
 audioread
 dtwalign
 eng_to_ipa
 epitran==1.25.1
+flask
+flask_cors
 gunicorn
 omegaconf
 ortools==9.11.4210
@@ -13,6 +14,7 @@ requests
 sentencepiece
 silero==0.4.1
 soundfile==0.12.1
+sqlalchemy
 structlog
 torch
 torchaudio

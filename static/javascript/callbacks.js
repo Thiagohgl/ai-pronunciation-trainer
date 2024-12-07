@@ -1,5 +1,3 @@
-
-
 // Audio context initialization
 let mediaRecorder, audioChunks, audioBlob, stream, audioRecorded;
 const ctx = new AudioContext();
@@ -29,8 +27,7 @@ let startTime, endTime;
 // API related variables 
 let AILanguage = "de"; // Standard is German
 
-
-let STScoreAPIKey = 'rll5QsTiv83nti99BW6uCmvs9BDVxSB39SVFceYb'; // Public Key. If, for some reason, you would like a private one, send-me a message and we can discuss some possibilities
+let STScoreAPIKey = '';
 let apiMainPathSample = '';// 'http://127.0.0.1:3001';// 'https://a3hj0l2j2m.execute-api.eu-central-1.amazonaws.com/Prod';
 let apiMainPathSTS = '';// 'https://wrg7ayuv7i.execute-api.eu-central-1.amazonaws.com/Prod';
 
@@ -57,8 +54,6 @@ const unblockUI = () => {
 
     if (currentSoundRecorded)
         document.getElementById("playRecordedAudio").classList.remove('disabled');
-
-
 };
 
 const blockUI = () => {
@@ -79,24 +74,24 @@ const UIError = () => {
     document.getElementById("buttonNext").onclick = () => getNextSample(); //If error, user can only try to get a new sample
     document.getElementById("buttonNext").style["background-color"] = '#58636d';
 
-    document.getElementById("recorded_ipa_script").innerHTML = "";
-    document.getElementById("single_word_ipa_pair").innerHTML = "Error";
-    document.getElementById("ipa_script").innerHTML = "Error"
+    document.getElementById("recorded_ipa_script").innerText = "";
+    document.getElementById("single_word_ipa_pair").innerText = "Error";
+    document.getElementById("ipa_script").innerText = "Error"
 
-    document.getElementById("main_title").innerHTML = 'Server Error';
-    document.getElementById("original_script").innerHTML = 'Server error. Either the daily quota of the server is over or there was some internal error. You can try to generate a new sample in a few seconds. If the error persist, try comming back tomorrow or download the local version from Github :)';
+    document.getElementById("main_title").innerText = 'Server Error';
+    document.getElementById("original_script").innerText = 'Server error. Either the daily quota of the server is over or there was some internal error. You can try to generate a new sample in a few seconds. If the error persist, try comming back tomorrow or download the local version from Github :)';
 };
 
 const UINotSupported = () => {
     unblockUI();
 
-    document.getElementById("main_title").innerHTML = "Browser unsupported";
+    document.getElementById("main_title").innerText = "Browser unsupported";
 
 }
 
 const UIRecordingError = () => {
     unblockUI();
-    document.getElementById("main_title").innerHTML = "Recording error, please try again or restart page.";
+    document.getElementById("main_title").innerText = "Recording error, please try again or restart page.";
     startMediaDevice();
 }
 
@@ -105,26 +100,26 @@ const UIRecordingError = () => {
 //################### Application state functions #######################
 function updateScore(currentPronunciationScore) {
 
-    if (isNaN(currentPronunciationScore))
+    if (Number.isNaN(currentPronunciationScore))
         return;
     currentScore += currentPronunciationScore * scoreMultiplier;
     currentScore = Math.round(currentScore);
 }
 
 const cacheSoundFiles = async () => {
-    await fetch(soundsPath + '/ASR_good.wav').then(data => data.arrayBuffer()).
+    await fetch(soundsPath + '/ASR_good.wav').then(dataSound1 => dataSound1.arrayBuffer()).
         then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
         then(decodeAudioData => {
             soundFileGood = decodeAudioData;
         });
 
-    await fetch(soundsPath + '/ASR_okay.wav').then(data => data.arrayBuffer()).
+    await fetch(soundsPath + '/ASR_okay.wav').then(dataSound2 => dataSound2.arrayBuffer()).
         then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
         then(decodeAudioData => {
             soundFileOkay = decodeAudioData;
         });
 
-    await fetch(soundsPath + '/ASR_bad.wav').then(data => data.arrayBuffer()).
+    await fetch(soundsPath + '/ASR_bad.wav').then(dataSound3 => dataSound3.arrayBuffer()).
         then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
         then(decodeAudioData => {
             soundFileBad = decodeAudioData;
@@ -132,28 +127,7 @@ const cacheSoundFiles = async () => {
 }
 
 const getNextSample = async () => {
-
-
-
-    blockUI();
-
-    if (!serverIsInitialized)
-        await initializeServer();
-
-    if (!serverWorking) {
-        UIError();
-        return;
-    }
-
-    if (soundFileBad == null)
-        cacheSoundFiles();
-
-
-
-    updateScore(parseFloat(document.getElementById("pronunciation_accuracy").innerHTML));
-
-    document.getElementById("main_title").innerHTML = "Processing new sample...";
-
+    await prepareUiForNextSample()
 
     if (document.getElementById('lengthCat1').checked) {
         sample_difficult = 0;
@@ -178,44 +152,59 @@ const getNextSample = async () => {
             body: JSON.stringify({
                 "category": sample_difficult.toString(), "language": AILanguage
             }),
-            headers: { "X-Api-Key": STScoreAPIKey }
-        }).then(res => res.json()).
-            then(data => {
-
-
-
-                let doc = document.getElementById("original_script");
-                currentText = data.real_transcript;
-                doc.innerHTML = currentText;
-
-                currentIpa = data.ipa_transcript
-
-                let doc_ipa = document.getElementById("ipa_script");
-                doc_ipa.innerHTML = "/ " + currentIpa + " /";
-
-                document.getElementById("recorded_ipa_script").innerHTML = ""
-                document.getElementById("pronunciation_accuracy").innerHTML = "";
-                document.getElementById("single_word_ipa_pair").innerHTML = "Reference | Spoken"
-                document.getElementById("section_accuracy").innerHTML = "| Score: " + currentScore.toString() + " - (" + currentSample.toString() + ")";
-                currentSample += 1;
-
-                document.getElementById("main_title").innerHTML = page_title;
-
-                document.getElementById("translated_script").innerHTML = data.transcript_translation;
-
-                currentSoundRecorded = false;
-                unblockUI();
-                document.getElementById("playRecordedAudio").classList.add('disabled');
-
-            })
+        }).then(res => res.json()).then(dataFromNextSample => {
+            // console.debug(`getNextSample:: dataFromNextSample: `, typeof dataFromNextSample, "=>", dataFromNextSample, "#");
+            populateSampleById(dataFromNextSample)
+        })
     }
-    catch
-    {
+    catch {
         UIError();
     }
 
-
 };
+
+const prepareUiForNextSample = async () => {
+    blockUI();
+
+    if (!serverIsInitialized)
+        await initializeServer();
+
+    if (!serverWorking) {
+        UIError();
+        return;
+    }
+
+    if (soundFileBad == null)
+        cacheSoundFiles();
+
+    updateScore(parseFloat(document.getElementById("pronunciation_accuracy").innerText));
+
+    document.getElementById("main_title").innerText = "Processing new sample...";
+}
+
+const populateSampleById = (dataById) => {
+    // console.debug(`populateSampleById:: dataById: `, typeof dataById, "=>", dataById, "#");
+    let doc = document.getElementById("original_script");
+    currentText = dataById.real_transcript;
+    doc.innerText = currentText;
+    currentIpa = dataById.ipa_transcript
+
+    let doc_ipa = document.getElementById("ipa_script");
+    doc_ipa.innerText = `/ ${String(currentIpa)} /`
+
+    document.getElementById("recorded_ipa_script").innerText = ""
+    document.getElementById("pronunciation_accuracy").innerText = "";
+    document.getElementById("single_word_ipa_pair").innerText = "Reference | Spoken"
+    document.getElementById("section_accuracy").innerText = `| Score: ${currentScore.toString()} - sample n: ${currentSample.toString()}`;
+    currentSample += 1;
+
+    document.getElementById("main_title").innerText = page_title;
+    document.getElementById("translated_script").innerText = dataById.transcript_translation;
+
+    currentSoundRecorded = false;
+    unblockUI();
+    document.getElementById("playRecordedAudio").classList.add('disabled');
+}
 
 const updateRecordingState = async () => {
     if (isRecording) {
@@ -229,15 +218,15 @@ const updateRecordingState = async () => {
 }
 
 const generateWordModal = (word_idx) => {
-
-    document.getElementById("single_word_ipa_pair").innerHTML = wrapWordForPlayingLink(real_transcripts_ipa[word_idx], word_idx, false, "black")
-        + ' | ' + wrapWordForPlayingLink(matched_transcripts_ipa[word_idx], word_idx, true, accuracy_colors[parseInt(wordCategories[word_idx])])
+    innerText0 = wrapWordForPlayingLink(real_transcripts_ipa[word_idx], word_idx, false, "black")
+    innerText1 = wrapWordForPlayingLink(matched_transcripts_ipa[word_idx], word_idx, true, accuracy_colors[parseInt(wordCategories[word_idx])])
+    document.getElementById("single_word_ipa_pair").innerText = `${innerText0} | ${innerText1}`
 }
 
 const recordSample = async () => {
 
-    document.getElementById("main_title").innerHTML = "Recording... click again when done speaking";
-    document.getElementById("recordIcon").innerHTML = 'pause_presentation';
+    document.getElementById("main_title").innerText = "Recording... click again when done speaking";
+    document.getElementById("recordIcon").innerText = 'pause_presentation';
     blockUI();
     document.getElementById("recordAudio").classList.remove('disabled');
     audioChunks = [];
@@ -251,17 +240,16 @@ const changeLanguage = (language, generateNewSample = false) => {
     AILanguage = language;
     languageFound = false;
     let languageIdentifier, languageName;
+    document.getElementById("field-filter-samples").value = "";
     switch (language) {
         case 'de':
-
-            document.getElementById("languageBox").innerHTML = "German";
+            document.getElementById("languageBox").innerText = "German";
             languageIdentifier = 'de';
             languageName = 'Anna';
             break;
 
         case 'en':
-
-            document.getElementById("languageBox").innerHTML = "English";
+            document.getElementById("languageBox").innerText = "English";
             languageIdentifier = 'en';
             languageName = 'Daniel';
             break;
@@ -303,10 +291,10 @@ const startMediaDevice = () => {
         stream = _stream
         mediaRecorder = new MediaRecorder(stream);
 
-        let currentSamples = 0
+        let currentSamplesN = 0
         mediaRecorder.ondataavailable = event => {
 
-            currentSamples += event.data.length
+            currentSamplesN += event.data.length
             audioChunks.push(event.data);
         };
 
@@ -333,31 +321,30 @@ const startMediaDevice = () => {
             try {
                 await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
                     method: "post",
-                    body: JSON.stringify({ "title": currentText[0], "base64Audio": audioBase64, "language": AILanguage }),
-                    headers: { "X-Api-Key": STScoreAPIKey }
+                    body: JSON.stringify({ "title": currentText, "base64Audio": audioBase64, "language": AILanguage }),
 
                 }).then(res => res.json()).
-                    then(data => {
+                    then(mediaData => {
 
                         if (playAnswerSounds)
-                            playSoundForAnswerAccuracy(parseFloat(data.pronunciation_accuracy))
+                            playSoundForAnswerAccuracy(parseFloat(mediaData.pronunciation_accuracy))
 
-                        document.getElementById("recorded_ipa_script").innerHTML = "/ " + data.ipa_transcript + " /";
+                        document.getElementById("recorded_ipa_script").innerText = `/ ${mediaData.ipa_transcript} /`
                         document.getElementById("recordAudio").classList.add('disabled');
-                        document.getElementById("main_title").innerHTML = page_title;
-                        document.getElementById("pronunciation_accuracy").innerHTML = data.pronunciation_accuracy + "%";
+                        document.getElementById("main_title").innerText = page_title;
+                        document.getElementById("pronunciation_accuracy").innerText = `${mediaData.pronunciation_accuracy}%`;
 
-                        lettersOfWordAreCorrect = data.is_letter_correct_all_words.split(" ")
-
-
-                        startTime = data.start_time;
-                        endTime = data.end_time;
+                        lettersOfWordAreCorrect = mediaData.is_letter_correct_all_words.split(" ")
 
 
-                        real_transcripts_ipa = data.real_transcripts_ipa.split(" ")
-                        matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
-                        wordCategories = data.pair_accuracy_category.split(" ")
-                        let currentTextWords = currentText[0].split(" ")
+                        startTime = mediaData.start_time;
+                        endTime = mediaData.end_time;
+
+
+                        real_transcripts_ipa = mediaData.real_transcripts_ipa.split(" ")
+                        matched_transcripts_ipa = mediaData.matched_transcripts_ipa.split(" ")
+                        wordCategories = mediaData.pair_accuracy_category.split(" ")
+                        let currentTextWords = currentText.split(" ")
 
                         coloredWords = "";
                         for (let word_idx = 0; word_idx < currentTextWords.length; word_idx++) {
@@ -413,9 +400,10 @@ const playSoundForAnswerAccuracy = async (accuracy) => {
 
 const playAudio = async () => {
 
-    document.getElementById("main_title").innerHTML = "Generating sound...";
-    playWithMozillaApi(currentText[0]);
-    document.getElementById("main_title").innerHTML = "Current Sound was played";
+    document.getElementById("main_title").innerText = "Generating sound...";
+    // console.debug(`playAudio:: currentText: `, typeof currentText, "=>", currentText, "#");
+    playWithMozillaApi(currentText);
+    document.getElementById("main_title").innerText = "Current Sound was played";
 
 };
 
@@ -436,7 +424,7 @@ const playRecording = async (start = null, end = null) => {
             audioRecorded.addEventListener("ended", function () {
                 audioRecorded.currentTime = 0;
                 unblockUI();
-                document.getElementById("main_title").innerHTML = "Recorded Sound was played";
+                document.getElementById("main_title").innerText = "Recorded Sound was played";
             });
             await audioRecorded.play();
 
@@ -450,7 +438,7 @@ const playRecording = async (start = null, end = null) => {
                 unblockUI();
                 audioRecorded.pause();
                 audioRecorded.currentTime = 0;
-                document.getElementById("main_title").innerHTML = "Recorded Sound was played";
+                document.getElementById("main_title").innerText = "Recorded Sound was played";
             }, endTimeInMs);
 
         }
@@ -473,15 +461,16 @@ const playNativeAndRecordedWord = async (word_idx) => {
 const stopRecording = () => {
     isRecording = false
     mediaRecorder.stop()
-    document.getElementById("main_title").innerHTML = "Processing audio...";
+    document.getElementById("main_title").innerText = "Processing audio...";
 }
 
 
 const playCurrentWord = async (word_idx) => {
 
-    document.getElementById("main_title").innerHTML = "Generating word...";
-    playWithMozillaApi(currentText[0].split(' ')[word_idx]);
-    document.getElementById("main_title").innerHTML = "Word was played";
+    document.getElementById("main_title").innerText = "Generating word...";
+    // console.debug(`playCurrentWord:: currentText: `, typeof currentText, "=>", currentText, "#");
+    playWithMozillaApi(currentText.split(' ')[word_idx]);
+    document.getElementById("main_title").innerText = "Word was played";
 }
 
 // TODO: Check if fallback is correct
@@ -534,10 +523,7 @@ const wrapWordForPlayingLink = (word, word_idx, isFromRecording, word_accuracy_c
 }
 
 const wrapWordForIndividualPlayback = (word, word_idx) => {
-
-
     return '<a onmouseover="generateWordModal(' + word_idx.toString() + ')" style = " white-space:nowrap; " href="javascript:playNativeAndRecordedWord(' + word_idx.toString() + ')"  >' + word + '</a> '
-
 }
 
 // ########## Function to initialize server ###############
@@ -546,7 +532,6 @@ try {
     fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
         method: "post",
         body: JSON.stringify({ "title": '', "base64Audio": '', "language": AILanguage }),
-        headers: { "X-Api-Key": STScoreAPIKey }
 
     });
 }
@@ -555,7 +540,7 @@ catch { }
 const initializeServer = async () => {
 
     valid_response = false;
-    document.getElementById("main_title").innerHTML = 'Initializing server, this may take up to 2 minutes...';
+    document.getElementById("main_title").innerText = 'Initializing server, this may take up to 2 minutes...';
     let number_of_tries = 0;
     let maximum_number_of_tries = 4;
 
@@ -569,16 +554,40 @@ const initializeServer = async () => {
             await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
                 method: "post",
                 body: JSON.stringify({ "title": '', "base64Audio": '', "language": AILanguage }),
-                headers: { "X-Api-Key": STScoreAPIKey }
 
-            }).then(
-                valid_response = true);
+            }).then(valid_response = true);
             serverIsInitialized = true;
         }
-        catch
-        {
+        catch {
             number_of_tries += 1;
         }
     }
 }
 
+const getSampleFromTextInput = async (AILanguage, textInput) => {
+    await fetch(apiMainPathSample + '/getSample', {
+        method: "post",
+        body: JSON.stringify({
+            "language": AILanguage, "transcript": textInput
+        }),
+    }).then(res => {
+        let res2json = res.json()
+        // console.debug(`getSampleFromTextInput:: res2json: `, typeof res2json, "=>", res2json, "#");
+        return res2json
+    }).then(dataOnInput => {
+        console.log(`getSampleFromTextInput:: dataOnInput: `, typeof dataOnInput, "=>", dataOnInput, "#");
+        populateSampleById(dataOnInput)
+    })
+}
+
+$(document).ready(function(){
+    $("#field-filter-samples").on("keyup", async function(e) {
+        e.preventDefault();
+        var keycode = (e.keyCode ? e.keyCode : e.which);
+        if (keycode === 13 || e.key === 'Enter') {
+            var valueFilter = $(this).val()
+            // console.debug(`input:: valueFilter: `, typeof valueFilter, "=>", valueFilter, ", AILanguage: ", AILanguage, "#");
+            await getSampleFromTextInput(AILanguage, valueFilter);
+        }
+    });
+});
