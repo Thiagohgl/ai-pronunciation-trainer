@@ -8,38 +8,30 @@ import pickle
 
 
 class TextDataset():
-    def __init__(self, table, language='-'):
+    def __init__(self, table):
         self.table_dataframe = table
         self.number_of_samples = len(table)
-        self.language = language
 
     def __getitem__(self, idx):
 
-        if self.language == 'de':
-            line = [self.table_dataframe['de_sentence'].iloc[idx]]
-        elif self.language == 'en':
-            line = [self.table_dataframe['en_sentence'].iloc[idx]]
-        else:
-            line = [self.table_dataframe['sentence'].iloc[idx]]
+        line = [self.table_dataframe['sentence'].iloc[idx]]
         return line
 
     def __len__(self):
         return self.number_of_samples
 
 
-sample_folder = "./"
+sample_folder = "./databases/"
 lambda_database = {}
 lambda_ipa_converter = {}
+available_languages = ['de', 'en']
 
-with open(sample_folder+'data_de_en_2.pickle', 'rb') as handle:
-    df = pickle.load(handle)
+for language in available_languages:
+    df = pd.read_csv(sample_folder+'data_'+language+'.csv',delimiter=';')
+    lambda_database[language] = TextDataset(df)
+    lambda_ipa_converter[language] = RuleBasedModels.get_phonem_converter(language)
 
-lambda_database['de'] = TextDataset(df, 'de')
-lambda_database['en'] = TextDataset(df, 'en')
 lambda_translate_new_sample = False
-lambda_ipa_converter['de'] = RuleBasedModels.EpitranPhonemConverter(
-    epitran.Epitran('deu-Latn'))
-lambda_ipa_converter['en'] = RuleBasedModels.EngPhonemConverter()
 
 
 def lambda_handler(event, context):
