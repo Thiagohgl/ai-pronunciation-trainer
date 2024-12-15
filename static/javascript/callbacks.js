@@ -337,6 +337,8 @@ const startMediaDevice = () => {
                 text = text.replace(/<[^>]*>?/gm, '');
                 //Remove spaces on the beginning and end
                 text = text.trim();
+                // Remove double spaces
+                text = text.replace(/\s\s+/g, ' ');
                 currentText = [text];
 
                 await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
@@ -367,9 +369,7 @@ const startMediaDevice = () => {
                         matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
                         wordCategories = data.pair_accuracy_category.split(" ")
                         let currentTextWords = currentText[0].split(" ")
-                        // remove empty words
-                        currentTextWords = currentTextWords.filter(function (el) {  return el != ""; });
-                        
+
                         coloredWords = "";
                         for (let word_idx = 0; word_idx < currentTextWords.length; word_idx++) {
 
