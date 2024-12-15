@@ -4,6 +4,18 @@ This tool uses AI to evaluate your pronunciation so you can improve it and be un
 
 ![](images/MainScreen.jpg)
 
+## !! Update !! 
+
+I'm happy (and surprised!) that apparently a considerable amount of people are using this tool, and this made -even more- clear that many things could be improved. I tried to solve the most critical issues with small changes on the code base, so that now: 
+* Requirements are relaxed and should work with modern python versions (tested with 3.12)
+* Whisper is used as standard ASR model 
+* You can edit the text you want to speak by clicking on it and typing (please do before an evaluation)
+* Code does not dependent on OR-Tools anymore, which makes is somewhat lighter and faster 
+* Code is slightly changed so it is now easier to add more languages and change the database. 
+* Errors will be shown on the console for easier debugging. 
+
+I hope this facilitates the use of the tool and you have more fun (and learning!) with it. I plan to add those changes to the server in the coming weeks when I find some more time.
+
 ## Installation 
 To run the program locally, you need to install the requirements and run the main python file:
 ```
@@ -29,3 +41,22 @@ This project originated from a small program that I did to improve my own pronun
 
 ## Disclaimer 
 This is a simple project that I made in my free time with the goal to be useful to some people. It is not perfect, thus be aware that some small bugs may be present. In case you find something is not working, all feedback is welcome, and issues may be addressed depending on their severity.
+
+## FAQ
+
+### How do I add a new language?
+
+There's definitely a code architecture that would allow this to be easier, but I have limited time and I think the current solution is doable with relative ease. What you need to do is: 
+#### Backend 
+As long as your language is supported by Whisper, you need only a database and small changes in key files:
+
+1. Add your language identifier to the "lambdaGetSample.py" file
+2. Add a .csv file with your text database in the "./databases" folder, following the naming convention 
+3. Add a corresponding phonem model in the "RuleBasedModels.py", you likely need only to give the language code to Epitran and possibly correct some characters with a wrapper 
+4. Add your trainer to "lambdaSpeechToScore.py" with the correct language code
+
+If you language is not supported by Whisper, you need to have an Speech-To-Text model and add it to the "getASRModel" function in "models.py", and it needs to implement the "IASRModel" interface. Besides this, you need to do the same as above.
+#### Frontend 
+
+1. In the "callback.js" function, add a case for your language 
+2. In the "main.html", add your language in the "languageBox" with corresponding call to the javascript function. 
