@@ -14,13 +14,8 @@ import time
 
 def getTrainer(language: str):
 
-    device = torch.device('cpu')
-
-    model, decoder = mo.getASRModel(language)
-    model = model.to(device)
-    model.eval()
-    asr_model = AIModels.NeuralASR(model, decoder)
-
+    asr_model = mo.getASRModel(language,use_whisper=True)
+    
     if language == 'de':
         phonem_converter = RuleBasedModels.EpitranPhonemConverter(
             epitran.Epitran('deu-Latn'))
