@@ -10,7 +10,8 @@ import time
 import audioread
 import numpy as np
 from torchaudio.transforms import Resample
-
+import io
+import tempfile
 
 trainer_SST_lambda = {}
 trainer_SST_lambda['de'] = pronunciationTrainer.getTrainer("de")
@@ -40,26 +41,21 @@ def lambda_handler(event, context):
             'body': ''
         }
 
-    start = time.time()
-    random_file_name = './'+utilsFileIO.generateRandomString()+'.ogg'
-    f = open(random_file_name, 'wb')
-    f.write(file_bytes)
-    f.close()
-    print('Time for saving binary in file: ', str(time.time()-start))
-
-    start = time.time()
-    signal, fs = audioread_load(random_file_name)
-
+    
+    with tempfile.NamedTemporaryFile(suffix=".ogg", delete=True) as tmp:
+        tmp.write(file_bytes)
+        tmp.flush()
+        tmp_name = tmp.name
+        signal, fs = audioread_load(tmp_name)
     signal = transform(torch.Tensor(signal)).unsqueeze(0)
 
-    print('Time for loading .ogg file file: ', str(time.time()-start))
 
     result = trainer_SST_lambda[language].processAudioForGivenText(
         signal, real_text)
 
-    start = time.time()
-    os.remove(random_file_name)
-    print('Time for deleting file: ', str(time.time()-start))
+    #start = time.time()
+    #os.remove(random_file_name)
+    #print('Time for deleting file: ', str(time.time()-start))
 
     start = time.time()
     real_transcripts_ipa = ' '.join(
@@ -104,7 +100,11 @@ def lambda_handler(event, context):
     return json.dumps(res)
 
 # From Librosa
-
+def audioread_load_from_bytes(file_bytes, offset=0.0, duration=None, dtype=np.float32):
+    file_like = io.BytesIO(file_bytes)
+    audio, sr = sf.read(file_like, dtype=dtype,format='ogg')
+    # If offset/duration needed, handle slicing here
+    return audio, sr
 
 def audioread_load(path, offset=0.0, duration=None, dtype=np.float32):
     """Load an audio buffer using audioread.
