@@ -99,12 +99,7 @@ def lambda_handler(event, context):
 
     return json.dumps(res)
 
-# From Librosa
-def audioread_load_from_bytes(file_bytes, offset=0.0, duration=None, dtype=np.float32):
-    file_like = io.BytesIO(file_bytes)
-    audio, sr = sf.read(file_like, dtype=dtype,format='ogg')
-    # If offset/duration needed, handle slicing here
-    return audio, sr
+
 
 def audioread_load(path, offset=0.0, duration=None, dtype=np.float32):
     """Load an audio buffer using audioread.
