@@ -16,4 +16,3 @@ sqlalchemy
 transformers
 sentencepiece
 transformers
-ortools 

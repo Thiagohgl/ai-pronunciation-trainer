@@ -1,10 +1,11 @@
 import WordMetrics
-from ortools.sat.python import cp_model
 import numpy as np
 from string import punctuation
 from dtwalign import dtw_from_distance_matrix
 import time
 from typing import List, Tuple
+#from ortools.sat.python import cp_model
+
 offset_blank = 1
 TIME_THRESHOLD_MAPPING = 5.0
 
@@ -123,19 +124,31 @@ def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, word
     return mapped_words, mapped_words_indices
 
 
-def get_best_mapped_words(words_estimated: list, words_real: list) -> list:
+def get_best_mapped_words(words_estimated: list, words_real: list,use_dtw:bool = True) -> list:
 
     word_distance_matrix = get_word_distance_matrix(
         words_estimated, words_real)
 
     start = time.time()
-    mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
+    
+    if use_dtw:
+        alignment = (dtw_from_distance_matrix(
+                word_distance_matrix.T))
+            
+        mapped_indices = alignment.get_warping_path()[:len(words_estimated)]
+        duration_of_mapping = time.time()-start
+    else:
+        mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
 
-    duration_of_mapping = time.time()-start
-    # In case or-tools doesn't converge, go to a faster, low-quality solution
-    if len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING+0.5:
-        mapped_indices = (dtw_from_distance_matrix(
-            word_distance_matrix)).path[:len(words_estimated), 1]
+        duration_of_mapping = time.time()-start
+        # In case or-tools doesn't converge, go to a faster, low-quality solution
+        if len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING+0.5:
+            #mapped_indices = (dtw_from_distance_matrix(
+            #    word_distance_matrix)).path[:len(words_estimated), 1]
+            alignment = (dtw_from_distance_matrix(
+                word_distance_matrix.T))
+            
+            mapped_indices = alignment.get_warping_path()
 
     mapped_words, mapped_words_indices = get_resulting_string(
         mapped_indices, words_estimated, words_real)
