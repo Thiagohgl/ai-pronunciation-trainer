@@ -331,6 +331,14 @@ const startMediaDevice = () => {
             }
 
             try {
+                // Get currentText from "original_script" div, in case user has change it
+                let text = document.getElementById("original_script").innerHTML;
+                // Remove html tags
+                text = text.replace(/<[^>]*>?/gm, '');
+                //Remove spaces on the beginning and end
+                text = text.trim();
+                currentText = [text];
+
                 await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
                     method: "post",
                     body: JSON.stringify({ "title": currentText[0], "base64Audio": audioBase64, "language": AILanguage }),
@@ -346,6 +354,7 @@ const startMediaDevice = () => {
                         document.getElementById("recordAudio").classList.add('disabled');
                         document.getElementById("main_title").innerHTML = page_title;
                         document.getElementById("pronunciation_accuracy").innerHTML = data.pronunciation_accuracy + "%";
+                        document.getElementById("ipa_script").innerHTML = data.real_transcripts_ipa
 
                         lettersOfWordAreCorrect = data.is_letter_correct_all_words.split(" ")
 
@@ -358,7 +367,9 @@ const startMediaDevice = () => {
                         matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
                         wordCategories = data.pair_accuracy_category.split(" ")
                         let currentTextWords = currentText[0].split(" ")
-
+                        // remove empty words
+                        currentTextWords = currentTextWords.filter(function (el) {  return el != ""; });
+                        
                         coloredWords = "";
                         for (let word_idx = 0; word_idx < currentTextWords.length; word_idx++) {
 
