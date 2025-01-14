@@ -5,6 +5,17 @@ import epitran
 import eng_to_ipa
 
 
+def get_phonem_converter(language: str):
+    if language == 'de':
+        phonem_converter = EpitranPhonemConverter(
+            epitran.Epitran('deu-Latn'))
+    elif language == 'en':
+        phonem_converter = EngPhonemConverter()
+    else:
+        raise ValueError('Language not implemented')
+
+    return phonem_converter
+
 class EpitranPhonemConverter(ModelInterfaces.ITextToPhonemModel):
     word_locations_in_samples = None
     audio_transcript = None
