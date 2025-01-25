@@ -16,3 +16,4 @@ sqlalchemy
 transformers
 sentencepiece
 transformers
+openai-whisper
