@@ -10,6 +10,7 @@ import AIModels
 import RuleBasedModels
 from string import punctuation
 import time
+from constants import sample_rate_resample
 
 
 def getTrainer(language: str):
@@ -30,6 +31,12 @@ def getTrainer(language: str):
     return trainer
 
 
+def preprocessAudioStandalone(audio: torch.tensor) -> torch.tensor:
+    audio = audio-torch.mean(audio)
+    audio = audio/torch.max(torch.abs(audio))
+    return audio
+
+
 class PronunciationTrainer:
     current_transcript: str
     current_ipa: str
@@ -41,7 +48,7 @@ class PronunciationTrainer:
     current_words_pronunciation_accuracy = []
     categories_thresholds = np.array([80, 60, 59])
 
-    sampling_rate = 16000
+    sampling_rate = sample_rate_resample
 
     def __init__(self, asr_model: mi.IASRModel, word_to_ipa_coverter: mi.ITextToPhonemModel) -> None:
         self.asr_model = asr_model
@@ -191,6 +198,4 @@ class PronunciationTrainer:
         return np.argmin(abs(self.categories_thresholds-accuracy))
 
     def preprocessAudio(self, audio: torch.tensor) -> torch.tensor:
-        audio = audio-torch.mean(audio)
-        audio = audio/torch.max(torch.abs(audio))
-        return audio
+        return preprocessAudioStandalone(audio)

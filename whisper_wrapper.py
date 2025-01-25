@@ -3,6 +3,7 @@ from ModelInterfaces import IASRModel
 from typing import Union
 import numpy as np
 import whisper
+from constants import sample_rate_resample
 
 
 def parse_word_info(word_info, sample_rate):
@@ -17,7 +18,7 @@ class WhisperASRModel(IASRModel):
         self.asr = whisper.load_model(model_name)
         self._transcript = ""
         self._word_locations = []
-        self.sample_rate = 16000
+        self.sample_rate = sample_rate_resample
         self.language = language
 
     def processAudio(self, audio:Union[np.ndarray, torch.Tensor]):

@@ -12,12 +12,14 @@ import numpy as np
 from torchaudio.transforms import Resample
 import io
 import tempfile
+from constants import sample_rate_resample, sample_rate_start
+
 
 trainer_SST_lambda = {}
 trainer_SST_lambda['de'] = pronunciationTrainer.getTrainer("de")
 trainer_SST_lambda['en'] = pronunciationTrainer.getTrainer("en")
 
-transform = Resample(orig_freq=48000, new_freq=16000)
+transform = Resample(orig_freq=sample_rate_start, new_freq=sample_rate_resample)
 
 
 def lambda_handler(event, context):

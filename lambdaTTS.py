@@ -7,9 +7,10 @@ import AIModels
 import utilsFileIO
 import os
 import base64
+from constants import sample_rate_resample
 
-sampling_rate = 16000
-model_TTS_lambda = AIModels.NeuralTTS(models.getTTSModel('de'), sampling_rate)
+
+model_TTS_lambda = AIModels.NeuralTTS(models.getTTSModel('de'), sample_rate_resample)
 
 
 def lambda_handler(event, context):
@@ -23,7 +24,7 @@ def lambda_handler(event, context):
         text_string).detach().numpy()*linear_factor
     random_file_name = utilsFileIO.generateRandomString(20)+'.wav'
 
-    sf.write('./'+random_file_name, audio, 16000)
+    sf.write('./'+random_file_name, audio, sample_rate_resample)
 
     with open(random_file_name, "rb") as f:
         audio_byte_array = f.read()
