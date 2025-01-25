@@ -8,7 +8,7 @@ def getASRModel(language: str,use_whisper:bool=True) -> IASRModel:
 
     if use_whisper:
         from whisper_wrapper import WhisperASRModel
-        return WhisperASRModel()
+        return WhisperASRModel(language=language)
     
     if language == 'de':
 
