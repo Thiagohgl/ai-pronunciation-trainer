@@ -1,10 +1,10 @@
 import unittest
 import numpy as np
 ## permit to import from parent directory also in
-import sys
-from pathlib import Path
-parent = Path(__file__).parent.parent
-sys.path.append(str(parent))
+# import sys
+# from pathlib import Path
+# parent = Path(__file__).parent.parent
+# sys.path.append(str(parent))
 import WordMatching
 from tests import set_seed
 from tests import constants_wordmatching as const
