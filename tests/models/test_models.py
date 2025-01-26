@@ -15,6 +15,10 @@ class TestModels(unittest.TestCase):
         self.tmp_dir = torch.hub.get_dir()
         self.device = torch.device("cpu")
 
+    def test_getASRModel_de_whisper(self):
+        asr = mo.getASRModel(self.language_de, use_whisper=True)
+        self.assertIsInstance(asr, NeuralASR)
+
     def test_getASRModel_de(self):
         asr = mo.getASRModel(self.language_de, use_whisper=False)
         self.assertIsInstance(asr, NeuralASR)
@@ -23,10 +27,26 @@ class TestModels(unittest.TestCase):
         asr = mo.getASRModel(self.language_en, use_whisper=False)
         self.assertIsInstance(asr, NeuralASR)
 
+    def test_getASRModel_not_implemented(self):
+        with self.assertRaises(ValueError):
+            try:
+                mo.getASRModel("wrong_language", use_whisper=False)
+            except ValueError as ve:
+                self.assertEqual(str(ve), "Language not implemented")
+                raise ve
+
     def test_getTranslationModel_de(self):
         model, tokenizer = mo.getTranslationModel(self.language_de)
         self.assertIsInstance(model, torch.nn.Module)
         self.assertIsInstance(tokenizer, MarianTokenizer)
+
+    def test_getTranslationModel_not_implemented(self):
+        with self.assertRaises(ValueError):
+            try:
+                mo.getTranslationModel("wrong_language")
+            except ValueError as ve:
+                self.assertEqual(str(ve), "Language not implemented")
+                raise ve
 
 if __name__ == '__main__':
     unittest.main()
