@@ -1,0 +1,62 @@
+{
+  "de": {
+    "0": {
+      "real_transcript": [
+        "Marie leidet an Hashimoto-Thyreoiditis."
+      ],
+      "ipa_transcript": "ma\u02d0ri\u02d0 la\u026a\u032fd\u025b\u02d0t a\u02d0n ha\u02d0shi\u02d0mo\u02d0to\u02d0-ty\u02d0r\u025b\u02d0\u0254\u026a\u032fdi\u02d0ti\u02d0s.",
+      "transcript_translation": ""
+    },
+    "1": {
+      "real_transcript": [
+        "Marie leidet an Hashimoto-Thyreoiditis."
+      ],
+      "ipa_transcript": "ma\u02d0ri\u02d0 la\u026a\u032fd\u025b\u02d0t a\u02d0n ha\u02d0shi\u02d0mo\u02d0to\u02d0-ty\u02d0r\u025b\u02d0\u0254\u026a\u032fdi\u02d0ti\u02d0s.",
+      "transcript_translation": ""
+    },
+    "2": {
+      "real_transcript": [
+        "Es ist einfach, den Status quo beibehalten; das hei\u00dft aber nicht, dass das auch das Richtige ist."
+      ],
+      "ipa_transcript": "\u025b\u02d0s \u026ast a\u026a\u032fnfax, d\u025b\u02d0n sta\u02d0tu\u02d0s kvo\u02d0 ba\u026a\u032fbe\u02d0alt\u025b\u02d0n; da\u02d0s ha\u026a\u032fst a\u02d0b\u025b\u02d0r n\u026a\u00e7t, das da\u02d0s a\u028a\u032fx da\u02d0s r\u026a\u00e7ti\u02d0\u0261\u025b\u02d0 \u026ast.",
+      "transcript_translation": ""
+    },
+    "3": {
+      "real_transcript": [
+        "Diana kam in \ud835\udc56\u210e\ud835\udc5f\ud835\udc52\ud835\udc5a zweitbesten Kleid vorbei und sah genauso aus, wie es sich ziemt, wenn man zum Tee geladen wird."
+      ],
+      "ipa_transcript": "di\u02d0a\u02d0na\u02d0 ka\u02d0m i\u02d0n \ud835\udc56\u210e\ud835\udc5f\ud835\udc52\ud835\udc5a t\u0361sva\u026a\u032ftb\u025bst\u025b\u02d0n kla\u026a\u032fd fo\u02d0rba\u026a\u032f \u028and za\u02d0 \u0261\u025b\u02d0na\u028a\u032fzo\u02d0 a\u028a\u032fs, vi\u02d0 \u025b\u02d0s z\u026a\u00e7 t\u0361simt, v\u025bn ma\u02d0n t\u0361su\u02d0m te\u02d0 \u0261\u025b\u02d0la\u02d0d\u025b\u02d0n vi\u02d0rd.",
+      "transcript_translation": ""
+    }
+  },
+  "en": {
+    "0": {
+      "real_transcript": [
+        "Mary has Hashimoto's."
+      ],
+      "ipa_transcript": "\u02c8m\u025bri h\u0259z hashimoto's.",
+      "transcript_translation": ""
+    },
+    "1": {
+      "real_transcript": [
+        "Mary has Hashimoto's."
+      ],
+      "ipa_transcript": "\u02c8m\u025bri h\u0259z hashimoto's.",
+      "transcript_translation": ""
+    },
+    "2": {
+      "real_transcript": [
+        "Following the status quo is easy, but that doesn't necessarily mean it's the right thing to do."
+      ],
+      "ipa_transcript": "\u02c8f\u0251lo\u028a\u026a\u014b \u00f0\u0259 \u02c8st\u00e6t\u0259s kwo\u028a \u026az \u02c8izi, b\u0259t \u00f0\u0259t \u02c8d\u0259z\u0259nt \u02ccn\u025bs\u0259\u02c8s\u025br\u0259li min \u026ats \u00f0\u0259 ra\u026at \u03b8\u026a\u014b t\u026a du.",
+      "transcript_translation": ""
+    },
+    "3": {
+      "real_transcript": [
+        "Diana came over, dressed in HER second-best dress and looking exactly as it is proper to look when asked out to tea."
+      ],
+      "ipa_transcript": "da\u026a\u02c8\u00e6n\u0259 ke\u026am \u02c8o\u028av\u0259r, dr\u025bst \u026an h\u0259r second-best dr\u025bs \u0259nd \u02c8l\u028ak\u026a\u014b \u026ag\u02c8z\u00e6ktli \u025bz \u026at \u026az \u02c8pr\u0251p\u0259r t\u026a l\u028ak w\u026an \u00e6st a\u028at t\u026a ti.",
+      "transcript_translation": ""
+    }
+  }
+}
