@@ -14,15 +14,12 @@ class NeuralASR(ModelInterfaces.IASRModel):
 
     def getTranscript(self) -> str:
         """Get the transcripts of the process audio"""
-        assert(self.audio_transcript != None,
-               'Can get audio transcripts without having processed the audio')
+        assert self.audio_transcript is not None, 'Can get audio transcripts without having processed the audio'
         return self.audio_transcript
 
     def getWordLocations(self) -> list:
         """Get the pair of words location from audio"""
-        assert(self.word_locations_in_samples != None,
-               'Can get word locations without having processed the audio')
-
+        assert self.word_locations_in_samples is not None, 'Can get word locations without having processed the audio'
         return self.word_locations_in_samples
 
     def processAudio(self, audio: torch.Tensor):
