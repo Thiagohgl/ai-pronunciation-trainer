@@ -3,11 +3,10 @@ import models
 import soundfile as sf
 import json
 import AIModels
-#from flask import Response
 import utilsFileIO
 import os
 import base64
-from constants import sample_rate_resample
+from constants import sample_rate_resample, ALLOWED_ORIGIN
 
 
 model_TTS_lambda = AIModels.NeuralTTS(models.getTTSModel('de'), sample_rate_resample)
@@ -36,7 +35,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {
             'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
         },
         'body': json.dumps(

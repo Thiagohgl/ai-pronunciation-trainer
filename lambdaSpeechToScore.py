@@ -1,23 +1,18 @@
-
 import torch
 import json
 import os
 import WordMatching as wm
-import utilsFileIO
 import pronunciationTrainer
 import base64
 import time
 import audioread
 import numpy as np
 from torchaudio.transforms import Resample
-import io
 import tempfile
-from constants import sample_rate_resample, sample_rate_start
+from constants import ALLOWED_ORIGIN, sample_rate_resample, sample_rate_start
 
 
-trainer_SST_lambda = {}
-trainer_SST_lambda['de'] = pronunciationTrainer.getTrainer("de")
-trainer_SST_lambda['en'] = pronunciationTrainer.getTrainer("en")
+trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunciationTrainer.getTrainer("en")}
 
 transform = Resample(orig_freq=sample_rate_start, new_freq=sample_rate_resample)
 
@@ -37,7 +32,7 @@ def lambda_handler(event, context):
             'headers': {
                 'Access-Control-Allow-Headers': '*',
                 'Access-Control-Allow-Credentials': "true",
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
                 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
             },
             'body': ''

@@ -4,6 +4,7 @@ import os
 from flask_cors import CORS
 import json
 
+from constants import ALLOWED_ORIGIN
 import lambdaTTS
 import lambdaSpeechToScore
 import lambdaGetSample
@@ -45,7 +46,7 @@ def GetAccuracyFromRecordedAudio():
             'headers': {
                 'Access-Control-Allow-Headers': '*',
                 'Access-Control-Allow-Credentials': "true",
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
                 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
             },
             'body': ''
@@ -55,6 +56,7 @@ def GetAccuracyFromRecordedAudio():
 
 
 if __name__ == "__main__":
+    # pycharm on windows: to run in debug mode add the env variables PYTHONUTF8=1 to the file configuration
     language = 'de'
     print(os.system('pwd'))
     webbrowser.open_new('http://127.0.0.1:3000/')
