@@ -130,3 +130,7 @@ dmypy.json
 
 tmp/*
 .venv*/*
+
+# custom
+translation_model_de.pickle
+translation_tokenizer_de.pickle
