@@ -18,6 +18,18 @@ def lambda_handler(event, context):
 
     text_string = body['value']
 
+    if len(text_string) == 0:
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Credentials': "true",
+                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
+            'body': '{}'
+        }
+
     linear_factor = 0.2
     audio = model_TTS_lambda.getAudioFromSentence(
         text_string).detach().numpy()*linear_factor
