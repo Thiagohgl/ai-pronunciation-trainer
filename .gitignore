@@ -135,3 +135,4 @@ tmp/*
 translation_model_de.pickle
 translation_tokenizer_de.pickle
 test.ogg
+static/node_modules/*
