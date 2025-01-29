@@ -136,3 +136,7 @@ translation_model_de.pickle
 translation_tokenizer_de.pickle
 test.ogg
 static/node_modules/*
+static/dist/*
+static/test-results/*
+cosmic-ray-results/*
+cosmic_ray.sqlite
