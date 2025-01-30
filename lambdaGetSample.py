@@ -108,7 +108,7 @@ def getSentenceCategory(sentence) -> int | None:
     for category in range(len(categories_word_limits)-1):
         if categories_word_limits[category] < number_of_words <= categories_word_limits[category + 1]:
             return category+1
-    raise ValueError(f"category not assigned for sentence {sentence} ...")
+    raise ValueError(f"category not assigned for sentence '{sentence}' ...")
 
 
 def get_enriched_dataframe_csv(

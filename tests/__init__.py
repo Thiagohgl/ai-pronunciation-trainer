@@ -1,8 +1,7 @@
-import os
-from pathlib import Path
+from constants import PROJECT_ROOT_FOLDER
 
 
-TEST_ROOT_FOLDER = Path(globals().get("__file__", "./_")).absolute().parent
+TEST_ROOT_FOLDER = PROJECT_ROOT_FOLDER / "tests"
 EVENTS_FOLDER = TEST_ROOT_FOLDER / "events"
 
 
