@@ -5,12 +5,11 @@ import json
 ## permit to import from parent directory also in
 import sys
 from pathlib import Path
-from unittest.mock import patch
 
 parent = Path(__file__).parent.parent
 sys.path.append(str(parent))
 from tests import EVENTS_FOLDER, set_seed
-from webApp import app, rootPath
+from webApp import app
 
 
 class TestWebApp(unittest.TestCase):
@@ -66,9 +65,9 @@ class TestWebApp(unittest.TestCase):
         output_data = response.data.decode("utf-8")
         output_data = json.loads(output_data)
         self.assertEqual(
-            output_data, {
-            'ipa_transcript': 'maːriː laɪ̯dɛːt aːn haːshiːmoːtoː-tyːrɛːɔɪ̯diːtiːs.',
-            'real_transcript': ['Marie leidet an Hashimoto-Thyreoiditis.'],
+        output_data, {
+            'ipa_transcript': 'ziː vɪl niːmandɛːn haɪ̯raːtɛːn.',
+            'real_transcript': ['Sie will niemanden heiraten.'],
             'transcript_translation': ''
         })
 
