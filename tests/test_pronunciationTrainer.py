@@ -47,6 +47,17 @@ class TestScore(unittest.TestCase):
         self.assertIsInstance(trainer_SST_lambda_de, pronunciationTrainer.PronunciationTrainer)
         self.assertIsInstance(trainer_SST_lambda_en, pronunciationTrainer.PronunciationTrainer)
 
+    def test_getTrainer_language_not_implemented(self):
+        with self.assertRaises(ValueError):
+            try:
+                pronunciationTrainer.getTrainer("it")
+            except ValueError as ve:
+                assert str(ve) == 'Language not implemented'
+                raise ve
+
+    def test_getWordsRelativeIntonation(self):
+        pass
+
     def test_exact_transcription_de(self):
         set_seed()
         phrase_real = phrases["de"]["real"]

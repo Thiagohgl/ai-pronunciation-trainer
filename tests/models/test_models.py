@@ -48,6 +48,26 @@ class TestModels(unittest.TestCase):
                 self.assertEqual(str(ve), "Language not implemented")
                 raise ve
 
+    def test_getTTSModel_de(self):
+        tts_module = mo.getTTSModel('de')
+        model = tts_module.model
+        assert isinstance(model, torch.nn.Module)
+
+    # def test_getTTSModel_en(self):
+    #     # for some reason this English TTS model doesn't work, in fact only the author uses only the German TTS model (lambdaTTS.py)
+    #     tts_module = mo.getTTSModel('en')
+    #     model = tts_module.model
+    #     assert isinstance(model, torch.nn.Module)
+
+    def test_getTTSModel_not_implemented(self):
+        with self.assertRaises(ValueError):
+            try:
+                mo.getTTSModel("it")
+            except ValueError as ve:
+                assert str(ve) == "Language not implemented"
+                raise ve
+
+
 if __name__ == '__main__':
     unittest.main()
 
