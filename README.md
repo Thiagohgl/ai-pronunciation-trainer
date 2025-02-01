@@ -56,7 +56,17 @@ As long as your language is supported by Whisper, you need only a database and s
 4. Add your trainer to "lambdaSpeechToScore.py" with the correct language code
 
 If you language is not supported by Whisper, you need to have an Speech-To-Text model and add it to the "getASRModel" function in "models.py", and it needs to implement the "IASRModel" interface. Besides this, you need to do the same as above.
+
 #### Frontend 
 
 1. In the "callback.js" function, add a case for your language 
 2. In the "main.html", add your language in the "languageBox" with corresponding call to the javascript function. 
+
+#### About the frontend refactor
+
+- Updated jquery@3.7.1
+- Updated css bootstrap@5.3.3
+- Removed the STScoreAPIKey constant from callback.js, reading it instead from a python/Flask env variable and saving it in a cookie
+- Get the IPA transcript from a custom written sentence using the `getCustomText()` javascript function; this post a request /getSample with 'language', 'transcript' keys 
+- Handle custom message errors (useful in case of `getCustomText()` error messages)
+- Added aria-labels to prepare playwright E2E tests

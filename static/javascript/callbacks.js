@@ -29,11 +29,20 @@ let startTime, endTime;
 // API related variables 
 let AILanguage = "de"; // Standard is German
 
+// Read the Public Key from an env variable (it's managed within the python/flask code - STScoreAPIKey).
+// If, for some reason, you would like a private one, send-me a message and we can discuss some possibilities
+try {
+    const  cookieList = document.cookie.split("=")
+    const  STScoreAPIKey = cookieList[1]
+} catch (error) {
+    console.log("STScoreAPIKey::error:", error, "#")
+}
 
-let STScoreAPIKey = 'rll5QsTiv83nti99BW6uCmvs9BDVxSB39SVFceYb'; // Public Key. If, for some reason, you would like a private one, send-me a message and we can discuss some possibilities
 let apiMainPathSample = '';// 'http://127.0.0.1:3001';// 'https://a3hj0l2j2m.execute-api.eu-central-1.amazonaws.com/Prod';
 let apiMainPathSTS = '';// 'https://wrg7ayuv7i.execute-api.eu-central-1.amazonaws.com/Prod';
-
+const defaultOriginalScript = "Click on the bar on the right to generate a new sentence (please use chrome web browser)."
+const defaultErrorScript = "Server error. Either the daily quota of the server is over or there was some internal error. You can try to generate a new sample in a few seconds. If the error persist, try comming back tomorrow or download the local version from Github :)";
+const editErrorScript = "Please edit this text before generating the IPA for a custom sentence!";
 
 // Variables to playback accuracy sounds
 let soundsPath = '../static';//'https://stscore-sounds-bucket.s3.eu-central-1.amazonaws.com';
@@ -74,7 +83,7 @@ const blockUI = () => {
 
 };
 
-const UIError = () => {
+const UIError = (errorMsg = defaultErrorScript) => {
     blockUI();
     document.getElementById("buttonNext").onclick = () => getNextSample(); //If error, user can only try to get a new sample
     document.getElementById("buttonNext").style["background-color"] = '#58636d';
@@ -84,7 +93,7 @@ const UIError = () => {
     document.getElementById("ipa_script").innerHTML = "Error"
 
     document.getElementById("main_title").innerHTML = 'Server Error';
-    document.getElementById("original_script").innerHTML = 'Server error. Either the daily quota of the server is over or there was some internal error. You can try to generate a new sample in a few seconds. If the error persist, try comming back tomorrow or download the local version from Github :)';
+    document.getElementById("original_script").innerHTML = errorMsg;
 };
 
 const UINotSupported = () => {
@@ -105,7 +114,7 @@ const UIRecordingError = () => {
 //################### Application state functions #######################
 function updateScore(currentPronunciationScore) {
 
-    if (isNaN(currentPronunciationScore))
+    if (Number.isNaN(currentPronunciationScore))
         return;
     currentScore += currentPronunciationScore * scoreMultiplier;
     currentScore = Math.round(currentScore);
@@ -113,28 +122,75 @@ function updateScore(currentPronunciationScore) {
 
 const cacheSoundFiles = async () => {
     await fetch(soundsPath + '/ASR_good.wav').then(data => data.arrayBuffer()).
-        then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
-        then(decodeAudioData => {
-            soundFileGood = decodeAudioData;
-        });
+    then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
+    then(decodeAudioData => {
+        soundFileGood = decodeAudioData;
+    });
 
     await fetch(soundsPath + '/ASR_okay.wav').then(data => data.arrayBuffer()).
-        then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
-        then(decodeAudioData => {
-            soundFileOkay = decodeAudioData;
-        });
+    then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
+    then(decodeAudioData => {
+        soundFileOkay = decodeAudioData;
+    });
 
     await fetch(soundsPath + '/ASR_bad.wav').then(data => data.arrayBuffer()).
-        then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
-        then(decodeAudioData => {
-            soundFileBad = decodeAudioData;
-        });
+    then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
+    then(decodeAudioData => {
+        soundFileBad = decodeAudioData;
+    });
+}
+
+const getCustomTextIsDisabled = () => {
+    const checkText = document.getElementById("original_script").innerText;
+    return checkText === defaultOriginalScript || checkText === defaultErrorScript || checkText === editErrorScript || checkText === "";
+}
+
+const getCustomText = async () => {
+    blockUI();
+
+    if (!serverIsInitialized)
+        await initializeServer();
+
+    if (!serverWorking) {
+        UIError();
+        return;
+    }
+
+    if (soundFileBad == null)
+        cacheSoundFiles();
+
+    if (getCustomTextIsDisabled()) {
+        UIError(editErrorScript);
+        return;
+    }
+
+    updateScore(parseFloat(document.getElementById("pronunciation_accuracy").innerHTML));
+
+    document.getElementById("main_title").innerHTML = "Get IPA transcription for custom text...";
+
+    try {
+        const original_script_element = document.getElementById("original_script")
+        const original_script = original_script_element.innerText;
+        await fetch(apiMainPathSample + '/getSample', {
+            method: "post",
+            body: JSON.stringify({
+                "language": AILanguage,
+                "transcript": original_script
+            }),
+            headers: { "X-Api-Key": STScoreAPIKey }
+        }).then(res => res.json()).
+        then(data => {
+            formatTranscriptData(data);
+        })
+    }
+    catch (err)
+    {
+        console.log("getCustomText::err:", err)
+        UIError();
+    }
 }
 
 const getNextSample = async () => {
-
-
-
     blockUI();
 
     if (!serverIsInitialized)
@@ -180,42 +236,47 @@ const getNextSample = async () => {
             }),
             headers: { "X-Api-Key": STScoreAPIKey }
         }).then(res => res.json()).
-            then(data => {
-
-
-
-                let doc = document.getElementById("original_script");
-                currentText = data.real_transcript;
-                doc.innerHTML = currentText;
-
-                currentIpa = data.ipa_transcript
-
-                let doc_ipa = document.getElementById("ipa_script");
-                doc_ipa.innerHTML = "/ " + currentIpa + " /";
-
-                document.getElementById("recorded_ipa_script").innerHTML = ""
-                document.getElementById("pronunciation_accuracy").innerHTML = "";
-                document.getElementById("single_word_ipa_pair").innerHTML = "Reference | Spoken"
-                document.getElementById("section_accuracy").innerHTML = "| Score: " + currentScore.toString() + " - (" + currentSample.toString() + ")";
-                currentSample += 1;
-
-                document.getElementById("main_title").innerHTML = page_title;
-
-                document.getElementById("translated_script").innerHTML = data.transcript_translation;
-
-                currentSoundRecorded = false;
-                unblockUI();
-                document.getElementById("playRecordedAudio").classList.add('disabled');
-
-            })
+        then(data => {
+            formatTranscriptData(data);
+        })
     }
-    catch
+    catch (err)
     {
+        console.log("getNextSample::err:", err)
         UIError();
     }
-
-
 };
+
+const formatTranscriptData = (data) => {
+    let doc = document.getElementById("original_script");
+    currentText = data.real_transcript;
+    doc.innerHTML = currentText;
+
+    currentIpa = data.ipa_transcript
+
+    let doc_ipa = document.getElementById("ipa_script");
+    doc_ipa.ariaLabel = "ipa_script"
+    doc_ipa.innerHTML = "/ " + currentIpa + " /";
+
+    let recorded_ipa_script = document.getElementById("recorded_ipa_script")
+    recorded_ipa_script.ariaLabel = "recorded_ipa_script"
+    recorded_ipa_script.innerHTML = ""
+
+    let pronunciation_accuracy = document.getElementById("pronunciation_accuracy")
+    pronunciation_accuracy.ariaLabel = "pronunciation_accuracy"
+    pronunciation_accuracy.innerHTML = "";
+    document.getElementById("single_word_ipa_pair").innerHTML = "Reference | Spoken"
+    document.getElementById("section_accuracy").innerHTML = "| Score: " + currentScore.toString() + " - (" + currentSample.toString() + ")";
+    currentSample += 1;
+
+    document.getElementById("main_title").innerHTML = page_title;
+
+    document.getElementById("translated_script").innerHTML = data.transcript_translation;
+
+    currentSoundRecorded = false;
+    unblockUI();
+    document.getElementById("playRecordedAudio").classList.add('disabled');
+}
 
 const updateRecordingState = async () => {
     if (isRecording) {
@@ -268,17 +329,17 @@ const changeLanguage = (language, generateNewSample = false) => {
     };
 
     for (idx = 0; idx < voices.length; idx++) {
-        if (voices[idx].lang.slice(0, 2) == languageIdentifier && voices[idx].name == languageName) {
+        if (voices[idx].lang.slice(0, 2) === languageIdentifier && voices[idx].name === languageName) {
             voice_synth = voices[idx];
             languageFound = true;
             break;
         }
 
     }
-    // If specific voice not found, search anything with the same language 
+    // If specific voice not found, search anything with the same language
     if (!languageFound) {
         for (idx = 0; idx < voices.length; idx++) {
-            if (voices[idx].lang.slice(0, 2) == languageIdentifier) {
+            if (voices[idx].lang.slice(0, 2) === languageIdentifier) {
                 voice_synth = voices[idx];
                 languageFound = true;
                 break;
@@ -347,55 +408,55 @@ const startMediaDevice = () => {
                     headers: { "X-Api-Key": STScoreAPIKey }
 
                 }).then(res => res.json()).
-                    then(data => {
+                then(data => {
 
-                        if (playAnswerSounds)
-                            playSoundForAnswerAccuracy(parseFloat(data.pronunciation_accuracy))
+                    if (playAnswerSounds)
+                        playSoundForAnswerAccuracy(parseFloat(data.pronunciation_accuracy))
 
-                        document.getElementById("recorded_ipa_script").innerHTML = "/ " + data.ipa_transcript + " /";
-                        document.getElementById("recordAudio").classList.add('disabled');
-                        document.getElementById("main_title").innerHTML = page_title;
-                        document.getElementById("pronunciation_accuracy").innerHTML = data.pronunciation_accuracy + "%";
-                        document.getElementById("ipa_script").innerHTML = data.real_transcripts_ipa
+                    document.getElementById("recorded_ipa_script").innerHTML = "/ " + data.ipa_transcript + " /";
+                    document.getElementById("recordAudio").classList.add('disabled');
+                    document.getElementById("main_title").innerHTML = page_title;
+                    document.getElementById("pronunciation_accuracy").innerHTML = data.pronunciation_accuracy + "%";
+                    document.getElementById("ipa_script").innerHTML = data.real_transcripts_ipa
 
-                        lettersOfWordAreCorrect = data.is_letter_correct_all_words.split(" ")
-
-
-                        startTime = data.start_time;
-                        endTime = data.end_time;
+                    lettersOfWordAreCorrect = data.is_letter_correct_all_words.split(" ")
 
 
-                        real_transcripts_ipa = data.real_transcripts_ipa.split(" ")
-                        matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
-                        wordCategories = data.pair_accuracy_category.split(" ")
-                        let currentTextWords = currentText[0].split(" ")
+                    startTime = data.start_time;
+                    endTime = data.end_time;
 
-                        coloredWords = "";
-                        for (let word_idx = 0; word_idx < currentTextWords.length; word_idx++) {
 
-                            wordTemp = '';
-                            for (let letter_idx = 0; letter_idx < currentTextWords[word_idx].length; letter_idx++) {
-                                letter_is_correct = lettersOfWordAreCorrect[word_idx][letter_idx] == '1'
-                                if (letter_is_correct)
-                                    color_letter = 'green'
-                                else
-                                    color_letter = 'red'
+                    real_transcripts_ipa = data.real_transcripts_ipa.split(" ")
+                    matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
+                    wordCategories = data.pair_accuracy_category.split(" ")
+                    let currentTextWords = currentText[0].split(" ")
 
-                                wordTemp += '<font color=' + color_letter + '>' + currentTextWords[word_idx][letter_idx] + "</font>"
-                            }
-                            currentTextWords[word_idx]
-                            coloredWords += " " + wrapWordForIndividualPlayback(wordTemp, word_idx)
+                    coloredWords = "";
+                    for (let word_idx = 0; word_idx < currentTextWords.length; word_idx++) {
+
+                        wordTemp = '';
+                        for (let letter_idx = 0; letter_idx < currentTextWords[word_idx].length; letter_idx++) {
+                            letter_is_correct = lettersOfWordAreCorrect[word_idx][letter_idx] === '1'
+                            if (letter_is_correct)
+                                color_letter = 'green'
+                            else
+                                color_letter = 'red'
+
+                            wordTemp += '<font color=' + color_letter + '>' + currentTextWords[word_idx][letter_idx] + "</font>"
                         }
+                        currentTextWords[word_idx]
+                        coloredWords += " " + wrapWordForIndividualPlayback(wordTemp, word_idx)
+                    }
 
 
 
-                        document.getElementById("original_script").innerHTML = coloredWords
+                    document.getElementById("original_script").innerHTML = coloredWords
 
-                        currentSoundRecorded = true;
-                        unblockUI();
-                        document.getElementById("playRecordedAudio").classList.remove('disabled');
+                    currentSoundRecorded = true;
+                    unblockUI();
+                    document.getElementById("playRecordedAudio").classList.remove('disabled');
 
-                    });
+                });
             }
             catch {
                 UIError();
@@ -539,9 +600,9 @@ const blobToBase64 = blob => new Promise((resolve, reject) => {
 
 const wrapWordForPlayingLink = (word, word_idx, isFromRecording, word_accuracy_color) => {
     if (isFromRecording)
-        return '<a style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playRecordedWord(' + word_idx.toString() + ')"  >' + word + '</a> '
+        return '<a aria-label="playRecordedWord" style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playRecordedWord(' + word_idx.toString() + ')"  >' + word + '</a> '
     else
-        return '<a style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playCurrentWord(' + word_idx.toString() + ')" >' + word + '</a> '
+        return '<a aria-label="playCurrentWord" style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playCurrentWord(' + word_idx.toString() + ')" >' + word + '</a> '
 }
 
 const wrapWordForIndividualPlayback = (word, word_idx) => {
