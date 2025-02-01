@@ -70,3 +70,5 @@ If you language is not supported by Whisper, you need to have an Speech-To-Text 
 - Get the IPA transcript from a custom written sentence using the `getCustomText()` javascript function; this post a request /getSample with 'language', 'transcript' keys 
 - Handle custom message errors (useful in case of `getCustomText()` error messages)
 - Added aria-labels to prepare playwright E2E tests
+- split single_word_ipa_pair element into three to improve the frontend testability
+- fixed some XSS vulnerabilities, g. use .innerText instead of .innerHTML

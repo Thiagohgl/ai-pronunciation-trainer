@@ -29,6 +29,24 @@ a.disabled {
 	display: flex;
 }
 
+/* text button */
+.text-button {
+	background-color: #467387;
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	height: fit-content;
+	width: 10em;
+}
+.text-button-div {
+	position: absolute;
+	top: 38%;
+}
+
 /* ############## Next button ##### */
 .button-next {
 	border-radius: 4px;

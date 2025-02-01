@@ -89,7 +89,10 @@ const UIError = (errorMsg = defaultErrorScript) => {
     document.getElementById("buttonNext").style["background-color"] = '#58636d';
 
     document.getElementById("recorded_ipa_script").innerHTML = "";
-    document.getElementById("single_word_ipa_pair").innerHTML = "Error";
+    document.getElementById("single_word_ipa_pair_error").style["display"] = "inline";
+    document.getElementById("single_word_ipa_pair_separator").style["display"] = "none";
+    document.getElementById("single_word_ipa_reference_recorded").style["display"] = "none";
+    document.getElementById("single_word_ipa_current").style["display"] = "none";
     document.getElementById("ipa_script").innerHTML = "Error"
 
     document.getElementById("main_title").innerHTML = 'Server Error';
@@ -99,13 +102,13 @@ const UIError = (errorMsg = defaultErrorScript) => {
 const UINotSupported = () => {
     unblockUI();
 
-    document.getElementById("main_title").innerHTML = "Browser unsupported";
+    document.getElementById("main_title").innerText = "Browser unsupported";
 
 }
 
 const UIRecordingError = () => {
     unblockUI();
-    document.getElementById("main_title").innerHTML = "Recording error, please try again or restart page.";
+    document.getElementById("main_title").innerText = "Recording error, please try again or restart page.";
     startMediaDevice();
 }
 
@@ -166,7 +169,7 @@ const getCustomText = async () => {
 
     updateScore(parseFloat(document.getElementById("pronunciation_accuracy").innerHTML));
 
-    document.getElementById("main_title").innerHTML = "Get IPA transcription for custom text...";
+    document.getElementById("main_title").innerText = "Get IPA transcription for custom text...";
 
     try {
         const original_script_element = document.getElementById("original_script")
@@ -250,32 +253,45 @@ const getNextSample = async () => {
 const formatTranscriptData = (data) => {
     let doc = document.getElementById("original_script");
     currentText = data.real_transcript;
-    doc.innerHTML = currentText;
+    doc.innerText = currentText;
 
     currentIpa = data.ipa_transcript
 
     let doc_ipa = document.getElementById("ipa_script");
     doc_ipa.ariaLabel = "ipa_script"
-    doc_ipa.innerHTML = "/ " + currentIpa + " /";
+    doc_ipa.innerText = `/ ${currentIpa} /`;
 
     let recorded_ipa_script = document.getElementById("recorded_ipa_script")
     recorded_ipa_script.ariaLabel = "recorded_ipa_script"
-    recorded_ipa_script.innerHTML = ""
+    recorded_ipa_script.innerText = ""
 
     let pronunciation_accuracy = document.getElementById("pronunciation_accuracy")
     pronunciation_accuracy.ariaLabel = "pronunciation_accuracy"
     pronunciation_accuracy.innerHTML = "";
-    document.getElementById("single_word_ipa_pair").innerHTML = "Reference | Spoken"
+
+    document.getElementById("single_word_ipa_pair_error").style["display"] = "none";
+    document.getElementById("single_word_ipa_pair_separator").style["display"] = "inline";
+    disableElementAndSetInnerText("single_word_ipa_reference_recorded", "Reference")
+    disableElementAndSetInnerText("single_word_ipa_current", "Spoken")
+
     document.getElementById("section_accuracy").innerHTML = "| Score: " + currentScore.toString() + " - (" + currentSample.toString() + ")";
     currentSample += 1;
 
     document.getElementById("main_title").innerHTML = page_title;
 
-    document.getElementById("translated_script").innerHTML = data.transcript_translation;
+    document.getElementById("translated_script").innerText = data.transcript_translation;
 
     currentSoundRecorded = false;
     unblockUI();
     document.getElementById("playRecordedAudio").classList.add('disabled');
+}
+
+const disableElementAndSetInnerText = (id, innerText) => {
+    const el = document.getElementById(id)
+    el.innerText = innerText
+    el.style["display"] = "inline"
+    el.disabled = true
+    el.enabled = false
 }
 
 const updateRecordingState = async () => {
@@ -290,9 +306,8 @@ const updateRecordingState = async () => {
 }
 
 const generateWordModal = (word_idx) => {
-
-    document.getElementById("single_word_ipa_pair").innerHTML = wrapWordForPlayingLink(real_transcripts_ipa[word_idx], word_idx, false, "black")
-        + ' | ' + wrapWordForPlayingLink(matched_transcripts_ipa[word_idx], word_idx, true, accuracy_colors[parseInt(wordCategories[word_idx])])
+    wrapWordForPlayingLink(real_transcripts_ipa[word_idx], word_idx, false, "black")
+    wrapWordForPlayingLink(matched_transcripts_ipa[word_idx], word_idx, true, accuracy_colors[parseInt(wordCategories[word_idx])])
 }
 
 const recordSample = async () => {
@@ -413,44 +428,52 @@ const startMediaDevice = () => {
                     if (playAnswerSounds)
                         playSoundForAnswerAccuracy(parseFloat(data.pronunciation_accuracy))
 
-                    document.getElementById("recorded_ipa_script").innerHTML = "/ " + data.ipa_transcript + " /";
+                    document.getElementById("recorded_ipa_script").innerText = `/ ${data.ipa_transcript} /`;
                     document.getElementById("recordAudio").classList.add('disabled');
-                    document.getElementById("main_title").innerHTML = page_title;
-                    document.getElementById("pronunciation_accuracy").innerHTML = data.pronunciation_accuracy + "%";
-                    document.getElementById("ipa_script").innerHTML = data.real_transcripts_ipa
+                    document.getElementById("main_title").innerText = page_title;
+                    document.getElementById("pronunciation_accuracy").innerText = `${data.pronunciation_accuracy}%`;
+                    document.getElementById("ipa_script").innerText = data.real_transcripts_ipa
 
                     lettersOfWordAreCorrect = data.is_letter_correct_all_words.split(" ")
-
 
                     startTime = data.start_time;
                     endTime = data.end_time;
 
-
                     real_transcripts_ipa = data.real_transcripts_ipa.split(" ")
                     matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
                     wordCategories = data.pair_accuracy_category.split(" ")
-                    let currentTextWords = currentText[0].split(" ")
+                    let arrayOriginalText = currentText[0].split(" ")
 
-                    coloredWords = "";
-                    for (let word_idx = 0; word_idx < currentTextWords.length; word_idx++) {
+                    let arrayColoredWords = document.getElementById("original_script")
+                    arrayColoredWords.textContent = ""
 
-                        wordTemp = '';
-                        for (let letter_idx = 0; letter_idx < currentTextWords[word_idx].length; letter_idx++) {
-                            letter_is_correct = lettersOfWordAreCorrect[word_idx][letter_idx] === '1'
-                            if (letter_is_correct)
-                                color_letter = 'green'
-                            else
-                                color_letter = 'red'
+                    for (let wordIdx in arrayOriginalText) {
+                        let currentWordText = arrayOriginalText[wordIdx]
 
-                            wordTemp += '<font color=' + color_letter + '>' + currentTextWords[word_idx][letter_idx] + "</font>"
+                        let letterIsCorrect = lettersOfWordAreCorrect[wordIdx]
+
+                        let coloredWordTemp = document.createElement("a")
+                        for (let letterIdx in currentWordText) {
+                            let letterCorrect = letterIsCorrect[letterIdx] === "1"
+                            let containerLetter = document.createElement("span")
+                            containerLetter.style.color = letterCorrect ? 'green' : "red"
+                            containerLetter.innerText = currentWordText[letterIdx];
+                            coloredWordTemp.appendChild(containerLetter)
+
+                            coloredWordTemp.style.whiteSpace = "nowrap"
+                            coloredWordTemp.style.textDecoration = "underline"
+                            coloredWordTemp.onclick = function () {
+                                generateWordModal(wordIdx.toString())
+                            }
+                            coloredWordTemp.onmouseover = function () {
+                                generateWordModal(wordIdx.toString())
+                            }
+                            arrayColoredWords.appendChild(coloredWordTemp)
                         }
-                        currentTextWords[word_idx]
-                        coloredWords += " " + wrapWordForIndividualPlayback(wordTemp, word_idx)
+                        let containerSpace = document.createElement("span")
+                        containerSpace.textContent = " "
+                        arrayColoredWords.appendChild(containerSpace)
                     }
-
-
-
-                    document.getElementById("original_script").innerHTML = coloredWords
 
                     currentSoundRecorded = true;
                     unblockUI();
@@ -598,18 +621,17 @@ const blobToBase64 = blob => new Promise((resolve, reject) => {
     reader.onerror = error => reject(error);
 });
 
-const wrapWordForPlayingLink = (word, word_idx, isFromRecording, word_accuracy_color) => {
-    if (isFromRecording)
-        return '<a aria-label="playRecordedWord" style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playRecordedWord(' + word_idx.toString() + ')"  >' + word + '</a> '
-    else
-        return '<a aria-label="playCurrentWord" style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playCurrentWord(' + word_idx.toString() + ')" >' + word + '</a> '
-}
-
-const wrapWordForIndividualPlayback = (word, word_idx) => {
-
-
-    return '<a onmouseover="generateWordModal(' + word_idx.toString() + ')" style = " white-space:nowrap; " href="javascript:playNativeAndRecordedWord(' + word_idx.toString() + ')"  >' + word + '</a> '
-
+const wrapWordForPlayingLink = (word, word_idx, isSpokenWord, word_color) => {
+    // for some reason here the function is swapped
+    const fn = isSpokenWord ? "playRecordedWord" : "playCurrentWord";
+    const id = isSpokenWord ? "single_word_ipa_current" : "single_word_ipa_reference_recorded";
+    const element = document.getElementById(id)
+    element.innerText = word
+    element.href = `javascript:${fn}(${word_idx.toString()})`
+    element.disabled = false
+    element.enabled = true
+    element.style["color"] = word_color
+    element.style["whiteSpace"] = "nowrap"
 }
 
 // ########## Function to initialize server ###############

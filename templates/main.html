@@ -95,6 +95,10 @@
                 -
             </p>
 
+            <div id="text-button-div" class="text-button-div">
+                <button id="buttonCustomText" class="text-button" onclick="javascript:getCustomText()">IPA for custom text</button>
+            </div>
+
         </div>
 
         <div id="text-area" class="main-text-div">
@@ -128,7 +132,11 @@
     <div class="container-small flex expand"
          style="align-items: center; text-align: center; vertical-align:middle; ">
         <p id="single_word_ipa_pair" class="expand ipa-text-small"
-           style="text-align: center; vertical-align: middle;">Reference | Spoken
+           style="text-align: center; vertical-align: middle;">
+            <span id="single_word_ipa_pair_error" style="display: none;" aria-label="ipa-pair-error">Error</span>
+            <a id="single_word_ipa_reference_recorded" aria-label="playRecordedWord" disabled>Reference</a>
+            <span id="single_word_ipa_pair_separator"> | </span>
+            <a id="single_word_ipa_current" aria-label="playCurrentWord" disabled>Spoken</a>
         </p>
     </div>
 
@@ -145,7 +153,6 @@
         <input label="Easy" type="radio" aria-label="Easy" id="lengthCat2" name='length' checked onclick="javascript:getNextSample()">
         <input label="Medium" type="radio" aria-label="Medium" id="lengthCat3" name='length' onclick="javascript:getNextSample()">
         <input label="Hard" type="radio" aria-label="Hard" id="lengthCat4" name='length' onclick="javascript:getNextSample()">
-        <input label="IPA for custom text" type="radio" aria-label="CustomText" id="customText" name='length' onclick="javascript:getCustomText()">
     </div>
 
 </div>
