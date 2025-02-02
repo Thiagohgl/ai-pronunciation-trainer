@@ -109,7 +109,6 @@ class PronunciationTrainer:
 
         current_recorded_audio = self.preprocessAudio(
             current_recorded_audio)
-
         self.asr_model.processAudio(current_recorded_audio)
 
         current_recorded_transcript, current_recorded_word_locations = self.getTranscriptAndWordsLocations(
