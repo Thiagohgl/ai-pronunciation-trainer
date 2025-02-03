@@ -4,6 +4,8 @@ import pandas as pd
 import json
 import RuleBasedModels
 
+from constants import app_logger
+
 
 class TextDataset:
     def __init__(self, table, language):
@@ -23,13 +25,13 @@ class TextDataset:
         return df_by_category
 
     def get_random_sample_from_df(self, category_value:int):
-        print(f"language={self.language}, category_value={category_value}.")
+        app_logger.info(f"language={self.language}, category_value={category_value}.")
         choice = self.table_dataframe.sample(n=1)
         if category_value !=0:
             df_language_filtered_by_category = self.get_category_from_df(category_value)
             choice = df_language_filtered_by_category.sample(n=1)
         sentence = choice["sentence"].iloc[0]
-        print(f"sentence={sentence} ...")
+        app_logger.info(f"sentence={sentence} ...")
         return [sentence]
 
 
@@ -72,7 +74,7 @@ def lambda_handler(event, context):
             current_transcript = get_random_selection(language, category)
         current_ipa = lambda_ipa_converter[language].convertToPhonem(current_transcript)
 
-        print(f"real_transcript='{current_transcript}', ipa_transcript='{current_ipa}'.")
+        app_logger.info(f"real_transcript='{current_transcript}', ipa_transcript='{current_ipa}'.")
         result = {
             'real_transcript': [current_transcript],
             'ipa_transcript': current_ipa,
@@ -81,7 +83,7 @@ def lambda_handler(event, context):
 
         return json.dumps(result)
     except Exception as ex:
-        print("ex:", ex, "#")
+        app_logger.error(f"ex: {ex} ...")
         raise ex
 
 
@@ -98,7 +100,7 @@ def get_random_selection(language: str, category: int) -> str:
     """
     lambda_df_lang = lambda_database[language]
     current_transcript = lambda_df_lang.get_random_sample_from_df(category)
-    print(f"category={category}, language={language}, current_transcript={current_transcript}.")
+    app_logger.info(f"category={category}, language={language}, current_transcript={current_transcript}.")
     return current_transcript[0]
 
 
@@ -132,10 +134,10 @@ def get_enriched_dataframe_csv(
     with open(df_filename, 'r') as handle:
         df2 = pd.read_csv(handle, sep="|")
         df2["category"] = df2["sentence"].apply(getSentenceCategory)
-        print("de_category added")
+        app_logger.info("de_category added")
     output_path = custom_folder / f'{custom_dataframe_csv_filename_no_ext}_{language}.csv'
     df2.to_csv(output_path, index=False, sep="|")
-    print(f"written {output_path} ...")
+    app_logger.info(f"written {output_path} ...")
 
 
 if __name__ == '__main__':

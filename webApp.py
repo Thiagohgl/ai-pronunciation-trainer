@@ -4,7 +4,7 @@ import os
 from flask_cors import CORS
 import json
 
-from constants import ALLOWED_ORIGIN
+from constants import ALLOWED_ORIGIN, app_logger
 import lambdaTTS
 import lambdaSpeechToScore
 import lambdaGetSample
@@ -43,7 +43,7 @@ def GetAccuracyFromRecordedAudio():
         event = {'body': json.dumps(request.get_json(force=True))}
         lambda_correct_output = lambdaSpeechToScore.lambda_handler(event, {})
     except Exception as e:
-        print('Error: ', str(e))
+        app_logger.error(f"error: {e} ...")
         return {
             'statusCode': 200,
             'headers': {

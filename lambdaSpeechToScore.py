@@ -9,7 +9,7 @@ import audioread
 import numpy as np
 from torchaudio.transforms import Resample
 import tempfile
-from constants import ALLOWED_ORIGIN, sample_rate_resample, sample_rate_start
+from constants import ALLOWED_ORIGIN, app_logger, sample_rate_resample, sample_rate_start
 
 
 trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunciationTrainer.getTrainer("en")}
@@ -52,7 +52,7 @@ def lambda_handler(event, context):
 
     #start = time.time()
     #os.remove(random_file_name)
-    #print('Time for deleting file: ', str(time.time()-start))
+    #app_logger.info('Time for deleting file: {time.time()-start}.')
 
     start = time.time()
     real_transcripts_ipa = ' '.join(
@@ -82,7 +82,8 @@ def lambda_handler(event, context):
 
     pair_accuracy_category = ' '.join(
         [str(category) for category in result['pronunciation_categories']])
-    print('Time to post-process results: ', str(time.time()-start))
+    time_post_process = time.time() - start
+    app_logger.info(f'Time to post-process results: {time_post_process:.3f}.')
 
     res = {'real_transcript': result['recording_transcript'],
            'ipa_transcript': result['recording_ipa'],
