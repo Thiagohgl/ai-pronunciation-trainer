@@ -25,15 +25,27 @@ let currentSoundRecorded = false;
 let currentText, currentIpa, real_transcripts_ipa, matched_transcripts_ipa;
 let wordCategories;
 let startTime, endTime;
+let SingleWordIpaPairBackup;
 
-// API related variables 
+// API related variables
 let AILanguage = "de"; // Standard is German
 
+// Read the Public Key from an env variable (it's managed within the python/flask code - STScoreAPIKey).
+// If, for some reason, you would like a private one, send-me a message and we can discuss some possibilities
+try {
+    const  cookieList = document.cookie.split("=")
+    const  STScoreAPIKey = cookieList[1]
+} catch (error) {
+    console.log("STScoreAPIKey::error:", error, "#")
+}
 
-let STScoreAPIKey = 'rll5QsTiv83nti99BW6uCmvs9BDVxSB39SVFceYb'; // Public Key. If, for some reason, you would like a private one, send-me a message and we can discuss some possibilities
 let apiMainPathSample = '';// 'http://127.0.0.1:3001';// 'https://a3hj0l2j2m.execute-api.eu-central-1.amazonaws.com/Prod';
 let apiMainPathSTS = '';// 'https://wrg7ayuv7i.execute-api.eu-central-1.amazonaws.com/Prod';
-
+const defaultOriginalScript = "Click on the bar on the right to generate a new sentence (please use chrome web browser)."
+const defaultErrorScript = "Server error. Either the daily quota of the server is over or there was some internal error. You can try to generate a new sample in a few seconds. If the error persist, try comming back tomorrow or download the local version from Github :)";
+const editErrorScript = "Please edit this text before generating the IPA for a custom sentence!";
+const browserUnsupported = "Browser unsupported";
+const recordingError = "Recording error, please try again or restart page.";
 
 // Variables to playback accuracy sounds
 let soundsPath = '../static';//'https://stscore-sounds-bucket.s3.eu-central-1.amazonaws.com';
@@ -47,7 +59,7 @@ let voice_idx = 0;
 let voice_synth = null;
 
 //############################ UI general control functions ###################
-const unblockUI = () => {
+const unblockUI = (unlockIPACustomText = false) => {
     document.getElementById("recordAudio").classList.remove('disabled');
     document.getElementById("playSampleAudio").classList.remove('disabled');
     document.getElementById("buttonNext").onclick = () => getNextSample();
@@ -58,7 +70,10 @@ const unblockUI = () => {
     if (currentSoundRecorded)
         document.getElementById("playRecordedAudio").classList.remove('disabled');
 
-
+    enableElementWithClass("input-uploader-audio-file")
+    if (unlockIPACustomText) {
+        enableElementWithClass("buttonCustomText")
+    }
 };
 
 const blockUI = () => {
@@ -69,34 +84,53 @@ const blockUI = () => {
     document.getElementById("original_script").classList.add('disabled');
     document.getElementById("playRecordedAudio").classList.add('disabled');
 
-    document.getElementById("buttonNext").style["background-color"] = '#adadad';
-
+    document.getElementById("buttonNext").classList.add('disabled');
+    disableElementWithClass("input-uploader-audio-file")
 
 };
 
-const UIError = () => {
+const UIError = (errorMsg = defaultErrorScript) => {
     blockUI();
     document.getElementById("buttonNext").onclick = () => getNextSample(); //If error, user can only try to get a new sample
     document.getElementById("buttonNext").style["background-color"] = '#58636d';
 
     document.getElementById("recorded_ipa_script").innerHTML = "";
-    document.getElementById("single_word_ipa_pair").innerHTML = "Error";
-    document.getElementById("ipa_script").innerHTML = "Error"
+    document.getElementById("single_word_ipa_pair_error").style["display"] = "inline";
+    document.getElementById("single_word_ipa_pair_separator").style["display"] = "none";
+    document.getElementById("single_word_ipa_reference_recorded").style["display"] = "none";
+    document.getElementById("single_word_ipa_current").style["display"] = "none";
+    document.getElementById("ipa_script").innerText = "Error"
 
-    document.getElementById("main_title").innerHTML = 'Server Error';
-    document.getElementById("original_script").innerHTML = 'Server error. Either the daily quota of the server is over or there was some internal error. You can try to generate a new sample in a few seconds. If the error persist, try comming back tomorrow or download the local version from Github :)';
+    document.getElementById("main_title").innerText = 'Server Error';
+    document.getElementById("original_script").innerHTML = errorMsg;
 };
+
+const disableElementWithClass = (id) => {
+    let el = document.getElementById(id)
+    // el.classList.add('disabled');
+    // el.classList.add('color-disabled');
+    el.disabled = true;
+    el.classList.remove('darkgreen');
+}
+
+const enableElementWithClass = (id) => {
+    let el = document.getElementById(id)
+    el.removeAttribute("disabled");
+    el.classList.add('darkgreen');
+    // el.classList.remove('color-disabled');
+    // el.classList.remove('disabled');
+}
 
 const UINotSupported = () => {
     unblockUI();
 
-    document.getElementById("main_title").innerHTML = "Browser unsupported";
+    document.getElementById("main_title").innerText = browserUnsupported;
 
 }
 
 const UIRecordingError = () => {
     unblockUI();
-    document.getElementById("main_title").innerHTML = "Recording error, please try again or restart page.";
+    document.getElementById("main_title").innerText = recordingError;
     startMediaDevice();
 }
 
@@ -105,7 +139,7 @@ const UIRecordingError = () => {
 //################### Application state functions #######################
 function updateScore(currentPronunciationScore) {
 
-    if (isNaN(currentPronunciationScore))
+    if (Number.isNaN(currentPronunciationScore))
         return;
     currentScore += currentPronunciationScore * scoreMultiplier;
     currentScore = Math.round(currentScore);
@@ -113,28 +147,77 @@ function updateScore(currentPronunciationScore) {
 
 const cacheSoundFiles = async () => {
     await fetch(soundsPath + '/ASR_good.wav').then(data => data.arrayBuffer()).
-        then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
-        then(decodeAudioData => {
-            soundFileGood = decodeAudioData;
-        });
+    then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
+    then(decodeAudioData => {
+        soundFileGood = decodeAudioData;
+    });
 
     await fetch(soundsPath + '/ASR_okay.wav').then(data => data.arrayBuffer()).
-        then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
-        then(decodeAudioData => {
-            soundFileOkay = decodeAudioData;
-        });
+    then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
+    then(decodeAudioData => {
+        soundFileOkay = decodeAudioData;
+    });
 
     await fetch(soundsPath + '/ASR_bad.wav').then(data => data.arrayBuffer()).
-        then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
-        then(decodeAudioData => {
-            soundFileBad = decodeAudioData;
-        });
+    then(arrayBuffer => ctx.decodeAudioData(arrayBuffer)).
+    then(decodeAudioData => {
+        soundFileBad = decodeAudioData;
+    });
+}
+
+const getCustomTextIsDisabled = () => {
+    const checkText = document.getElementById("original_script").innerText;
+    return checkText === defaultOriginalScript || checkText === defaultErrorScript || checkText === editErrorScript || checkText.toString().replace(/\s/g,'') === "";
+}
+
+const getCustomText = async () => {
+    blockUI();
+
+    if (!serverIsInitialized)
+        await initializeServer();
+
+    if (!serverWorking) {
+        UIError();
+        return;
+    }
+
+    if (soundFileBad == null)
+        cacheSoundFiles();
+
+    if (getCustomTextIsDisabled()) {
+        UIError(editErrorScript);
+        disableElementWithClass("buttonCustomText")
+        return;
+    }
+
+    updateScore(parseFloat(document.getElementById("pronunciation_accuracy").innerHTML));
+
+    document.getElementById("main_title").innerText = "Get IPA transcription for custom text...";
+
+    try {
+        const original_script_element = document.getElementById("original_script")
+        const original_script = original_script_element.innerText;
+        await fetch(apiMainPathSample + '/getSample', {
+            method: "post",
+            body: JSON.stringify({
+                "language": AILanguage,
+                "transcript": original_script
+            }),
+            headers: { "X-Api-Key": STScoreAPIKey }
+        }).then(res => res.json()).
+        then(data => {
+            formatTranscriptData(data);
+            audioRecorded = undefined;
+        })
+    }
+    catch (err)
+    {
+        console.log("getCustomText::err:", err)
+        UIError();
+    }
 }
 
 const getNextSample = async () => {
-
-
-
     blockUI();
 
     if (!serverIsInitialized)
@@ -152,7 +235,7 @@ const getNextSample = async () => {
 
     updateScore(parseFloat(document.getElementById("pronunciation_accuracy").innerHTML));
 
-    document.getElementById("main_title").innerHTML = "Processing new sample...";
+    document.getElementById("main_title").innerText = "Processing new sample...";
 
 
     if (document.getElementById('lengthCat1').checked) {
@@ -180,42 +263,52 @@ const getNextSample = async () => {
             }),
             headers: { "X-Api-Key": STScoreAPIKey }
         }).then(res => res.json()).
-            then(data => {
-
-
-
-                let doc = document.getElementById("original_script");
-                currentText = data.real_transcript;
-                doc.innerHTML = currentText;
-
-                currentIpa = data.ipa_transcript
-
-                let doc_ipa = document.getElementById("ipa_script");
-                doc_ipa.innerHTML = "/ " + currentIpa + " /";
-
-                document.getElementById("recorded_ipa_script").innerHTML = ""
-                document.getElementById("pronunciation_accuracy").innerHTML = "";
-                document.getElementById("single_word_ipa_pair").innerHTML = "Reference | Spoken"
-                document.getElementById("section_accuracy").innerHTML = "| Score: " + currentScore.toString() + " - (" + currentSample.toString() + ")";
-                currentSample += 1;
-
-                document.getElementById("main_title").innerHTML = page_title;
-
-                document.getElementById("translated_script").innerHTML = data.transcript_translation;
-
-                currentSoundRecorded = false;
-                unblockUI();
-                document.getElementById("playRecordedAudio").classList.add('disabled');
-
-            })
+        then(data => {
+            formatTranscriptData(data);
+        })
     }
-    catch
+    catch (err)
     {
+        console.log("getNextSample::err:", err)
         UIError();
     }
-
-
 };
+
+const formatTranscriptData = (data) => {
+    let doc = document.getElementById("original_script");
+    currentText = data.real_transcript;
+    doc.innerText = currentText;
+
+    currentIpa = data.ipa_transcript
+
+    let doc_ipa = document.getElementById("ipa_script");
+    doc_ipa.ariaLabel = "ipa_script"
+    doc_ipa.innerText = `/ ${currentIpa} /`;
+
+    let recorded_ipa_script = document.getElementById("recorded_ipa_script")
+    recorded_ipa_script.ariaLabel = "recorded_ipa_script"
+    recorded_ipa_script.innerText = ""
+
+    let pronunciation_accuracy = document.getElementById("pronunciation_accuracy")
+    pronunciation_accuracy.ariaLabel = "pronunciation_accuracy"
+    pronunciation_accuracy.innerHTML = "";
+
+    // restore a clean state for document.getElementById("single_word_ipa_pair") to avoid errors when playing the word audio
+    $(document).ready(function() {
+        $("#single_word_ipa_pair").replaceWith(SingleWordIpaPairBackup.clone())
+    })
+
+    document.getElementById("section_accuracy").innerText = `| Score: ${currentScore.toString()} - (${currentSample.toString()})`;
+    currentSample += 1;
+
+    document.getElementById("main_title").innerText = page_title;
+
+    document.getElementById("translated_script").innerText = data.transcript_translation;
+
+    currentSoundRecorded = false;
+    unblockUI(true);
+    document.getElementById("playRecordedAudio").classList.add('disabled');
+}
 
 const updateRecordingState = async () => {
     if (isRecording) {
@@ -229,14 +322,13 @@ const updateRecordingState = async () => {
 }
 
 const generateWordModal = (word_idx) => {
-
-    document.getElementById("single_word_ipa_pair").innerHTML = wrapWordForPlayingLink(real_transcripts_ipa[word_idx], word_idx, false, "black")
-        + ' | ' + wrapWordForPlayingLink(matched_transcripts_ipa[word_idx], word_idx, true, accuracy_colors[parseInt(wordCategories[word_idx])])
+    wrapWordForPlayingLink(real_transcripts_ipa[word_idx], word_idx, false, "black")
+    wrapWordForPlayingLink(matched_transcripts_ipa[word_idx], word_idx, true, accuracy_colors[parseInt(wordCategories[word_idx])])
 }
 
 const recordSample = async () => {
 
-    document.getElementById("main_title").innerHTML = "Recording... click again when done speaking";
+    document.getElementById("main_title").innerText = "Recording... click again when done speaking";
     document.getElementById("recordIcon").innerHTML = 'pause_presentation';
     blockUI();
     document.getElementById("recordAudio").classList.remove('disabled');
@@ -254,31 +346,31 @@ const changeLanguage = (language, generateNewSample = false) => {
     switch (language) {
         case 'de':
 
-            document.getElementById("languageBox").innerHTML = "German";
+            document.getElementById("languageBox").innerText = "German";
             languageIdentifier = 'de';
             languageName = 'Anna';
             break;
 
         case 'en':
 
-            document.getElementById("languageBox").innerHTML = "English";
+            document.getElementById("languageBox").innerText = "English";
             languageIdentifier = 'en';
             languageName = 'Daniel';
             break;
     };
 
     for (idx = 0; idx < voices.length; idx++) {
-        if (voices[idx].lang.slice(0, 2) == languageIdentifier && voices[idx].name == languageName) {
+        if (voices[idx].lang.slice(0, 2) === languageIdentifier && voices[idx].name === languageName) {
             voice_synth = voices[idx];
             languageFound = true;
             break;
         }
 
     }
-    // If specific voice not found, search anything with the same language 
+    // If specific voice not found, search anything with the same language
     if (!languageFound) {
         for (idx = 0; idx < voices.length; idx++) {
-            if (voices[idx].lang.slice(0, 2) == languageIdentifier) {
+            if (voices[idx].lang.slice(0, 2) === languageIdentifier) {
                 voice_synth = voices[idx];
                 languageFound = true;
                 break;
@@ -297,6 +389,82 @@ const mediaStreamConstraints = {
     }
 }
 
+
+async function sendAudioToGetAccuracyFromRecordedAudio(audioBase64) {
+    try {
+        // Get currentText from "original_script" div, in case user has change it
+        let text = document.getElementById("original_script").innerHTML;
+        // Remove html tags
+        text = text.replace(/<[^>]*>?/gm, '');
+        //Remove spaces on the beginning and end
+        text = text.trim();
+        // Remove double spaces
+        text = text.replace(/\s\s+/g, ' ');
+        currentText = [text];
+
+        await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
+            method: "post",
+            body: JSON.stringify({"title": currentText[0], "base64Audio": audioBase64, "language": AILanguage}),
+            headers: {"X-Api-Key": STScoreAPIKey}
+
+        }).then(res => res.json()).then(data => {
+
+            if (playAnswerSounds)
+                playSoundForAnswerAccuracy(parseFloat(data.pronunciation_accuracy))
+
+            document.getElementById("recorded_ipa_script").innerText = `/ ${data.ipa_transcript} /`;
+            document.getElementById("recordAudio").classList.add('disabled');
+            document.getElementById("main_title").innerText = page_title;
+            document.getElementById("pronunciation_accuracy").innerText = `${data.pronunciation_accuracy}%`;
+            document.getElementById("ipa_script").innerText = data.real_transcripts_ipa
+
+            lettersOfWordAreCorrect = data.is_letter_correct_all_words.split(" ")
+
+            startTime = data.start_time;
+            endTime = data.end_time;
+
+            real_transcripts_ipa = data.real_transcripts_ipa.split(" ")
+            matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
+            wordCategories = data.pair_accuracy_category.split(" ")
+            let arrayOriginalText = currentText[0].split(" ")
+
+            let arrayColoredWords = document.getElementById("original_script")
+            arrayColoredWords.textContent = ""
+
+            for (let wordIdx in arrayOriginalText) {
+                let currentWordText = arrayOriginalText[wordIdx]
+
+                let letterIsCorrect = lettersOfWordAreCorrect[wordIdx]
+
+                let coloredWordTemp = document.createElement("a")
+                for (let letterIdx in currentWordText) {
+                    let letterCorrect = letterIsCorrect[letterIdx] === "1"
+                    let containerLetter = document.createElement("span")
+                    containerLetter.style.color = letterCorrect ? 'green' : "red"
+                    containerLetter.innerText = currentWordText[letterIdx];
+                    coloredWordTemp.appendChild(containerLetter)
+
+                    coloredWordTemp.style.whiteSpace = "nowrap"
+                    coloredWordTemp.style.textDecoration = "underline"
+                    coloredWordTemp.onclick = function () {
+                        generateWordModal(wordIdx.toString())
+                    }
+                    arrayColoredWords.appendChild(coloredWordTemp)
+                }
+                let containerSpace = document.createElement("span")
+                containerSpace.textContent = " "
+                arrayColoredWords.appendChild(containerSpace)
+            }
+
+            currentSoundRecorded = true;
+            unblockUI();
+            document.getElementById("playRecordedAudio").classList.remove('disabled');
+
+        });
+    } catch {
+        UIError();
+    }
+}
 
 const startMediaDevice = () => {
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints).then(_stream => {
@@ -329,77 +497,7 @@ const startMediaDevice = () => {
                 setTimeout(UIRecordingError, 50); // Make sure this function finished after get called again
                 return;
             }
-
-            try {
-                // Get currentText from "original_script" div, in case user has change it
-                let text = document.getElementById("original_script").innerHTML;
-                // Remove html tags
-                text = text.replace(/<[^>]*>?/gm, '');
-                //Remove spaces on the beginning and end
-                text = text.trim();
-                // Remove double spaces
-                text = text.replace(/\s\s+/g, ' ');
-                currentText = [text];
-
-                await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
-                    method: "post",
-                    body: JSON.stringify({ "title": currentText[0], "base64Audio": audioBase64, "language": AILanguage }),
-                    headers: { "X-Api-Key": STScoreAPIKey }
-
-                }).then(res => res.json()).
-                    then(data => {
-
-                        if (playAnswerSounds)
-                            playSoundForAnswerAccuracy(parseFloat(data.pronunciation_accuracy))
-
-                        document.getElementById("recorded_ipa_script").innerHTML = "/ " + data.ipa_transcript + " /";
-                        document.getElementById("recordAudio").classList.add('disabled');
-                        document.getElementById("main_title").innerHTML = page_title;
-                        document.getElementById("pronunciation_accuracy").innerHTML = data.pronunciation_accuracy + "%";
-                        document.getElementById("ipa_script").innerHTML = data.real_transcripts_ipa
-
-                        lettersOfWordAreCorrect = data.is_letter_correct_all_words.split(" ")
-
-
-                        startTime = data.start_time;
-                        endTime = data.end_time;
-
-
-                        real_transcripts_ipa = data.real_transcripts_ipa.split(" ")
-                        matched_transcripts_ipa = data.matched_transcripts_ipa.split(" ")
-                        wordCategories = data.pair_accuracy_category.split(" ")
-                        let currentTextWords = currentText[0].split(" ")
-
-                        coloredWords = "";
-                        for (let word_idx = 0; word_idx < currentTextWords.length; word_idx++) {
-
-                            wordTemp = '';
-                            for (let letter_idx = 0; letter_idx < currentTextWords[word_idx].length; letter_idx++) {
-                                letter_is_correct = lettersOfWordAreCorrect[word_idx][letter_idx] == '1'
-                                if (letter_is_correct)
-                                    color_letter = 'green'
-                                else
-                                    color_letter = 'red'
-
-                                wordTemp += '<font color=' + color_letter + '>' + currentTextWords[word_idx][letter_idx] + "</font>"
-                            }
-                            currentTextWords[word_idx]
-                            coloredWords += " " + wrapWordForIndividualPlayback(wordTemp, word_idx)
-                        }
-
-
-
-                        document.getElementById("original_script").innerHTML = coloredWords
-
-                        currentSoundRecorded = true;
-                        unblockUI();
-                        document.getElementById("playRecordedAudio").classList.remove('disabled');
-
-                    });
-            }
-            catch {
-                UIError();
-            }
+            await sendAudioToGetAccuracyFromRecordedAudio(audioBase64);
         };
 
     });
@@ -424,9 +522,9 @@ const playSoundForAnswerAccuracy = async (accuracy) => {
 
 const playAudio = async () => {
 
-    document.getElementById("main_title").innerHTML = "Generating sound...";
+    document.getElementById("main_title").innerText = "Generating sound...";
     playWithMozillaApi(currentText[0]);
-    document.getElementById("main_title").innerHTML = "Current Sound was played";
+    document.getElementById("main_title").innerText = "Current Sound was played";
 
 };
 
@@ -447,7 +545,7 @@ const playRecording = async (start = null, end = null) => {
             audioRecorded.addEventListener("ended", function () {
                 audioRecorded.currentTime = 0;
                 unblockUI();
-                document.getElementById("main_title").innerHTML = "Recorded Sound was played";
+                document.getElementById("main_title").innerText = "Recorded Sound was played";
             });
             await audioRecorded.play();
 
@@ -484,15 +582,15 @@ const playNativeAndRecordedWord = async (word_idx) => {
 const stopRecording = () => {
     isRecording = false
     mediaRecorder.stop()
-    document.getElementById("main_title").innerHTML = "Processing audio...";
+    document.getElementById("main_title").innerText = "Processing audio...";
 }
 
 
 const playCurrentWord = async (word_idx) => {
 
-    document.getElementById("main_title").innerHTML = "Generating word...";
+    document.getElementById("main_title").innerText = "Generating word...";
     playWithMozillaApi(currentText[0].split(' ')[word_idx]);
-    document.getElementById("main_title").innerHTML = "Word was played";
+    document.getElementById("main_title").innerText = "Word was played";
 }
 
 // TODO: Check if fallback is correct
@@ -537,22 +635,20 @@ const blobToBase64 = blob => new Promise((resolve, reject) => {
     reader.onerror = error => reject(error);
 });
 
-const wrapWordForPlayingLink = (word, word_idx, isFromRecording, word_accuracy_color) => {
-    if (isFromRecording)
-        return '<a style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playRecordedWord(' + word_idx.toString() + ')"  >' + word + '</a> '
-    else
-        return '<a style = " white-space:nowrap; color:' + word_accuracy_color + '; " href="javascript:playCurrentWord(' + word_idx.toString() + ')" >' + word + '</a> '
-}
-
-const wrapWordForIndividualPlayback = (word, word_idx) => {
-
-
-    return '<a onmouseover="generateWordModal(' + word_idx.toString() + ')" style = " white-space:nowrap; " href="javascript:playNativeAndRecordedWord(' + word_idx.toString() + ')"  >' + word + '</a> '
-
+const wrapWordForPlayingLink = (word, word_idx, isSpokenWord, word_color) => {
+    // for some reason here the function is swapped
+    const fn = isSpokenWord ? "playRecordedWord" : "playCurrentWord";
+    const id = isSpokenWord ? "single_word_ipa_current" : "single_word_ipa_reference_recorded";
+    const element = document.getElementById(id)
+    element.innerText = word
+    element.href = `javascript:${fn}(${word_idx.toString()})`
+    element.removeAttribute("disabled")
+    element.style["color"] = word_color
+    element.style["whiteSpace"] = "nowrap"
 }
 
 // ########## Function to initialize server ###############
-// This is to try to avoid aws lambda cold start 
+// This is to try to avoid aws lambda cold start
 try {
     fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
         method: "post",
@@ -563,10 +659,36 @@ try {
 }
 catch { }
 
+const audioToBase64 = async (audioFile) => {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = (e) => resolve(e.target.result);
+
+        // custom: set the global variable 'audioRecorded' to play later the uploaded audio
+        let audioUrl = URL.createObjectURL(audioFile);
+        audioRecorded = new Audio(audioUrl);
+
+        reader.readAsDataURL(audioFile);
+    });
+}
+
+const audioUpload = async (audioFile) => {
+    console.log("starting uploading the file...")
+    let audioBase64 = await audioToBase64(audioFile);
+    console.log("file uploaded, starting making the request...")
+    await sendAudioToGetAccuracyFromRecordedAudio(audioBase64);
+    console.log("request done!")
+}
+
 const initializeServer = async () => {
 
-    valid_response = false;
-    document.getElementById("main_title").innerHTML = 'Initializing server, this may take up to 2 minutes...';
+    let valid_response = false;
+    document.getElementById("main_title").innerText = 'Initializing server, this may take up to 2 minutes...';
+    $(document).ready(function() {
+        // required to properly reset the #single_word_ipa_pair element
+        SingleWordIpaPairBackup = $("#single_word_ipa_pair").clone();
+    })
     let number_of_tries = 0;
     let maximum_number_of_tries = 4;
 
@@ -586,9 +708,10 @@ const initializeServer = async () => {
                 valid_response = true);
             serverIsInitialized = true;
         }
-        catch
+        catch (e)
         {
             number_of_tries += 1;
+            console.log(`initializeServer::error: ${e}, retry n=${number_of_tries}.`)
         }
     }
 }

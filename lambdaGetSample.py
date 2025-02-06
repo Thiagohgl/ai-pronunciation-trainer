@@ -38,37 +38,39 @@ def lambda_handler(event, context):
 
     body = json.loads(event['body'])
 
-    category = int(body['category'])
-
+    try:
+        category = int(body['category'])
+    except KeyError:
+        category = 0
     language = body['language']
+    try:
+        current_transcript = [str(body["transcript"])]
+    except KeyError:
+        sample_in_category = False
 
-    sample_in_category = False
+        while(not sample_in_category):
+            valid_sequence = False
+            while not valid_sequence:
+                try:
+                    sample_idx = random.randint(0, len(lambda_database[language]))
+                    current_transcript = lambda_database[language][
+                        sample_idx]
+                    valid_sequence = True
+                except:
+                    pass
 
-    while(not sample_in_category):
-        valid_sequence = False
-        while not valid_sequence:
-            try:
-                sample_idx = random.randint(0, len(lambda_database[language]))
-                current_transcript = lambda_database[language][
-                    sample_idx]
-                valid_sequence = True
-            except:
-                pass
+            sentence_category = getSentenceCategory(
+                current_transcript[0])
 
-        sentence_category = getSentenceCategory(
-            current_transcript[0])
-
-        sample_in_category = (sentence_category ==
-                              category) or category == 0
-
-    translated_trascript = ""
-
-    current_ipa = lambda_ipa_converter[language].convertToPhonem(
-        current_transcript[0])
+            sample_in_category = (sentence_category ==
+                                  category) or category == 0
+    current_transcript_to_convert = current_transcript[0] if isinstance(current_transcript, list) else current_transcript
+    current_ipa = lambda_ipa_converter[language].convertToPhonem(current_transcript_to_convert)
+    print("current_transcript:", type(current_transcript), current_transcript, "#")
 
     result = {'real_transcript': current_transcript,
               'ipa_transcript': current_ipa,
-              'transcript_translation': translated_trascript}
+              'transcript_translation': ""}
 
     return json.dumps(result)
 

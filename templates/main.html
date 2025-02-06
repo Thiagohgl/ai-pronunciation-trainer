@@ -19,6 +19,12 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <script>
+        // Read STScoreAPIKey from a python/Flask env variable
+        const data = '{{ data | tojson }}'
+        const { STScoreAPIKey } = JSON.parse(data)
+        document.cookie = `STScoreAPIKey=${STScoreAPIKey}; path=/; Secure; SameSite=Strict;`
+    </script>
 
 
 </head>
@@ -74,36 +80,35 @@
 
             <div class="horizontal-flexbox" style="position: absolute; top: 2%; ">
 
-                <a id="playSampleAudio" href="javascript:playAudio()" class="round-button disabled" style="color:white; text-align:center;
+            <a id="playSampleAudio" aria-label="playSampleAudio" href="javascript:playAudio()" class="round-button disabled" style="color:white; text-align:center;
                     position: absolute; top: 2%; "><i class="material-icons icon-text">play_arrow</i>
                 </a>
 
-                <a id="playRecordedAudio" href="javascript:playRecording()" class="round-button disabled"
+            <a id="playRecordedAudio" aria-label="playRecordedAudio" href="javascript:playRecording()" class="round-button disabled"
                     style="color:white; text-align:center; position: absolute; top: 15%; "><i
                         class="material-icons icon-text">record_voice_over</i>
                 </a>
-                <p id="pronunciation_accuracy" class="expanded accuracy-text"
+            <p id="pronunciation_accuracy" aria-label="pronunciation_accuracy" class="expanded accuracy-text"
                     style="text-align: center; color: black; position: absolute;  top: 27%; ">
                     -
                 </p>
+
+            <div id="text-button-div" class="text-button-div">
+                <button id="buttonCustomText" class="text-button darkgreen" onclick="javascript:getCustomText()">IPA for custom text</button>
+            </div>
 
             </div>
 
             <div id="text-area" class="main-text-div">
 
-                <p id="original_script" class=" bigger-text text-primary main-text" contenteditable>Click on the bar on the
-                    right
-                    to
-                    generate a
-                    new sentence (please use chrome web browser).
-                </p>
-                <p id="ipa_script" class="text-muted bigger-text ipa-text"> Before speaking, click on the mic button
+            <p id="original_script" aria-label="original_script" class=" bigger-text text-primary main-text" contenteditable="plaintext-only">Click on the bar on the right to generate a new sentence (please use chrome web browser).</p>
+            <p id="ipa_script" aria-label="ipa_script" class="text-muted bigger-text ipa-text"> Before speaking, click on the mic button
                     below to start recording and then click again when you're done.
                 </p>
-                <p id="recorded_ipa_script" class="text-primary ipa-text">On the left bottom you can choose the
+            <p id="recorded_ipa_script" aria-label="recorded_ipa_script" class="text-primary ipa-text">On the left bottom you can choose the
                     difficult. On the upper left you can choose the language.
                 </p>
-                <p id="translated_script" class="text-muted medium-text ipa-text"> The corresponding IPA reading of each
+            <p id="translated_script" aria-label="translated_script" class="text-muted medium-text ipa-text"> The corresponding IPA reading of each
                     sentence will also be displayed. If you never heard from IPA, you can check out this
                     <a href="https://www.youtube.com/watch?v=mzrLZi6fipA&list=RDCMUCQAUWk_yGz7bk1181DrijNw&start_radio=1&rv=mzrLZi6fipA&t=22&ab_channel=FluentForever"
                         target=”_blank”>playlist</a>. Try to get at least 690 points a day. Don't be shy! You can do it
@@ -114,22 +119,46 @@
 
             <div id="nextButtonDiv" style="position: absolute; left: 90%; top:0%; height: 100%;" class="flex-container">
                 <button id="buttonNext" class="expanded button-next" onclick="javascript:getNextSample()">
-                    <span></span></a>
+                    <span></span>
+                </button>
             </div>
         </div>
 
 
 
 
-        <div class="container-small flex expand"
+        <div class="container-small expand"
             style="align-items: center; text-align: center; vertical-align:middle; ">
             <p id="single_word_ipa_pair" class="expand ipa-text-small"
-                style="text-align: center; vertical-align: middle;">Reference | Spoken
+           style="text-align: center; vertical-align: middle;">
+            <span id="single_word_ipa_pair_error" style="display: none;" aria-label="ipa-pair-error">Error</span>
+            <a id="single_word_ipa_reference_recorded" aria-label="playRecordedWord" disabled>Reference</a>
+            <span id="single_word_ipa_pair_separator"> | </span>
+            <a id="single_word_ipa_current" aria-label="playCurrentWord" disabled>Spoken</a>
             </p>
         </div>
 
 
-        <div id="btn-record" class="expanded mic-button-div">
+        <div class="display-inline-block form-audio-file text-align-center">
+            <input
+                id="input-uploader-audio-hidden"
+                oninput="audioUpload(this.files[0])"
+                style="display:none;"
+                type="file"
+            >
+            <input
+                aria-label="input-uploader-audio-file"
+                class="display-block"
+                disabled
+                id="input-uploader-audio-file"
+                onclick="document.getElementById('input-uploader-audio-hidden').click();"
+                type="button"
+                value="Custom audio file"
+            />
+        </div>
+
+
+        <div id="btn-record" aria-label="btn-record" class="expanded mic-button-div">
             <a id="recordAudio" href="javascript:updateRecordingState()" class="round-button-mic disabled"
                 style="color:white; text-align:center; "><i id="recordIcon" class="material-icons icon-text-mic">mic</i>
             </a>
@@ -137,10 +166,10 @@
 
 
         <div id="radio-difficulty" class="radio" style="position: fixed; top: 95%; left: 2%;">
-            <input label="Random" type="radio" id="lengthCat1" name='length' onclick="javascript:getNextSample()">
-            <input label="Easy" type="radio" id="lengthCat2" name='length' checked onclick="javascript:getNextSample()">
-            <input label="Medium" type="radio" id="lengthCat3" name='length' onclick="javascript:getNextSample()">
-            <input label="Hard" type="radio" id="lengthCat4" name='length' onclick="javascript:getNextSample()">
+        <input label="Random" type="radio" aria-label="Random" id="lengthCat1" name='length' onclick="javascript:getNextSample()">
+        <input label="Easy" type="radio" aria-label="Easy" id="lengthCat2" name='length' checked onclick="javascript:getNextSample()">
+        <input label="Medium" type="radio" aria-label="Medium" id="lengthCat3" name='length' onclick="javascript:getNextSample()">
+        <input label="Hard" type="radio" aria-label="Hard" id="lengthCat4" name='length' onclick="javascript:getNextSample()">
         </div>
 
     </div>

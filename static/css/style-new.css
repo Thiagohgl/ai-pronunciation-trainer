@@ -2,6 +2,21 @@ body {
 	background: #f2f2f2;
 }
 
+.flex {
+	display: flex;
+}
+
+.text-align-center {
+	text-align: center;
+}
+
+.display-block {
+	display: block;
+}
+
+.display-inline-block {
+	display: inline-block;
+}
 
 .expanded {
 	margin: auto;
@@ -18,7 +33,13 @@ h1 {
 
 a.disabled {
 	pointer-events: none;
-	color: #ccc;
+	color: black;
+	background-color: #ccc;
+}
+
+.color-disabled {
+	pointer-events: none;
+	color: black;
 	background-color: #ccc;
 }
 
@@ -27,6 +48,31 @@ a.disabled {
 	height: 100%;
 	width: 100%;
 	display: flex;
+}
+
+.darkgreen {
+	color: white;
+	background-color: #467387;
+}
+
+/* text button */
+.text-button {
+	border: none;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	height: fit-content;
+	width: 4em;
+}
+.text-button-div {
+	position: absolute;
+	top: 38%;
+}
+#input-uploader-audio-file {
+	width: 100px;
+	white-space: normal;
 }
 
 /* ############## Next button ##### */
@@ -219,6 +265,17 @@ a.disabled {
 
 .icon-text-home {
 	font-size: 3.5em !important;
+}
+
+.form-audio-file {
+	position: fixed;
+	left: 25%;
+	top: 82%;
+}
+.form-audio-file-label {
+	position: fixed;
+	left: 25%;
+	top: 86%;
 }
 
 .mic-button-div {
