@@ -12,7 +12,12 @@ import lambdaGetSample
 
 app = Flask(__name__)
 cors = CORS(app)
-app.config['CORS_HEADERS'] = '*'
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Strict',
+)
+# if really using this api key for external requests it should be stored in a secure way
 data = {"STScoreAPIKey": STSCOREAPIKEY}
 
 rootPath = ''
@@ -54,9 +59,8 @@ def GetAccuracyFromRecordedAudio():
         return {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Headers': '*',
-                'Access-Control-Allow-Credentials': "true",
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': ALLOWED_ORIGIN,
+                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
                 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
             },
             'body': ''
