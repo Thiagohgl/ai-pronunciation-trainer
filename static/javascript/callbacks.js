@@ -107,8 +107,6 @@ const UIError = (errorMsg = defaultErrorScript) => {
 
 const disableElementWithClass = (id) => {
     let el = document.getElementById(id)
-    // el.classList.add('disabled');
-    // el.classList.add('color-disabled');
     el.disabled = true;
     el.classList.remove('darkgreen');
 }
@@ -117,8 +115,6 @@ const enableElementWithClass = (id) => {
     let el = document.getElementById(id)
     el.removeAttribute("disabled");
     el.classList.add('darkgreen');
-    // el.classList.remove('color-disabled');
-    // el.classList.remove('disabled');
 }
 
 const UINotSupported = () => {
@@ -167,7 +163,8 @@ const cacheSoundFiles = async () => {
 
 const getCustomTextIsDisabled = () => {
     const checkText = document.getElementById("original_script").innerText;
-    return checkText === defaultOriginalScript || checkText === defaultErrorScript || checkText === editErrorScript || checkText.toString().replace(/\s/g,'') === "";
+    let cleanedText = checkText.toString().replace(/[^\w\s]/gi, ' ').trim();
+    return checkText === defaultOriginalScript || checkText === defaultErrorScript || checkText === editErrorScript || cleanedText === "";
 }
 
 const getCustomText = async () => {
@@ -186,10 +183,8 @@ const getCustomText = async () => {
 
     if (getCustomTextIsDisabled()) {
         UIError(editErrorScript);
-        disableElementWithClass("buttonCustomText")
         return;
     }
-
     updateScore(parseFloat(document.getElementById("pronunciation_accuracy").innerHTML));
 
     document.getElementById("main_title").innerText = "Get IPA transcription for custom text...";
