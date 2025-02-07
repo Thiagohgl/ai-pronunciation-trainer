@@ -94,5 +94,35 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         expectedPronunciationAccuracy: "77%",
         expectedSectionAccuracyScore: "| Score: 167 - (",
         testAudioFile: "test_de_hard.wav"
+    },
+    {
+        expectedText: "Hi there, how are you?",
+        category: "Easy",
+        expectedIPA: "/ haɪ ðɛr, haʊ ər ju? /",
+        language: "English",
+        expectedRecordedIPAScript: "/ haɪ ðɛr, haʊ ər ju? /",
+        expectedPronunciationAccuracy: "100%",
+        expectedSectionAccuracyScore: "| Score: 244 - (",
+        testAudioFile: "test_en_easy.wav"
+    },
+    {
+        expectedText: "Rome is home to some of the most beautiful monuments in the world.",
+        category: "Medium",
+        expectedIPA: "/ roʊm ɪz hoʊm tɪ səm əv ðə moʊst ˈbjutəfəl ˈmɑnjəmənts ɪn ðə wərld. /",
+        language: "English",
+        expectedRecordedIPAScript:  "/ roʊm ɪz hoʊm tɪ səm əv ðə moʊst ˈbjutəfəl ˈmɑnjəmənts ɪn ðə wərld. /",
+        expectedPronunciationAccuracy: "100%",
+        expectedSectionAccuracyScore: "| Score: 344 - (",
+        testAudioFile: "test_en_medium.wav"
+    },
+    {
+        expectedText: "Some machine learning models are designed to understand and generate human-like text based on the input they receive.",
+        category: "Hard",
+        expectedIPA: "/ səm məˈʃin ˈlərnɪŋ ˈmɑdəlz ər dɪˈzaɪnd tɪ ˌəndərˈstænd ənd ˈʤɛnərˌeɪt human-like tɛkst beɪst ɔn ðə ˈɪnˌpʊt ðeɪ rɪˈsiv. /",
+        language: "English",
+        expectedRecordedIPAScript: "/ səm məˈʃin ˈlərnɪŋ ˈmɑdəlz ər dɪˈzaɪnd tɪ ˌəndərˈstænd ənd ˈʤɛnərˌeɪt human-like tɛkst beɪst ɔn ðə ˈɪnˌpʊt ðeɪ rɪˈsiv. /",
+        expectedPronunciationAccuracy: "100%",
+        expectedSectionAccuracyScore: "| Score: 444 - (",
+        testAudioFile: "test_en_hard.wav"
     }
 ]

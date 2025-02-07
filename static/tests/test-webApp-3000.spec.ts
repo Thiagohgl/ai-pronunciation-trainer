@@ -131,37 +131,21 @@ test.describe("test: get a custom sample writing within the input field.", async
             if (language !== languagePredefined) {
                 await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
                 await page.getByRole('link', { name: language }).click();
+                await page.waitForTimeout(200)
             }
             await page.getByLabel('original_script').fill(expectedText);
             await page.getByRole('button', { name: 'buttonCustomText' }).click();
-            console.log("clicked buttonCustomText, text:", await page.getByLabel('original_script').textContent());
+            await page.waitForTimeout(200)
             await helperGetNextSentenceOutput({page, expectedText, expectedIPA});
 
             // test the /GetAccuracyFromRecordedAudio endpoint
-            // await page.getByRole('button', { name: 'input-uploader-audio-file' }).click();
-            console.log("import.meta.dirname: ", import.meta.dirname, "#");
             const audioFilePath = path.join( import.meta.dirname, '..', '..', 'tests', 'events', testAudioFile);
-            console.log("audioFilePath: ", audioFilePath, "#");
+            console.log(`import.meta.dirname: ${import.meta.dirname}, audioFilePath: ${audioFilePath}`);
             // workaround to upload the audio file that will trigger the /GetAccuracyFromRecordedAudio endpoint
             await page.getByLabel("input-uploader-audio-hidden").setInputFiles(audioFilePath);
-            console.log("audio file uploaded");
             await expect(page.getByLabel('original_script')).toHaveScreenshot();
-            console.log("screenshot taken");
             await expect(page.getByLabel('recorded_ipa_script')).toContainText(expectedRecordedIPAScript);
-            console.log("recorded_ipa_script: ", await page.getByLabel('recorded_ipa_script').textContent());
             await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
-            console.log("pronunciation_accuracy: ", await page.getByLabel('pronunciation_accuracy').textContent());
-            // todo: find a way to record the played audio sounds and compare them with the expected audio sounds
-            await page.getByRole('link', { name: 'playRecordedAudio' }).click();
-            console.log("playRecordedAudio clicked");
-            // todo: callback.js, split the colored sentence into words (span elements) and select the last word
-            // let wordForPlayAudio = expectedText.split(" ")[expectedText.length-1]
-            // console.log("Clicking on the last word of the sentence to populate the 'playRecordedWord' (Reference) and 'playCurrentWord' (Spoken) elements.");
-            // await page.getByText(wordForPlayAudio, { exact: true }).click();
-            // await page.getByText(wordForPlayAudio).click();
-            // todo: find a way to record the played audio sounds and compare them with the expected audio sounds
-            // await page.getByRole('link', { name: 'playRecordedWord' }).click();
-            // await page.getByRole('link', { name: 'playCurrentWord' }).click();
 
             await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
             await expect(page.getByLabel('section_accuracy_score')).toContainText(expectedSectionAccuracyScore);
