@@ -306,14 +306,7 @@ const formatTranscriptData = (data) => {
 }
 
 const updateRecordingState = async () => {
-    if (isRecording) {
-        stopRecording();
-        return
-    }
-    else {
-        recordSample()
-        return;
-    }
+    return isRecording ? stopRecording() : recordSample();
 }
 
 const generateWordModal = (word_idx) => {
@@ -439,6 +432,8 @@ async function sendAudioToGetAccuracyFromRecordedAudio(audioBase64) {
                     containerLetter.innerText = currentWordText[letterIdx];
                     coloredWordTemp.appendChild(containerLetter)
 
+                    coloredWordTemp.ariaLabel = `word${wordIdx}${currentWordText}`.replace(/[^a-zA-Z0-9]/g, "")
+                    console.log(`coloredWordTemp.ariaLabel:${coloredWordTemp.ariaLabel}!`)
                     coloredWordTemp.style.whiteSpace = "nowrap"
                     coloredWordTemp.style.textDecoration = "underline"
                     coloredWordTemp.onclick = function () {

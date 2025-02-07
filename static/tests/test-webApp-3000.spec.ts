@@ -46,9 +46,11 @@ test.describe("test: get a custom sample writing within the input field.", async
         await expect(page.getByLabel('section_accuracy_score')).toContainText('| Score: 0');
         const textPlaceholder = page.getByText("Click on the bar on the");
         await expect(textPlaceholder).toBeVisible();
+
         await expect(page.getByLabel('playRecordedWord')).toContainText('Reference');
         await expect(page.getByLabel('playCurrentWord')).toContainText('Spoken');
         await expect(page.getByLabel('pronunciation_accuracy')).toContainText('-');
+
         const inputUploaderAudioFile = page.getByLabel('input-uploader-audio-file');
         await expect(inputUploaderAudioFile).toBeDisabled();
         await expect(inputUploaderAudioFile).toContainText('Custom audio file');
@@ -140,22 +142,44 @@ test.describe("test: get a custom sample writing within the input field.", async
 
             // test the /GetAccuracyFromRecordedAudio endpoint
             const audioFilePath = path.join( import.meta.dirname, '..', '..', 'tests', 'events', testAudioFile);
-            console.log(`import.meta.dirname: ${import.meta.dirname}, audioFilePath: ${audioFilePath}`);
-            // workaround to upload the audio file that will trigger the /GetAccuracyFromRecordedAudio endpoint
-            await page.getByLabel("input-uploader-audio-hidden").setInputFiles(audioFilePath);
+            try {
+                await expect(page.getByLabel('original_script')).toContainText(expectedText);
+                // workaround to upload the audio file that will trigger the /GetAccuracyFromRecordedAudio endpoint
+                await page.getByLabel("input-uploader-audio-hidden").setInputFiles(audioFilePath);
+            } catch (err1) {
+                console.log(`import.meta.dirname: '${import.meta.dirname}', audioFilePath: '${audioFilePath}'`);
+                console.error(`input-uploader-audio-hidden::err1: `, err1, "#");
+            }
             await expect(page.getByLabel('original_script')).toHaveScreenshot();
 
             const expectedText2 = expectedIPA.replace(/^\/ /g, "").replace(/ \/$/g, "")
             try {
                 await expect(page.getByLabel('ipa_script', {exact: true})).toContainText(expectedText2);
-            } catch (e) {
-                console.log(`expectedText2: ${expectedText2}`);
-                const ipaScript2 = await page.getByLabel('ipa_script', {exact: true}).innerText();
-                console.log(`ipaScript2: '${ipaScript2}'`);
-                throw e;
+            } catch (err2) {
+                console.log(`expectedText2: '${expectedText2}'`);
+                throw err2;
             }
             await expect(page.getByLabel('recorded_ipa_script')).toContainText(expectedRecordedIPAScript);
             await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
+
+            /** todo: find a way to record the played audio sounds:
+             * - playSampleAudio
+             * - playRecordedAudio
+             * - playRecordedWord
+             * - playCurrentWord
+             * and compare them with the expected audio sounds
+             */
+            await page.getByRole('link', { name: 'playSampleAudio' }).click();
+            await page.getByRole('link', { name: 'playRecordedAudio' }).click();
+
+            let idx = expectedText.split(" ").length - 1;
+            let wordForPlayAudio = expectedText.split(" ")[idx]
+            let wordForPlayAudioAriaLabel = `word${idx}${wordForPlayAudio}`.replace(/[^a-zA-Z0-9]/g, "")
+            await expect(page.getByLabel(wordForPlayAudioAriaLabel)).toHaveScreenshot();
+            await page.getByLabel(wordForPlayAudioAriaLabel).click();
+            let playRecordedWord = page.getByRole('link', { name: 'playRecordedWord' });
+            await expect(playRecordedWord).toHaveScreenshot();
+            await playRecordedWord.click();
 
             await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
             await expect(page.getByLabel('section_accuracy_score')).toContainText(expectedSectionAccuracyScore);
