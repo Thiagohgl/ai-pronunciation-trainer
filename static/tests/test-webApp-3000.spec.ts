@@ -144,6 +144,16 @@ test.describe("test: get a custom sample writing within the input field.", async
             // workaround to upload the audio file that will trigger the /GetAccuracyFromRecordedAudio endpoint
             await page.getByLabel("input-uploader-audio-hidden").setInputFiles(audioFilePath);
             await expect(page.getByLabel('original_script')).toHaveScreenshot();
+
+            const expectedText2 = expectedIPA.replace(/^\/ /g, "").replace(/ \/$/g, "")
+            try {
+                await expect(page.getByLabel('ipa_script', {exact: true})).toContainText(expectedText2);
+            } catch (e) {
+                console.log(`expectedText2: ${expectedText2}`);
+                const ipaScript2 = await page.getByLabel('ipa_script', {exact: true}).innerText();
+                console.log(`ipaScript2: '${ipaScript2}'`);
+                throw e;
+            }
             await expect(page.getByLabel('recorded_ipa_script')).toContainText(expectedRecordedIPAScript);
             await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
 
