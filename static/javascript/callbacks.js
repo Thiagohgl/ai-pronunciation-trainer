@@ -162,7 +162,7 @@ const cacheSoundFiles = async () => {
 }
 
 const getCustomTextIsDisabled = () => {
-    const checkText = document.getElementById("original_script").innerText;
+    const checkText = document.getElementById("original_script").innerText.trim();
     let cleanedText = checkText.toString().replace(/[^\w\s]/gi, ' ').trim();
     return checkText === defaultOriginalScript || checkText === defaultErrorScript || checkText === editErrorScript || cleanedText === "";
 }

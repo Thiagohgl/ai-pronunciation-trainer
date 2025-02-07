@@ -53,17 +53,17 @@
                     Language: </p>
                 <!--dropbtn accuracy-text-->
                 <div class="dropdown">
-                    <button id="languageBox" class="dropbtn accuracy-text"
+                    <button id="languageBox" class="dropbtn accuracy-text" aria-label="languageBoxDropdown"
                         style="font-size:1em; text-align: left; padding-top: 3px; padding-left: 0px;">German</button>
                     <div class="dropdown-content">
-                        <a href="javascript:changeLanguage('de',true)" class="accuracy-text"
+                        <a href="javascript:changeLanguage('de',true)" class="accuracy-text" aria-label="languageGerman"
                             style="padding-top: 3px; ">German</a>
-                        <a href="javascript:changeLanguage('en',true)" class="accuracy-text ;"
+                        <a href="javascript:changeLanguage('en',true)" class="accuracy-text ;" aria-label="languageEnglish"
                             style="padding-top: 3px; ">English</a>
                     </div>
                 </div>
 
-                <p id="section_accuracy" class="accuracy-text"
+                <p id="section_accuracy" class="accuracy-text" aria-label="section_accuracy_score"
                     style="text-align: left; color: black; font-size: larger;">
                     | Score: 0
                 </p>
@@ -94,7 +94,7 @@
                 </p>
 
             <div id="text-button-div" class="text-button-div">
-                <button id="buttonCustomText" class="text-button darkgreen" onclick="javascript:getCustomText()">IPA for custom text</button>
+                <button id="buttonCustomText" aria-label="buttonCustomText" class="text-button darkgreen" onclick="javascript:getCustomText()">IPA for custom text</button>
             </div>
 
             </div>
@@ -117,8 +117,8 @@
 
             </div>
 
-            <div id="nextButtonDiv" style="position: absolute; left: 90%; top:0%; height: 100%;" class="flex-container">
-                <button id="buttonNext" class="expanded button-next" onclick="javascript:getNextSample()">
+            <div id="nextButtonDiv" class="flex-container">
+                <button id="buttonNext" aria-label="buttonNext" class="expanded button-next" onclick="javascript:getNextSample()">
                     <span></span>
                 </button>
             </div>
@@ -141,6 +141,7 @@
 
         <div class="display-inline-block form-audio-file text-align-center">
             <input
+                aria-label="input-uploader-audio-hidden"
                 id="input-uploader-audio-hidden"
                 oninput="audioUpload(this.files[0])"
                 style="display:none;"
@@ -158,8 +159,8 @@
         </div>
 
 
-        <div id="btn-record" aria-label="btn-record" class="expanded mic-button-div">
-            <a id="recordAudio" href="javascript:updateRecordingState()" class="round-button-mic disabled"
+        <div id="btn-record" class="expanded mic-button-div">
+            <a id="recordAudio" href="javascript:updateRecordingState()" class="round-button-mic disabled" aria-label="recordAudio"
                 style="color:white; text-align:center; "><i id="recordIcon" class="material-icons icon-text-mic">mic</i>
             </a>
         </div>

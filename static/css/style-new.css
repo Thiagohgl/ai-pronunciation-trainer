@@ -86,11 +86,10 @@ a.disabled {
 	box-sizing: border-box;
 	position: absolute;
 	top: 0;
-	left: 0%;
-	right: 2%;
-	bottom: 2%;
+	left: 94%;
 	background-color: #58636d;
-	width: 10em;
+	width: 6%;
+	height: 100%;
 
 	transition: all 0.5s;
 	cursor: pointer;
