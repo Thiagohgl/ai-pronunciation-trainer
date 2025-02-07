@@ -1,7 +1,31 @@
 import {test, expect, chromium, Page} from "@playwright/test";
-import {dataGetSample} from "./constants";
+import path from "node:path";
+import {customDataWithTestAudio, dataGetSample} from "./constants";
 
-let pageArray = new Array<Page>();
+let pageArray: Page[] = [];
+
+const helperGetNextSentenceOutput = async (args: {page: Page, expectedText: string, expectedIPA: string}) => {
+    const {page, expectedText, expectedIPA} = args;
+    await expect(page.getByLabel('original_script')).toContainText(expectedText);
+    await expect(page.getByLabel('ipa_script', { exact: true })).toContainText(expectedIPA);
+    await expect(page.getByLabel('playSampleAudio')).not.toHaveClass(/disabled/);
+    await expect(page.getByLabel('input-uploader-audio-file')).toBeEnabled();
+    await expect(page.getByRole('link', { name: 'recordAudio' })).not.toHaveClass(/disabled/);
+    await expect(page.getByLabel('playRecordedWord')).toContainText('Reference');
+    await expect(page.getByLabel('playCurrentWord')).toContainText('Spoken');
+    // check for not having an error message
+    await expect(page.getByLabel('ipa-pair-error')).not.toBeVisible();
+}
+
+const helperGetNextSentence = async (args: {page: Page, expectedText: string, expectedIPA: string, language: string, languagePredefined: string, category: string}) => {
+    let {page, expectedText, expectedIPA, language, languagePredefined, category} = args;
+    if (language !== languagePredefined) {
+        await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
+        await page.getByRole('link', { name: language }).click();
+    }
+    await page.getByRole('radio', { name: category }).check();
+    await helperGetNextSentenceOutput({page, expectedText, expectedIPA});
+}
 
 test.describe("test: get a custom sample writing within the input field.", async () => {
     test.beforeAll(async ({}) => {
@@ -52,39 +76,29 @@ test.describe("test: get a custom sample writing within the input field.", async
              - input-uploader-audio-file
          should NOT be disabled or to have the class 'disabled'.
          **/
-        await expect(page.getByRole('link', { name: 'playSampleAudio' })).not.toHaveClass(/disabled/);
-        await expect(page.getByRole('link', { name: 'recordAudio' })).not.toHaveClass(/disabled/);
-        let originalScript = page.getByLabel('original_script')
-        await expect(originalScript).toContainText('Marie leidet an Hashimoto-Thyreoiditis.');
-        let ipaScript = page.getByLabel('ipa_script', { exact: true });
-        await expect(ipaScript).toContainText('/ maːriː laɪ̯dɛːt aːn haːshiːmoːtoː-tyːrɛːɔɪ̯diːtiːs. /');
-        await expect(page.getByLabel('input-uploader-audio-file')).not.toHaveClass(/disabled/);
-        await expect(page.getByLabel('input-uploader-audio-file')).toBeEnabled();
+        await helperGetNextSentenceOutput({
+            page,
+            expectedText: "Marie leidet an Hashimoto-Thyreoiditis.",
+            expectedIPA: "/ maːriː laɪ̯dɛːt aːn haːshiːmoːtoː-tyːrɛːɔɪ̯diːtiːs. /"
+        });
         await expect(page.getByLabel('section_accuracy_score')).toContainText('| Score: 0 - (0)');
     });
 
     let languagePredefined = "German"
     for (let {expectedText, category, expectedIPA, language} of dataGetSample) {
-        test(`Get a custom sample writing within the input field using the predefined '${category}' and language '${language}' sentence category.`, async ({}) => {
-            let page = pageArray[0];
-            if (language !== languagePredefined) {
-                await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
-                await page.getByRole('link', { name: language }).click();
-            }
-            await page.getByRole('radio', { name: category }).check();
-            await expect(page.getByLabel('original_script')).toContainText(expectedText);
-            await expect(page.getByLabel('ipa_script', { exact: true })).toContainText(expectedIPA);
-            await expect(page.getByLabel('playSampleAudio')).not.toHaveClass(/disabled/);
-            await expect(page.getByLabel('input-uploader-audio-file')).toBeEnabled();
-            await expect(page.getByRole('link', { name: 'recordAudio' })).not.toHaveClass(/disabled/);
-            await expect(page.getByLabel('playRecordedWord')).toContainText('Reference');
-            await expect(page.getByLabel('playCurrentWord')).toContainText('Spoken');
-            // check for not having an error message
-            await expect(page.getByLabel('ipa-pair-error')).not.toBeVisible();
+        test(`Get a custom sample using a custom sentence ('${category}' category, '${language}' language)`, async ({}) => {
+            await helperGetNextSentence({
+                page: pageArray[0],
+                expectedText,
+                expectedIPA,
+                language,
+                languagePredefined,
+                category
+            });
         });
     }
 
-    test("Get a custom sample writing within the input field using the predefined 'medium' sentence category (switch back to English)", async ({}) => {
+    test("Test an error message, then remove it (switch back to English)", async ({}) => {
         let page = pageArray[0];
         let language = "German";
         await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
@@ -106,4 +120,51 @@ test.describe("test: get a custom sample writing within the input field.", async
         let ipaScript = page.getByLabel('ipa_script', { exact: true });
         await expect(ipaScript).toContainText('/ maːriː laɪ̯dɛːt aːn haːshiːmoːtoː-tyːrɛːɔɪ̯diːtiːs. /');
     })
+
+    for (let {
+        expectedText, category, expectedIPA, language, expectedRecordedIPAScript,
+        expectedSectionAccuracyScore, expectedPronunciationAccuracy, testAudioFile
+    } of customDataWithTestAudio) {
+        test(`Test the /GetAccuracyFromRecordedAudio endpoint with a custom sentence ('${category}' category, '${language}' language)`, async ({}) => {
+            let page = pageArray[0];
+
+            if (language !== languagePredefined) {
+                await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
+                await page.getByRole('link', { name: language }).click();
+            }
+            await page.getByLabel('original_script').fill(expectedText);
+            await page.getByRole('button', { name: 'buttonCustomText' }).click();
+            console.log("clicked buttonCustomText, text:", await page.getByLabel('original_script').textContent());
+            await helperGetNextSentenceOutput({page, expectedText, expectedIPA});
+
+            // test the /GetAccuracyFromRecordedAudio endpoint
+            // await page.getByRole('button', { name: 'input-uploader-audio-file' }).click();
+            console.log("import.meta.dirname: ", import.meta.dirname, "#");
+            const audioFilePath = path.join( import.meta.dirname, '..', '..', 'tests', 'events', testAudioFile);
+            console.log("audioFilePath: ", audioFilePath, "#");
+            // workaround to upload the audio file that will trigger the /GetAccuracyFromRecordedAudio endpoint
+            await page.getByLabel("input-uploader-audio-hidden").setInputFiles(audioFilePath);
+            console.log("audio file uploaded");
+            await expect(page.getByLabel('original_script')).toHaveScreenshot();
+            console.log("screenshot taken");
+            await expect(page.getByLabel('recorded_ipa_script')).toContainText(expectedRecordedIPAScript);
+            console.log("recorded_ipa_script: ", await page.getByLabel('recorded_ipa_script').textContent());
+            await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
+            console.log("pronunciation_accuracy: ", await page.getByLabel('pronunciation_accuracy').textContent());
+            // todo: find a way to record the played audio sounds and compare them with the expected audio sounds
+            await page.getByRole('link', { name: 'playRecordedAudio' }).click();
+            console.log("playRecordedAudio clicked");
+            // todo: callback.js, split the colored sentence into words (span elements) and select the last word
+            // let wordForPlayAudio = expectedText.split(" ")[expectedText.length-1]
+            // console.log("Clicking on the last word of the sentence to populate the 'playRecordedWord' (Reference) and 'playCurrentWord' (Spoken) elements.");
+            // await page.getByText(wordForPlayAudio, { exact: true }).click();
+            // await page.getByText(wordForPlayAudio).click();
+            // todo: find a way to record the played audio sounds and compare them with the expected audio sounds
+            // await page.getByRole('link', { name: 'playRecordedWord' }).click();
+            // await page.getByRole('link', { name: 'playCurrentWord' }).click();
+
+            await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
+            await expect(page.getByLabel('section_accuracy_score')).toContainText(expectedSectionAccuracyScore);
+        });
+    }
 });

@@ -7,7 +7,19 @@ type DataGetSample = {
     expectedIPA: string;
     language: Language;
 }
+interface CustomDataWithTestAudio extends DataGetSample {
+    expectedRecordedIPAScript: string;
+    expectedPronunciationAccuracy: string;
+    expectedSectionAccuracyScore: string;
+    testAudioFile: string;
+}
 export const dataGetSample: DataGetSample[] = [
+    {
+        expectedText: "Marie leidet an Hashimoto-Thyreoiditis.",
+        category: "Random",
+        expectedIPA: "/ maːriː laɪ̯dɛːt aːn haːshiːmoːtoː-tyːrɛːɔɪ̯diːtiːs. /",
+        language: "German"
+    },
     {
         expectedText: "Marie leidet an Hashimoto-Thyreoiditis.",
         category: "Easy",
@@ -28,6 +40,12 @@ export const dataGetSample: DataGetSample[] = [
     },
     {
         expectedText: "Mary has Hashimoto's.",
+        category: "Random",
+        expectedIPA: "/ ˈmɛri həz hashimoto's. /",
+        language: "English"
+    },
+    {
+        expectedText: "Mary has Hashimoto's.",
         category: "Easy",
         expectedIPA: "/ ˈmɛri həz hashimoto's. /",
         language: "English"
@@ -43,5 +61,38 @@ export const dataGetSample: DataGetSample[] = [
         category: "Hard",
         expectedIPA: "/ daɪˈænə keɪm ˈoʊvər, drɛst ɪn hər second-best drɛs ənd ˈlʊkɪŋ ɪgˈzæktli ɛz ɪt ɪz ˈprɑpər tɪ lʊk wɪn æst aʊt tɪ ti. /",
         language: "English"
+    }
+]
+
+export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
+    {
+        expectedText: "Hallo, wie geht es dir?",
+        category: "Easy",
+        expectedIPA: "/ haloː, viː ɡeːt ɛːs diːr? /",
+        language: "German",
+        expectedRecordedIPAScript: "/ haloː, viː ɡeːt ɛːs diːr? /",
+        expectedPronunciationAccuracy: "100%",
+        expectedSectionAccuracyScore: "| Score: 0 - (",
+        testAudioFile: "test_de_easy.wav"
+    },
+    {
+        expectedText: "Die König-Ludwig-Eiche ist ein Naturdenkmal im Staatsbad Brückenau.",
+        category: "Medium",
+        expectedIPA: "/ diː køːniːɡ-lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdɛŋkmaːl iːm statsbaːd bryːkɛːnaʊ̯. /",
+        language: "German",
+        expectedRecordedIPAScript: "/  diː køːniːɡ-lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdaŋkmaːl iːm statsbadbryːkɛːnaʊ̯. /",
+        expectedPronunciationAccuracy: "67%",
+        expectedSectionAccuracyScore: "| Score: 100 - (",
+        testAudioFile: "test_de_medium.wav"
+    },
+    {
+        expectedText: "Die König-Ludwig-Eiche ist ein Naturdenkmal im Staatsbad Brückenau, einem Ortsteil des drei Kilometer nordöstlich gelegenen Bad Brückenau im Landkreis Bad Kissingen in Bayern.",
+        category: "Hard",
+        expectedIPA: "/ diː køːniːɡ-lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdɛŋkmaːl iːm statsbaːd bryːkɛːnaʊ̯, aɪ̯nɛːm oːrtstaɪ̯l dɛːs draɪ̯ kiːloːmɛːtɛːr noːrdœstlɪç ɡɛːlɛːɡɛːnɛːn baːd bryːkɛːnaʊ̯ iːm landkraɪ̯s baːd kɪzɪŋɛːn iːn baɪ̯ɛːrn. /",
+        language: "German",
+        expectedRecordedIPAScript: "/  diː køːniːɡ-lʊtvɛːɡaɪ̯çɛː ɪst aɪ̯n naːtuːrdaŋkmaːl iːm statsbaːd bryːkɛːnaʊ̯, aɪ̯nɛːm oːrt staɪ̯l dɛːs 3 km noːrdœstlɪç ɡɛːlɛːɡɛːnɛːn baːd bryːkɛːnaʊ̯ iːm landkraɪ̯sbaːd kɪzɪŋɛːn iːn baɪ̯ɛːrn. /",
+        expectedPronunciationAccuracy: "77%",
+        expectedSectionAccuracyScore: "| Score: 167 - (",
+        testAudioFile: "test_de_hard.wav"
     }
 ]
