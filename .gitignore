@@ -55,6 +55,7 @@ coverage.xml
 static/test-results/*
 cosmic-ray-results/*
 cosmic_ray.sqlite
+static/playwright-report/*
 
 # Translations
 *.mo
