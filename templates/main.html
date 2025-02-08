@@ -5,17 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <link rel="stylesheet" href="../static/css/style-new.css">
     <script src="../static/javascript/callbacks.js"></script>
 
 
     <title>AI pronunciation trainer</title>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -94,7 +96,7 @@
                 </p>
 
             <div id="text-button-div" class="text-button-div">
-                <button id="buttonCustomText" aria-label="buttonCustomText" class="text-button darkgreen" onclick="javascript:getCustomText()">IPA for custom text</button>
+                <button id="buttonCustomText" aria-label="buttonCustomText" class="text-button darkgreen" onclick="getCustomText()">IPA for custom text</button>
             </div>
 
             </div>
@@ -118,7 +120,7 @@
             </div>
 
             <div id="nextButtonDiv" class="flex-container">
-                <button id="buttonNext" aria-label="buttonNext" class="expanded button-next" onclick="javascript:getNextSample()">
+                <button id="buttonNext" aria-label="buttonNext" class="expanded button-next" onclick="getNextSample()">
                     <span></span>
                 </button>
             </div>
@@ -167,10 +169,10 @@
 
 
         <div id="radio-difficulty" class="radio" style="position: fixed; top: 95%; left: 2%;">
-        <input label="Random" type="radio" aria-label="Random" id="lengthCat1" name='length' onclick="javascript:getNextSample()">
-        <input label="Easy" type="radio" aria-label="Easy" id="lengthCat2" name='length' checked onclick="javascript:getNextSample()">
-        <input label="Medium" type="radio" aria-label="Medium" id="lengthCat3" name='length' onclick="javascript:getNextSample()">
-        <input label="Hard" type="radio" aria-label="Hard" id="lengthCat4" name='length' onclick="javascript:getNextSample()">
+        <input label="Random" type="radio" aria-label="Random" id="lengthCat1" name='length' onclick="getNextSample()">
+        <input label="Easy" type="radio" aria-label="Easy" id="lengthCat2" name='length' checked onclick="getNextSample()">
+        <input label="Medium" type="radio" aria-label="Medium" id="lengthCat3" name='length' onclick="getNextSample()">
+        <input label="Hard" type="radio" aria-label="Hard" id="lengthCat4" name='length' onclick="getNextSample()">
         </div>
 
     </div>
