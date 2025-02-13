@@ -1,15 +1,16 @@
-
-import torch
-import numpy as np
-import models as mo
-import WordMetrics
-import WordMatching as wm
-import epitran
-import ModelInterfaces as mi
-import AIModels
-import RuleBasedModels
-from string import punctuation
 import time
+from string import punctuation
+
+import epitran
+import numpy as np
+import torch
+
+import ModelInterfaces as mi
+import RuleBasedModels
+import WordMatching as wm
+import WordMetrics
+import models as mo
+from constants import sample_rate_resample, app_logger
 
 
 def getTrainer(language: str):
@@ -30,6 +31,12 @@ def getTrainer(language: str):
     return trainer
 
 
+def preprocessAudioStandalone(audio: torch.tensor) -> torch.tensor:
+    audio = audio-torch.mean(audio)
+    audio = audio/torch.max(torch.abs(audio))
+    return audio
+
+
 class PronunciationTrainer:
     current_transcript: str
     current_ipa: str
@@ -41,7 +48,7 @@ class PronunciationTrainer:
     current_words_pronunciation_accuracy = []
     categories_thresholds = np.array([80, 60, 59])
 
-    sampling_rate = 16000
+    sampling_rate = sample_rate_resample
 
     def __init__(self, asr_model: mi.IASRModel, word_to_ipa_coverter: mi.ITextToPhonemModel) -> None:
         self.asr_model = asr_model
@@ -61,7 +68,7 @@ class PronunciationTrainer:
     def getWordsRelativeIntonation(self, Audio: torch.tensor, word_locations: list):
         intonations = torch.zeros((len(word_locations), 1))
         intonation_fade_samples = 0.3*self.sampling_rate
-        print(intonations.shape)
+        app_logger.info(f"intonations.shape: {intonations.shape}.")
         for word in range(len(word_locations)):
             intonation_start = int(np.maximum(
                 0, word_locations[word][0]-intonation_fade_samples))
@@ -80,12 +87,14 @@ class PronunciationTrainer:
         start = time.time()
         recording_transcript, recording_ipa, word_locations = self.getAudioTranscript(
             recordedAudio)
-        print('Time for NN to transcript audio: ', str(time.time()-start))
+        time_transcript_audio = time.time() - start
+        app_logger.info(f'Time for NN to transcript audio: {time_transcript_audio:.2f}.')
 
         start = time.time()
         real_and_transcribed_words, real_and_transcribed_words_ipa, mapped_words_indices = self.matchSampleAndRecordedWords(
             real_text, recording_transcript)
-        print('Time for matching transcripts: ', str(time.time()-start))
+        time_matching_transcripts = time.time() - start
+        app_logger.info(f'Time for matching transcripts: {time_matching_transcripts:.3f}.')
 
         start_time, end_time = self.getWordLocationsFromRecordInSeconds(
             word_locations, mapped_words_indices)
@@ -119,6 +128,7 @@ class PronunciationTrainer:
         return current_recorded_transcript, current_recorded_ipa, current_recorded_word_locations
 
     def getWordLocationsFromRecordInSeconds(self, word_locations, mapped_words_indices) -> list:
+        app_logger.info(f"len_list: word_locations:{len(word_locations)},  mapped_words_indices:{len(mapped_words_indices)}, {len(word_locations) == len(mapped_words_indices)}...")
         start_time = []
         end_time = []
         for word_idx in range(len(mapped_words_indices)):
@@ -190,6 +200,8 @@ class PronunciationTrainer:
         return np.argmin(abs(self.categories_thresholds-accuracy))
 
     def preprocessAudio(self, audio: torch.tensor) -> torch.tensor:
-        audio = audio-torch.mean(audio)
-        audio = audio/torch.max(torch.abs(audio))
-        return audio
+        return preprocessAudioStandalone(audio)
+
+
+def log_errors(s, name, caller):
+    app_logger.error(f"args => caller:{caller}, {name}: {len(s)}, {s} ...")

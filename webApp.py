@@ -1,13 +1,13 @@
-from flask import Flask, render_template, request
-import webbrowser
-import os
-from flask_cors import CORS
 import json
 
-from constants import ALLOWED_ORIGIN, IS_TESTING, STSCOREAPIKEY
-import lambdaTTS
-import lambdaSpeechToScore
+from flask import Flask, render_template, request
+from flask_cors import CORS
+
 import lambdaGetSample
+import lambdaSpeechToScore
+import lambdaTTS
+import utilsFileIO
+from constants import IS_TESTING, STSCOREAPIKEY, app_logger
 
 
 app = Flask(__name__)
@@ -55,22 +55,15 @@ def GetAccuracyFromRecordedAudio():
         event = {'body': json.dumps(request.get_json(force=True))}
         lambda_correct_output = lambdaSpeechToScore.lambda_handler(event, {})
     except Exception as e:
-        print('Error: ', str(e))
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Headers': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-            },
-            'body': ''
-        }
+        app_logger.error(f"error: {e} ...")
+        return utilsFileIO.return_response_ok('')
 
     return lambda_correct_output
 
 
 if __name__ == "__main__":
-    language = 'de'
-    print(os.system('pwd'))
-    webbrowser.open_new('http://127.0.0.1:3000/')
-    app.run(host="0.0.0.0", port=3000)
+    try:
+        app.run(debug=IS_TESTING, host="0.0.0.0", port=3000)
+    except Exception as ex:
+        app_logger.error(f"main_error: type({ex}, ex.args:{ex.args}, ex:'{ex}'")
+        raise ex

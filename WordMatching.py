@@ -1,10 +1,13 @@
-import WordMetrics
-import numpy as np
-from string import punctuation
-from dtwalign import dtw_from_distance_matrix
 import time
+from string import punctuation
 from typing import List, Tuple
-#from ortools.sat.python import cp_model
+
+import numpy as np
+from dtwalign import dtw_from_distance_matrix
+from ortools.sat.python import cp_model
+
+import WordMetrics
+
 
 offset_blank = 1
 TIME_THRESHOLD_MAPPING = 5.0
@@ -15,7 +18,7 @@ def get_word_distance_matrix(words_estimated: list, words_real: list) -> np.ndar
     number_of_estimated_words = len(words_estimated)
 
     word_distance_matrix = np.zeros(
-        (number_of_estimated_words+offset_blank, number_of_real_words))
+        (number_of_estimated_words + offset_blank, number_of_real_words))
     for idx_estimated in range(number_of_estimated_words):
         for idx_real in range(number_of_real_words):
             word_distance_matrix[idx_estimated, idx_real] = WordMetrics.edit_distance_python(
@@ -24,7 +27,7 @@ def get_word_distance_matrix(words_estimated: list, words_real: list) -> np.ndar
     if offset_blank == 1:
         for idx_real in range(number_of_real_words):
             word_distance_matrix[number_of_estimated_words,
-                                 idx_real] = len(words_real[idx_real])
+            idx_real] = len(words_real[idx_real])
     return word_distance_matrix
 
 
@@ -32,37 +35,37 @@ def get_best_path_from_distance_matrix(word_distance_matrix):
     modelCpp = cp_model.CpModel()
 
     number_of_real_words = word_distance_matrix.shape[1]
-    number_of_estimated_words = word_distance_matrix.shape[0]-1
+    number_of_estimated_words = word_distance_matrix.shape[0] - 1
 
     number_words = np.maximum(number_of_real_words, number_of_estimated_words)
 
     estimated_words_order = [modelCpp.NewIntVar(0, int(
-        number_words - 1 + offset_blank), 'w%i' % i) for i in range(number_words+offset_blank)]
+        number_words - 1 + offset_blank), 'w%i' % i) for i in range(number_words + offset_blank)]
 
     # They are in ascending order
-    for word_idx in range(number_words-1):
+    for word_idx in range(number_words - 1):
         modelCpp.Add(
-            estimated_words_order[word_idx+1] >= estimated_words_order[word_idx])
+            estimated_words_order[word_idx + 1] >= estimated_words_order[word_idx])
 
     total_phoneme_distance = 0
     real_word_at_time = {}
     for idx_estimated in range(number_of_estimated_words):
         for idx_real in range(number_of_real_words):
             real_word_at_time[idx_estimated, idx_real] = modelCpp.NewBoolVar(
-                'real_word_at_time'+str(idx_real)+'-'+str(idx_estimated))
+                'real_word_at_time' + str(idx_real) + '-' + str(idx_estimated))
             modelCpp.Add(estimated_words_order[idx_estimated] == idx_real).OnlyEnforceIf(
                 real_word_at_time[idx_estimated, idx_real])
             total_phoneme_distance += word_distance_matrix[idx_estimated,
-                                                           idx_real]*real_word_at_time[idx_estimated, idx_real]
+            idx_real] * real_word_at_time[idx_estimated, idx_real]
 
     # If no word in time, difference is calculated from empty string
     for idx_real in range(number_of_real_words):
         word_has_a_match = modelCpp.NewBoolVar(
-            'word_has_a_match'+str(idx_real))
+            'word_has_a_match' + str(idx_real))
         modelCpp.Add(sum([real_word_at_time[idx_estimated, idx_real] for idx_estimated in range(
             number_of_estimated_words)]) == 1).OnlyEnforceIf(word_has_a_match)
         total_phoneme_distance += word_distance_matrix[number_of_estimated_words,
-                                                       idx_real]*word_has_a_match.Not()
+        idx_real] * word_has_a_match.Not()
 
     # Loss should be minimized
     modelCpp.Minimize(total_phoneme_distance)
@@ -82,7 +85,7 @@ def get_best_path_from_distance_matrix(word_distance_matrix):
         return []
 
 
-def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, words_real: list) -> Tuple[List,List]:
+def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, words_real: list) -> Tuple[List, List]:
     mapped_words = []
     mapped_words_indices = []
     WORD_NOT_FOUND_TOKEN = '-'
@@ -113,7 +116,7 @@ def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, word
                 error_word = WordMetrics.edit_distance_python(
                     words_estimated[single_word_idx], words_real[word_idx])
                 if error_word < error:
-                    error = error_word*1
+                    error = error_word * 1
                     best_possible_combination = words_estimated[single_word_idx]
                     best_possible_idx = single_word_idx
 
@@ -124,31 +127,19 @@ def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, word
     return mapped_words, mapped_words_indices
 
 
-def get_best_mapped_words(words_estimated: list, words_real: list,use_dtw:bool = True) -> list:
-
+def get_best_mapped_words(words_estimated: list | str, words_real: list | str, use_dtw:bool = True) -> tuple[list, list]:
+    # todo: get from env variable / default param from request to set the value for use_dtw
     word_distance_matrix = get_word_distance_matrix(
         words_estimated, words_real)
 
     start = time.time()
-    
-    if use_dtw:
-        alignment = (dtw_from_distance_matrix(
-                word_distance_matrix.T))
-            
-        mapped_indices = alignment.get_warping_path()[:len(words_estimated)]
-        duration_of_mapping = time.time()-start
-    else:
-        mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
+    mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
 
-        duration_of_mapping = time.time()-start
-        # In case or-tools doesn't converge, go to a faster, low-quality solution
-        if len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING+0.5:
-            #mapped_indices = (dtw_from_distance_matrix(
-            #    word_distance_matrix)).path[:len(words_estimated), 1]
-            alignment = (dtw_from_distance_matrix(
-                word_distance_matrix.T))
-            
-            mapped_indices = alignment.get_warping_path()
+    duration_of_mapping = time.time() - start
+    # In case or-tools doesn't converge, go to a faster, low-quality solution
+    if len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING + 0.5:
+        mapped_indices = (dtw_from_distance_matrix(
+            word_distance_matrix)).path[:len(words_estimated), 1]
 
     mapped_words, mapped_words_indices = get_resulting_string(
         mapped_indices, words_estimated, words_real)
@@ -156,9 +147,41 @@ def get_best_mapped_words(words_estimated: list, words_real: list,use_dtw:bool =
     return mapped_words, mapped_words_indices
 
 
+# OLD VERSION to use with use_dtw from env variable / param from request
+# def get_best_mapped_words(words_estimated: list, words_real: list,use_dtw:bool = True) -> list:
+#
+#     word_distance_matrix = get_word_distance_matrix(
+#         words_estimated, words_real)
+#
+#     start = time.time()
+#
+#     if use_dtw:
+#         alignment = (dtw_from_distance_matrix(
+#             word_distance_matrix.T))
+#
+#         mapped_indices = alignment.get_warping_path()[:len(words_estimated)]
+#         duration_of_mapping = time.time()-start
+#     else:
+#         mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
+#
+#         duration_of_mapping = time.time()-start
+#         # In case or-tools doesn't converge, go to a faster, low-quality solution
+#         if len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING+0.5:
+#             #mapped_indices = (dtw_from_distance_matrix(
+#             #    word_distance_matrix)).path[:len(words_estimated), 1]
+#             alignment = (dtw_from_distance_matrix(
+#                 word_distance_matrix.T))
+#
+#             mapped_indices = alignment.get_warping_path()
+#
+#     mapped_words, mapped_words_indices = get_resulting_string(
+#         mapped_indices, words_estimated, words_real)
+#
+#     return mapped_words, mapped_words_indices
+
+
 # Faster, but not optimal
 def get_best_mapped_words_dtw(words_estimated: list, words_real: list) -> list:
-
     from dtwalign import dtw_from_distance_matrix
     word_distance_matrix = get_word_distance_matrix(
         words_estimated, words_real)
@@ -171,10 +194,10 @@ def get_best_mapped_words_dtw(words_estimated: list, words_real: list) -> list:
 
 
 def getWhichLettersWereTranscribedCorrectly(real_word, transcribed_word):
-    is_leter_correct = [None]*len(real_word)    
-    for idx, letter in enumerate(real_word):   
-        letter = letter.lower()    
-        transcribed_word[idx] = transcribed_word[idx].lower() 
+    is_leter_correct = [None] * len(real_word)
+    for idx, letter in enumerate(real_word):
+        letter = letter.lower()
+        transcribed_word[idx] = transcribed_word[idx].lower()
         if letter == transcribed_word[idx] or letter in punctuation:
             is_leter_correct[idx] = 1
         else:
@@ -190,7 +213,7 @@ def parseLetterErrorsToHTML(word_real, is_leter_correct):
     wrong_color_end = '-'
     for idx, letter in enumerate(word_real):
         if is_leter_correct[idx] == 1:
-            word_colored += correct_color_start + letter+correct_color_end
+            word_colored += correct_color_start + letter + correct_color_end
         else:
-            word_colored += wrong_color_start + letter+wrong_color_end
+            word_colored += wrong_color_start + letter + wrong_color_end
     return word_colored

@@ -10,7 +10,8 @@ from torchaudio.transforms import Resample
 
 import WordMatching as wm
 import pronunciationTrainer
-from constants import ALLOWED_ORIGIN, sample_rate_resample, sample_rate_start
+import utilsFileIO
+from constants import app_logger, sample_rate_resample, sample_rate_start
 
 
 trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunciationTrainer.getTrainer("en")}
@@ -28,16 +29,7 @@ def lambda_handler(event, context):
     language = data['language']
 
     if len(real_text) == 0:
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Headers': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-            },
-            'body': ''
-        }
-
+        return utilsFileIO.return_response_ok('')
     
     with tempfile.NamedTemporaryFile(suffix=".ogg", delete=True) as tmp:
         tmp.write(file_bytes)
@@ -52,7 +44,7 @@ def lambda_handler(event, context):
 
     #start = time.time()
     #os.remove(random_file_name)
-    #print('Time for deleting file: ', str(time.time()-start))
+    #app_logger.info('Time for deleting file: {time.time()-start}.')
 
     start = time.time()
     real_transcripts_ipa = ' '.join(
@@ -82,7 +74,8 @@ def lambda_handler(event, context):
 
     pair_accuracy_category = ' '.join(
         [str(category) for category in result['pronunciation_categories']])
-    print('Time to post-process results: ', str(time.time()-start))
+    time_post_process = time.time() - start
+    app_logger.info(f'Time to post-process results: {time_post_process:.3f}.')
 
     res = {'real_transcript': result['recording_transcript'],
            'ipa_transcript': result['recording_ipa'],

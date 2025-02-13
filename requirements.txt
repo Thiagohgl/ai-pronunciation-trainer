@@ -12,7 +12,9 @@ pandas
 flask
 flask_cors
 pickle-mixin
+structlog
 sqlalchemy
 transformers
 sentencepiece
 transformers
+openai-whisper

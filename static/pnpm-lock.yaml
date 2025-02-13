@@ -7,7 +7,7 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
       '@playwright/test':
         specifier: ^1.50.1
         version: 1.50.1

@@ -1,14 +1,17 @@
+import pickle
+
 import torch
 import torch.nn as nn
-import pickle
+
+from AIModels import NeuralASR
 from ModelInterfaces import IASRModel
-from AIModels import NeuralASR 
+
 
 def getASRModel(language: str,use_whisper:bool=True) -> IASRModel:
 
     if use_whisper:
         from whisper_wrapper import WhisperASRModel
-        return WhisperASRModel()
+        return WhisperASRModel(language=language)
     
     if language == 'de':
 

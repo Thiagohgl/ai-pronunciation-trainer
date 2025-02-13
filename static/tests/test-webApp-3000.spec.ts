@@ -19,11 +19,14 @@ const helperGetNextSentenceOutput = async (args: {page: Page, expectedText: stri
 
 const helperGetNextSentence = async (args: {page: Page, expectedText: string, expectedIPA: string, language: string, languagePredefined: string, category: string}) => {
     let {page, expectedText, expectedIPA, language, languagePredefined, category} = args;
-    if (language !== languagePredefined) {
+    let currentSelectedLanguage = page.getByLabel('languageBoxDropdown');
+    let currentSelectedLanguageText = await currentSelectedLanguage.textContent();
+    if (language !== languagePredefined && currentSelectedLanguageText !== language) {
+        console.log(`changing language because => currentSelectedLanguageText:'${currentSelectedLanguageText}', need language:'${language}'`);
         await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
         await page.getByRole('link', { name: language }).click();
     }
-    await page.getByRole('radio', { name: category }).check();
+    await page.getByRole('radio', { name: category }).click();
     await helperGetNextSentenceOutput({page, expectedText, expectedIPA});
 }
 
@@ -73,15 +76,16 @@ test.describe("test: get a custom sample writing within the input field.", async
         await page.getByRole('button', { name: 'buttonNext' }).click({timeout: 10000});
         console.log("clicked buttonNext");
         /** immediately after clicking on 'buttonNext' the elements
-             - playSampleAudio
-             - recordAudio
-             - input-uploader-audio-file
+         - playSampleAudio
+         - recordAudio
+         - input-uploader-audio-file
          should NOT be disabled or to have the class 'disabled'.
          **/
+        let {expectedText, expectedIPA} = dataGetSample[1];
         await helperGetNextSentenceOutput({
             page,
-            expectedText: "Marie leidet an Hashimoto-Thyreoiditis.",
-            expectedIPA: "/ maːriː laɪ̯dɛːt aːn haːshiːmoːtoː-tyːrɛːɔɪ̯diːtiːs. /"
+            expectedText,
+            expectedIPA,
         });
         await expect(page.getByLabel('section_accuracy_score')).toContainText('| Score: 0 - (0)');
     });
@@ -116,11 +120,12 @@ test.describe("test: get a custom sample writing within the input field.", async
         await expect(page.getByLabel('ipa-pair-error')).toBeVisible();
 
         // click again on a different sentence category to remove the error message
-        await page.getByRole('radio', { name: "Easy" }).check();
+        let {expectedText, expectedIPA, category} = dataGetSample[1];
+        await page.getByRole('radio', { name: category }).click();
         let originalScript = page.getByLabel('original_script')
-        await expect(originalScript).toContainText('Marie leidet an Hashimoto-Thyreoiditis.');
+        await expect(originalScript).toContainText(expectedText);
         let ipaScript = page.getByLabel('ipa_script', { exact: true });
-        await expect(ipaScript).toContainText('/ maːriː laɪ̯dɛːt aːn haːshiːmoːtoː-tyːrɛːɔɪ̯diːtiːs. /');
+        await expect(ipaScript).toContainText(expectedIPA);
     })
 
     for (let {
