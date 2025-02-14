@@ -82,40 +82,46 @@
 
             <div class="horizontal-flexbox" style="position: absolute; top: 2%; ">
 
-            <a id="playSampleAudio" aria-label="playSampleAudio" href="javascript:playAudio()" class="round-button disabled" style="color:white; text-align:center;
-                    position: absolute; top: 2%; "><i class="material-icons icon-text">play_arrow</i>
-                </a>
+                <a id="playSampleAudio" aria-label="playSampleAudio" href="javascript:playAudio()" class="round-button disabled" style="color:white; text-align:center;
+                        position: absolute; top: 2%; "><i class="material-icons icon-text">play_arrow</i>
+                    </a>
 
-            <a id="playRecordedAudio" aria-label="playRecordedAudio" href="javascript:playRecording()" class="round-button disabled"
-                    style="color:white; text-align:center; position: absolute; top: 15%; "><i
-                        class="material-icons icon-text">record_voice_over</i>
-                </a>
-            <p id="pronunciation_accuracy" aria-label="pronunciation_accuracy" class="expanded accuracy-text"
-                    style="text-align: center; color: black; position: absolute;  top: 27%; ">
-                    -
-                </p>
+                <a id="playRecordedAudio" aria-label="playRecordedAudio" href="javascript:playRecording()" class="round-button disabled"
+                        style="color:white; text-align:center; position: absolute; top: 15%; "><i
+                            class="material-icons icon-text">record_voice_over</i>
+                    </a>
+                <p id="pronunciation_accuracy" aria-label="pronunciation_accuracy" class="expanded accuracy-text"
+                   style="color: black; position: absolute;  top: 27%; margin-left: 0; font-size: 2em"><span>%</span>
+                    </p>
 
-            <div id="text-button-div" class="text-button-div">
-                <button id="buttonCustomText" aria-label="buttonCustomText" class="text-button darkgreen" onclick="getCustomText()">IPA for custom text</button>
-            </div>
+                <div id="text-button-div" class="text-button-div">
+                    <button id="buttonCustomText" aria-label="buttonCustomText" class="text-button darkgreen" onclick="getCustomText()">IPA for custom text</button>
+                </div>
+
+                <div class="container-dtw-div">
+                    <label class="container-label-dtw">DTW
+                        <input type="checkbox" checked="checked" id="checkbox-dtw">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
 
             </div>
 
             <div id="text-area" class="main-text-div">
 
-            <p id="original_script" aria-label="original_script" class=" bigger-text text-primary main-text" contenteditable="plaintext-only">Click on the bar on the right to generate a new sentence (please use chrome web browser).</p>
-            <p id="ipa_script" aria-label="ipa_script" class="text-muted bigger-text ipa-text"> Before speaking, click on the mic button
-                    below to start recording and then click again when you're done.
-                </p>
-            <p id="recorded_ipa_script" aria-label="recorded_ipa_script" class="text-primary ipa-text">On the left bottom you can choose the
-                    difficult. On the upper left you can choose the language.
-                </p>
-            <p id="translated_script" aria-label="translated_script" class="text-muted medium-text ipa-text"> The corresponding IPA reading of each
-                    sentence will also be displayed. If you never heard from IPA, you can check out this
-                    <a href="https://www.youtube.com/watch?v=mzrLZi6fipA&list=RDCMUCQAUWk_yGz7bk1181DrijNw&start_radio=1&rv=mzrLZi6fipA&t=22&ab_channel=FluentForever"
-                        target=”_blank”>playlist</a>. Try to get at least 690 points a day. Don't be shy! You can do it
-                    :)
-                </p>
+                <p id="original_script" aria-label="original_script" class=" bigger-text text-primary main-text" contenteditable="plaintext-only">Click on the bar on the right to generate a new sentence (please use chrome web browser).</p>
+                <p id="ipa_script" aria-label="ipa_script" class="text-muted bigger-text ipa-text"> Before speaking, click on the mic button
+                        below to start recording and then click again when you're done.
+                    </p>
+                <p id="recorded_ipa_script" aria-label="recorded_ipa_script" class="text-primary ipa-text">On the left bottom you can choose the
+                        difficult. On the upper left you can choose the language.
+                    </p>
+                <p id="translated_script" aria-label="translated_script" class="text-muted medium-text ipa-text"> The corresponding IPA reading of each
+                        sentence will also be displayed. If you never heard from IPA, you can check out this
+                        <a href="https://www.youtube.com/watch?v=mzrLZi6fipA&list=RDCMUCQAUWk_yGz7bk1181DrijNw&start_radio=1&rv=mzrLZi6fipA&t=22&ab_channel=FluentForever"
+                            target=”_blank”>playlist</a>. Try to get at least 690 points a day. Don't be shy! You can do it
+                        :)
+                    </p>
 
             </div>
 

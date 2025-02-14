@@ -7,7 +7,7 @@ from dtwalign import dtw_from_distance_matrix
 from ortools.sat.python import cp_model
 
 import WordMetrics
-
+from constants import app_logger
 
 offset_blank = 1
 TIME_THRESHOLD_MAPPING = 5.0
@@ -128,56 +128,38 @@ def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, word
 
 
 def get_best_mapped_words(words_estimated: list | str, words_real: list | str, use_dtw:bool = True) -> tuple[list, list]:
-    # todo: get from env variable / default param from request to set the value for use_dtw
+    app_logger.info(f"words_estimated: '{words_estimated}', words_real: '{words_real}', use_dtw:{use_dtw}.")
     word_distance_matrix = get_word_distance_matrix(
         words_estimated, words_real)
-
+    app_logger.debug(f"word_distance_matrix: '{word_distance_matrix}'.")
     start = time.time()
-    mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
+    app_logger.info(f"use_dtw: '{use_dtw}'.")
+    if use_dtw:
+        alignment = (dtw_from_distance_matrix(word_distance_matrix.T))
+        app_logger.debug(f"alignment: '{alignment}'.")
+        mapped_indices = alignment.get_warping_path()[:len(words_estimated)]
+        app_logger.debug(f"mapped_indices: '{mapped_indices}'.")
+        duration_of_mapping = time.time()-start
+    else:
+        mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
+        app_logger.debug(f"mapped_indices: '{mapped_indices}'.")
+        duration_of_mapping = time.time()-start
+        # In case or-tools doesn't converge, go to a faster, low-quality solution
+        check_mapped_indices_or_duration = len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING+0.5
+        app_logger.debug(f"check_mapped_indices_or_duration: '{check_mapped_indices_or_duration}'.")
+        if check_mapped_indices_or_duration:
+            #mapped_indices = (dtw_from_distance_matrix(
+            #    word_distance_matrix)).path[:len(words_estimated), 1]
+            word_distance_matrix_transposed = word_distance_matrix.T
+            app_logger.debug(f"word_distance_matrix_transposed: '{word_distance_matrix_transposed}'.")
+            alignment = dtw_from_distance_matrix(word_distance_matrix_transposed)
+            app_logger.debug(f"check_mapped_indices_or_duration, alignment: '{alignment}'.")
+            mapped_indices = alignment.get_warping_path()
+            app_logger.debug(f"check_mapped_indices_or_duration, mapped_indices: '{mapped_indices}'.")
 
-    duration_of_mapping = time.time() - start
-    # In case or-tools doesn't converge, go to a faster, low-quality solution
-    if len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING + 0.5:
-        mapped_indices = (dtw_from_distance_matrix(
-            word_distance_matrix)).path[:len(words_estimated), 1]
-
-    mapped_words, mapped_words_indices = get_resulting_string(
-        mapped_indices, words_estimated, words_real)
-
+    mapped_words, mapped_words_indices = get_resulting_string(mapped_indices, words_estimated, words_real)
+    app_logger.debug(f"mapped_words: '{mapped_words}', mapped_words_indices: '{mapped_words_indices}', duration_of_mapping:{duration_of_mapping}.")
     return mapped_words, mapped_words_indices
-
-
-# OLD VERSION to use with use_dtw from env variable / param from request
-# def get_best_mapped_words(words_estimated: list, words_real: list,use_dtw:bool = True) -> list:
-#
-#     word_distance_matrix = get_word_distance_matrix(
-#         words_estimated, words_real)
-#
-#     start = time.time()
-#
-#     if use_dtw:
-#         alignment = (dtw_from_distance_matrix(
-#             word_distance_matrix.T))
-#
-#         mapped_indices = alignment.get_warping_path()[:len(words_estimated)]
-#         duration_of_mapping = time.time()-start
-#     else:
-#         mapped_indices = get_best_path_from_distance_matrix(word_distance_matrix)
-#
-#         duration_of_mapping = time.time()-start
-#         # In case or-tools doesn't converge, go to a faster, low-quality solution
-#         if len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING+0.5:
-#             #mapped_indices = (dtw_from_distance_matrix(
-#             #    word_distance_matrix)).path[:len(words_estimated), 1]
-#             alignment = (dtw_from_distance_matrix(
-#                 word_distance_matrix.T))
-#
-#             mapped_indices = alignment.get_warping_path()
-#
-#     mapped_words, mapped_words_indices = get_resulting_string(
-#         mapped_indices, words_estimated, words_real)
-#
-#     return mapped_words, mapped_words_indices
 
 
 # Faster, but not optimal

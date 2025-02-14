@@ -2,17 +2,18 @@ import base64
 import json
 import tempfile
 import time
+from pathlib import Path
 
 import audioread
 import numpy as np
 import torch
 from torchaudio.transforms import Resample
+from werkzeug.debug.repr import missing
 
 import WordMatching as wm
 import pronunciationTrainer
 import utilsFileIO
-from constants import app_logger, sample_rate_resample, sample_rate_start
-
+from constants import app_logger, sample_rate_resample, sample_rate_start, USE_DTW, IS_TESTING
 
 trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunciationTrainer.getTrainer("en")}
 
@@ -27,17 +28,22 @@ def lambda_handler(event, context):
     file_bytes = base64.b64decode(
         data['base64Audio'][22:].encode('utf-8'))
     language = data['language']
+    try:
+        use_dtw = data["useDTW"]
+    except KeyError:
+        use_dtw = USE_DTW
 
     if len(real_text) == 0:
         return utilsFileIO.return_response_ok('')
-    
-    with tempfile.NamedTemporaryFile(suffix=".ogg", delete=True) as tmp:
+
+    delete_tmp = not IS_TESTING
+    with tempfile.NamedTemporaryFile(suffix=".ogg", delete=delete_tmp) as tmp:
         tmp.write(file_bytes)
         tmp.flush()
         tmp_name = tmp.name
         signal, fs = audioread_load(tmp_name)
     signal = transform(torch.Tensor(signal)).unsqueeze(0)
-
+    Path(tmp_name).unlink(missing_ok=True)
 
     result = trainer_SST_lambda[language].processAudioForGivenText(
         signal, real_text)
@@ -64,7 +70,7 @@ def lambda_handler(event, context):
     for idx, word_real in enumerate(words_real):
 
         mapped_letters, mapped_letters_indices = wm.get_best_mapped_words(
-            mapped_words[idx], word_real)
+            mapped_words[idx], word_real, use_dtw=use_dtw)
 
         is_letter_correct = wm.getWhichLettersWereTranscribedCorrectly(
             word_real, mapped_letters)  # , mapped_letters_indices)

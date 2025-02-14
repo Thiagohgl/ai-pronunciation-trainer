@@ -389,10 +389,13 @@ async function sendAudioToGetAccuracyFromRecordedAudio(audioBase64) {
         // Remove double spaces
         text = text.replace(/\s\s+/g, ' ');
         currentText = [text];
+        let useDTWValue = document.getElementById("checkbox-dtw").checked
 
         await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
             method: "post",
-            body: JSON.stringify({"title": currentText[0], "base64Audio": audioBase64, "language": AILanguage}),
+            body: JSON.stringify({
+                "title": currentText[0], "base64Audio": audioBase64, "language": AILanguage, "useDTW": useDTWValue
+            }),
             headers: {"X-Api-Key": STScoreAPIKey}
 
         }).then(res => res.json()).then(data => {
