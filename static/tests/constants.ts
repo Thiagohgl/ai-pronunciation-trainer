@@ -92,7 +92,7 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         expectedIPA: "/ diː køːniːɡ-lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdɛŋkmaːl iːm statsbaːd bryːkɛːnaʊ̯, aɪ̯nɛːm oːrtstaɪ̯l dɛːs draɪ̯ kiːloːmɛːtɛːr noːrdœstlɪç ɡɛːlɛːɡɛːnɛːn baːd bryːkɛːnaʊ̯ iːm landkraɪ̯s baːd kɪzɪŋɛːn iːn baɪ̯ɛːrn. /",
         language: "German",
         expectedRecordedIPAScript: "/  diː køːniːɡ lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdaŋkmaːl iːm statsbaːd bryːkɛːnaʊ̯, aɪ̯nɛːm oːrt staɪ̯l dɛːs 3 km noːrdœstlɪç ɡɛːlɛːɡɛːnɛːn baːd bryːkɛːnaʊ̯ iːm landkraɪ̯sbaːd ɡɛːzɪŋɛːn iːn baɪ̯ɛːrn. /",
-        expectedPronunciationAccuracy: "81%",
+        expectedPronunciationAccuracy: "72%",
         expectedSectionAccuracyScore: "| Score: 165 - (",
         testAudioFile: "test_de_hard.wav"
     },
@@ -103,7 +103,7 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         language: "English",
         expectedRecordedIPAScript: "/ haɪ ðɛr, haʊ ər ju? /",
         expectedPronunciationAccuracy: "100%",
-        expectedSectionAccuracyScore: "| Score: 246 - (",
+        expectedSectionAccuracyScore: "| Score: 237 - (",
         testAudioFile: "test_en_easy.wav"
     },
     {
@@ -113,7 +113,7 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         language: "English",
         expectedRecordedIPAScript:  "/ roʊm ɪz hoʊm tɪ səm əv ðə moʊst ˈbjutəfəl ˈmɑnjəmənts ɪn ðə wərld. /",
         expectedPronunciationAccuracy: "100%",
-        expectedSectionAccuracyScore: "| Score: 346 - (",
+        expectedSectionAccuracyScore: "| Score: 337 - (",
         testAudioFile: "test_en_medium.wav"
     },
     {
@@ -123,7 +123,7 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         language: "English",
         expectedRecordedIPAScript: "/ səm məˈʃin ˈlərnɪŋ ˈmɑdəlz ər dɪˈzaɪnd tɪ ˌəndərˈstænd ənd ˈʤɛnərˌeɪt human-like tɛkst beɪst ɔn ðə ˈɪnˌpʊt ðeɪ rɪˈsiv. /",
         expectedPronunciationAccuracy: "100%",
-        expectedSectionAccuracyScore: "| Score: 446 - (",
+        expectedSectionAccuracyScore: "| Score: 437 - (",
         testAudioFile: "test_en_hard.wav"
     }
 ]

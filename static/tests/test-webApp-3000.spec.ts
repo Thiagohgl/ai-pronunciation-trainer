@@ -52,7 +52,7 @@ test.describe("test: get a custom sample writing within the input field.", async
 
         await expect(page.getByLabel('playRecordedWord')).toContainText('Reference');
         await expect(page.getByLabel('playCurrentWord')).toContainText('Spoken');
-        await expect(page.getByLabel('pronunciation_accuracy')).toContainText('-');
+        await expect(page.getByLabel('pronunciation_accuracy')).toContainText('%');
 
         const inputUploaderAudioFile = page.getByLabel('input-uploader-audio-file');
         await expect(inputUploaderAudioFile).toBeDisabled();

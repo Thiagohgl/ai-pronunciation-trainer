@@ -7,7 +7,7 @@ from unittest.mock import patch
 import pandas as pd
 
 import lambdaGetSample
-from constants import PROJECT_ROOT_FOLDER
+from constants import PROJECT_ROOT_FOLDER, app_logger
 from tests import EVENTS_FOLDER, set_seed, TEST_ROOT_FOLDER
 
 
@@ -19,9 +19,9 @@ def helper_category(cls, category: int, language: str, expected_output: dict):
     try:
         cls.assertDictEqual(response_dict, expected_output)
     except AssertionError as ae:
-        print(f"category: {category}, language: {language}.")
-        print(f"response_dict: {response_dict}")
-        print(f"expected_output: {expected_output}")
+        app_logger.error(f"category: {category}, language: {language}.")
+        app_logger.error(f"response_dict: {response_dict} .")
+        app_logger.error(f"expected_output: {expected_output} .")
         raise ae
 
 

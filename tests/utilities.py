@@ -1,6 +1,8 @@
 """Various utilities (Serialize objects, time benchmark, args dump, numerical and stats info)"""
 from typing import Mapping
 
+from constants import app_logger
+
 
 def serialize(obj: any, include_none: bool = False):
     """
@@ -45,7 +47,7 @@ def _serialize(obj: any, include_none: bool):
         else:
             return _serialize_object(obj, include_none)
     except Exception as e_serialize:
-        print(f"e_serialize::{e_serialize}, type_obj:{type(obj)}, obj:{obj}.")
+        app_logger.error(f"e_serialize::{e_serialize}, type_obj:{type(obj)}, obj:{obj}.")
         return f"object_name:{str(obj)}__object_type_str:{str(type(obj))}."
 
 
@@ -118,7 +120,7 @@ def hash_calculate(arr_or_path, is_file: bool, read_mode: str = "rb") -> str | b
         try:
             hash_fn = sha256(arr_or_path)
         except TypeError:
-            print(
+            app_logger.error(
                 f"TypeError, re-try encoding arg:{arr_or_path},type:{type(arr_or_path)}."
             )
             hash_fn = sha256(arr_or_path.encode("utf-8"))

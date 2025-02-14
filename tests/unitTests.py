@@ -11,7 +11,7 @@ from tests import set_seed
 
 def helper_category_test(category: int, threshold_min: int, threshold_max: int):
     event = {'body': json.dumps({'category': category, 'language': 'de'})}
-    response = lambdaGetSample.lambda_handler(event, [])
+    response = lambdaGetSample.lambda_handler(event, {})
     response_dict = json.loads(response)
     number_of_words = len(
         response_dict['real_transcript'][0].split())
@@ -40,7 +40,7 @@ class TestDataset(unittest.TestCase):
             for cat in range(4):
                 set_seed()
                 event = {'body': json.dumps({'category': cat, 'language': lang})}
-                response = lambdaGetSample.lambda_handler(event, [])
+                response = lambdaGetSample.lambda_handler(event, {})
                 response_dict = json.loads(response)
                 output_dict[lang][cat] = response_dict["real_transcript"][0]
         self.assertDictEqual(output_dict, expected_output__get_random_selection)

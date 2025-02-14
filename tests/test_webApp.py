@@ -10,21 +10,20 @@ parent = Path(__file__).parent.parent
 sys.path.append(str(parent))
 from tests import EVENTS_FOLDER, set_seed
 from webApp import app
-from constants import ALLOWED_ORIGIN
+from constants import ALLOWED_ORIGIN, app_logger
 
 
 class TestWebApp(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
-        self.app.testing = True
         if platform.system() == "Windows" or platform.system() == "Win32":
             os.environ["PYTHONUTF8"] = "1"
+            os.environ["IS_TESTING"] = "TRUE"
 
     def tearDown(self):
-        if (
-            platform.system() == "Windows" or platform.system() == "Win32"
-        ) and "PYTHONUTF8" in os.environ:
+        if platform.system() == "Windows" or platform.system() == "Win32" and "PYTHONUTF8" in os.environ:
             del os.environ["PYTHONUTF8"]
+            del os.environ["IS_TESTING"]
 
     def test_main_route(self):
         response = self.app.get('/')
@@ -48,7 +47,6 @@ class TestWebApp(unittest.TestCase):
         output_data = response.data.decode("utf-8")
         output_data = json.loads(output_data)
         app.logger.info(f"output_data: {output_data} ...")
-        # {'body': '{}', 'headers': {'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET', 'Access-Control-Allow-Origin': 'http://localhost:3000'}, 'statusCode': 200}
         self.assertEqual(output_data, {
             'body': '{}',
             'headers': {
@@ -81,6 +79,7 @@ class TestWebApp(unittest.TestCase):
             inputs_by_language = inputs["en"]
             loaded_body = inputs_by_language["body"]
         input_data = json.loads(loaded_body)
+        app_logger.info(f"input_data: {input_data} ...")
         pass
         response = self.app.post('/GetAccuracyFromRecordedAudio', json=input_data, content_type='application/json')
         self.assertEqual(response.status_code, 200)
