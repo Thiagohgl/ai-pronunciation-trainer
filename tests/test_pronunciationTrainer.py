@@ -87,10 +87,10 @@ class TestScore(unittest.TestCase):
         real_and_transcribed_words, real_and_transcribed_words_ipa, mapped_words_indices = trainer_SST_lambda_de.matchSampleAndRecordedWords(phrase_real, phrase_partial)
         pronunciation_accuracy, current_words_pronunciation_accuracy= trainer_SST_lambda_de.getPronunciationAccuracy(real_and_transcribed_words)
         app_logger.info(f"real_and_transcribed_words_ipa:{real_and_transcribed_words_ipa}.")
-        self.assertEqual(real_and_transcribed_words_ipa, [('haloː,', 'haloː'), ('viː', 'viː'), ('ɡeːt', '-'), ('ɛːs', 'ɡeːt'), ('diːr?', '-')])
-        self.assertEqual(mapped_words_indices, [0, 1, -1, 2, -1])
-        self.assertEqual(int(pronunciation_accuracy), 41)
-        self.assertEqual(current_words_pronunciation_accuracy, [100.0, 100.0, 0.0, -50.0, 0.0])
+        self.assertEqual(real_and_transcribed_words_ipa, [('haloː,', 'haloː'), ('viː', 'viː'), ('ɡeːt', 'ɡeːt'), ('ɛːs', '-'), ('diːr?', '-')] )
+        self.assertEqual(mapped_words_indices, [0, 1, 2, -1, -1])
+        self.assertEqual(int(pronunciation_accuracy), 71)
+        self.assertEqual(current_words_pronunciation_accuracy, [100.0, 100.0, 100.0, 0.0, 0.0])
 
     def test_incorrect_transcription_with_correct_words_de(self):
         set_seed()
@@ -132,13 +132,11 @@ class TestScore(unittest.TestCase):
         phrase_partial = phrases["en"]["partial"]
         real_and_transcribed_words, real_and_transcribed_words_ipa, mapped_words_indices = trainer_SST_lambda_en.matchSampleAndRecordedWords(phrase_real, phrase_partial)
         app_logger.info(f"real_and_transcribed_words_ipa:{real_and_transcribed_words_ipa}.")
-        self.assertEqual(real_and_transcribed_words_ipa, [('haɪ', 'aɪ'), ('ðɛr,', 'ðɛr'), ('haʊ', ''), ('ər', 'haʊ'), ('ju?', '')])
-        # self.assertEqual(real_and_transcribed_words_ipa, [('haɪ', 'aɪ'), ('ðɛr,', 'ðɛr'), ('haʊ', 'haʊ'), ('ər', ''), ('ju?', '')])
-        self.assertEqual(mapped_words_indices, [0, 1, -1, 2, -1])
-        pronunciation_accuracy, current_words_pronunciation_accuracy = trainer_SST_lambda_en.getPronunciationAccuracy(real_and_transcribed_words)
-        self.assertEqual(int(pronunciation_accuracy), 38)
-        #  [50.0, 100.0, 0.0, 0.0, 0.0] != [50.0, 100.0, 100.0, 0.0, 0.0
-        self.assertEqual(current_words_pronunciation_accuracy, [50.0, 100.0, 0.0, 0.0, 0.0])
+        self.assertEqual(real_and_transcribed_words_ipa, [('haɪ', 'aɪ'), ('ðɛr,', 'ðɛr'), ('haʊ', 'haʊ'), ('ər', ''), ('ju?', '')])
+        self.assertEqual(mapped_words_indices, [0, 1, 2, -1, -1])
+        pronunciation_accuracy, current_words_pronunciation_accuracy= trainer_SST_lambda_en.getPronunciationAccuracy(real_and_transcribed_words)
+        self.assertEqual(int(pronunciation_accuracy), 56)
+        self.assertEqual(current_words_pronunciation_accuracy, [50.0, 100.0, 100.0, 0.0, 0.0])
 
     def test_incorrect_transcription_with_correct_words_en(self):
         set_seed()

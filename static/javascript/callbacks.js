@@ -390,6 +390,7 @@ async function sendAudioToGetAccuracyFromRecordedAudio(audioBase64) {
         text = text.replace(/\s\s+/g, ' ');
         currentText = [text];
         let useDTWValue = document.getElementById("checkbox-dtw").checked
+        console.log(`useDTWValue: '${typeof useDTWValue}', '${useDTWValue}'`)
 
         await fetch(apiMainPathSTS + '/GetAccuracyFromRecordedAudio', {
             method: "post",

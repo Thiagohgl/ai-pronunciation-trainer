@@ -1,6 +1,6 @@
 import {test, expect, chromium, Page} from "@playwright/test";
 import path from "node:path";
-import {customDataWithTestAudio, dataGetSample} from "./constants";
+import {customDataWithTestAudioNoUseDTW, dataGetSample, CustomDataWithTestAudio, objectUseDTW} from "./constants";
 
 let pageArray: Page[] = [];
 
@@ -128,66 +128,82 @@ test.describe("test: get a custom sample writing within the input field.", async
         await expect(ipaScript).toContainText(expectedIPA);
     })
 
-    for (let {
-        expectedText, category, expectedIPA, language, expectedRecordedIPAScript,
-        expectedSectionAccuracyScore, expectedPronunciationAccuracy, testAudioFile
-    } of customDataWithTestAudio) {
-        test(`Test the /GetAccuracyFromRecordedAudio endpoint with a custom sentence ('${category}' category, '${language}' language)`, async ({}) => {
-            let page = pageArray[0];
+    for (let useDTW of [false, true]) {
+        let customDataWithAudio = objectUseDTW[useDTW]
+        for (let {
+            expectedText, category, expectedIPA, language, expectedRecordedIPAScript,
+            expectedSectionAccuracyScore, expectedPronunciationAccuracy, testAudioFile
+        } of customDataWithAudio) {
+            test(`Test the /GetAccuracyFromRecordedAudio endpoint with a custom sentence ('${category}' category, '${language}' language, useDTW='${useDTW}')`, async ({}) => {
+                let page = pageArray[0];
 
-            if (language !== languagePredefined) {
-                await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
-                await page.getByRole('link', { name: language }).click();
+                if (language !== languagePredefined) {
+                    await page.getByRole('button', { name: 'languageBoxDropdown' }).click();
+                    await page.getByRole('link', { name: language }).click();
+                    await page.waitForTimeout(200)
+                }
+                await page.getByLabel('original_script').fill(expectedText);
+                await page.getByRole('button', { name: 'buttonCustomText' }).click();
                 await page.waitForTimeout(200)
-            }
-            await page.getByLabel('original_script').fill(expectedText);
-            await page.getByRole('button', { name: 'buttonCustomText' }).click();
-            await page.waitForTimeout(200)
-            await helperGetNextSentenceOutput({page, expectedText, expectedIPA});
+                await helperGetNextSentenceOutput({page, expectedText, expectedIPA});
 
-            // test the /GetAccuracyFromRecordedAudio endpoint
-            const audioFilePath = path.join( import.meta.dirname, '..', '..', 'tests', 'events', testAudioFile);
-            try {
-                await expect(page.getByLabel('original_script')).toContainText(expectedText);
-                // workaround to upload the audio file that will trigger the /GetAccuracyFromRecordedAudio endpoint
-                await page.getByLabel("input-uploader-audio-hidden").setInputFiles(audioFilePath);
-            } catch (err1) {
-                console.log(`import.meta.dirname: '${import.meta.dirname}', audioFilePath: '${audioFilePath}'`);
-                console.error(`input-uploader-audio-hidden::err1: `, err1, "#");
-            }
-            await expect(page.getByLabel('original_script')).toHaveScreenshot();
+                let checkboxDTW = page.getByText('DTW')
+                let dtwCheckbox = await checkboxDTW.isChecked();
+                console.log(`useDTW: ${useDTW}, verify checkboxDTW: is checked? ${dtwCheckbox}!`);
+                if (useDTW) {
+                    await page.waitForTimeout(200)
+                    if (!dtwCheckbox) {
+                        await checkboxDTW.click();
+                        await page.waitForTimeout(200)
+                        console.log(`useDTW: ${useDTW}, AFTER checkboxDTW: is checked?`, await checkboxDTW.isChecked());
+                    }
+                } else console.log("useDTW is false, so no need to click on the checkboxDTW");
 
-            const expectedText2 = expectedIPA.replace(/^\/ /g, "").replace(/ \/$/g, "")
-            try {
-                await expect(page.getByLabel('ipa_script', {exact: true})).toContainText(expectedText2);
-            } catch (err2) {
-                console.log(`expectedText2: '${expectedText2}'`);
-                throw err2;
-            }
-            await expect(page.getByLabel('recorded_ipa_script')).toContainText(expectedRecordedIPAScript);
-            await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
+                // test the /GetAccuracyFromRecordedAudio endpoint
+                const audioFilePath = path.join( import.meta.dirname, '..', '..', 'tests', 'events', testAudioFile);
+                try {
+                    await expect(page.getByLabel('original_script')).toContainText(expectedText);
+                    // workaround to upload the audio file that will trigger the /GetAccuracyFromRecordedAudio endpoint
+                    await page.getByLabel("input-uploader-audio-hidden").setInputFiles(audioFilePath);
+                } catch (err1) {
+                    console.log(`import.meta.dirname: '${import.meta.dirname}', audioFilePath: '${audioFilePath}'`);
+                    console.error(`input-uploader-audio-hidden::err1: `, err1, "#");
+                }
+                await expect(page.getByLabel('original_script')).toHaveScreenshot();
 
-            /** todo: find a way to record the played audio sounds:
-             * - playSampleAudio
-             * - playRecordedAudio
-             * - playRecordedWord
-             * - playCurrentWord
-             * and compare them with the expected audio sounds
-             */
-            await page.getByRole('link', { name: 'playSampleAudio' }).click();
-            await page.getByRole('link', { name: 'playRecordedAudio' }).click();
+                const expectedText2 = expectedIPA.replace(/^\/ /g, "").replace(/ \/$/g, "")
+                try {
+                    await expect(page.getByLabel('ipa_script', {exact: true})).toContainText(expectedText2);
+                } catch (err2) {
+                    console.log(`expectedText2: '${expectedText2}'`);
+                    throw err2;
+                }
+                await expect(page.getByLabel('recorded_ipa_script')).toContainText(expectedRecordedIPAScript);
+                await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
 
-            let idx = expectedText.split(" ").length - 1;
-            let wordForPlayAudio = expectedText.split(" ")[idx]
-            let wordForPlayAudioAriaLabel = `word${idx}${wordForPlayAudio}`.replace(/[^a-zA-Z0-9]/g, "")
-            await expect(page.getByLabel(wordForPlayAudioAriaLabel)).toHaveScreenshot();
-            await page.getByLabel(wordForPlayAudioAriaLabel).click();
-            let playRecordedWord = page.getByRole('link', { name: 'playRecordedWord' });
-            await expect(playRecordedWord).toHaveScreenshot();
-            await playRecordedWord.click();
+                /** todo: find a way to record the played audio sounds:
+                 * - playSampleAudio
+                 * - playRecordedAudio
+                 * - playRecordedWord
+                 * - playCurrentWord
+                 * and compare them with the expected audio sounds
+                 */
+                await page.getByRole('link', { name: 'playSampleAudio' }).click();
+                await page.getByRole('link', { name: 'playRecordedAudio' }).click();
 
-            await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
-            await expect(page.getByLabel('section_accuracy_score')).toContainText(expectedSectionAccuracyScore);
-        });
+                let idx = expectedText.split(" ").length - 1;
+                let wordForPlayAudio = expectedText.split(" ")[idx]
+                let wordForPlayAudioAriaLabel = `word${idx}${wordForPlayAudio}`.replace(/[^a-zA-Z0-9]/g, "")
+                await expect(page.getByLabel(wordForPlayAudioAriaLabel)).toHaveScreenshot();
+                await page.getByLabel(wordForPlayAudioAriaLabel).click();
+                let playRecordedWord = page.getByRole('link', { name: 'playRecordedWord' });
+                await expect(playRecordedWord).toHaveScreenshot();
+                await playRecordedWord.click();
+
+                await expect(page.getByLabel('pronunciation_accuracy')).toContainText(expectedPronunciationAccuracy);
+                await expect(page.getByLabel('section_accuracy_score')).toContainText(expectedSectionAccuracyScore);
+            });
+        }
     }
+
 });

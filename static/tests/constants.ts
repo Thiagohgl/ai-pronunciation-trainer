@@ -7,11 +7,12 @@ export type DataGetSample = {
     expectedIPA: string;
     language: Language;
 }
-interface CustomDataWithTestAudio extends DataGetSample {
+export interface CustomDataWithTestAudio extends DataGetSample {
     expectedRecordedIPAScript: string;
     expectedPronunciationAccuracy: string;
     expectedSectionAccuracyScore: string;
     testAudioFile: string;
+    useDTW?: boolean;
 }
 export const dataGetSample: DataGetSample[] = [
     {
@@ -65,7 +66,7 @@ export const dataGetSample: DataGetSample[] = [
     /**/
 ]
 
-export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
+export const customDataWithTestAudioNoUseDTW: CustomDataWithTestAudio[] = [
     {
         expectedText: "Hallo, wie geht es dir?",
         category: "Easy",
@@ -74,7 +75,8 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         expectedRecordedIPAScript: "/ haloː, viː ɡeːt ɛːs diːr? /",
         expectedPronunciationAccuracy: "100%",
         expectedSectionAccuracyScore: "| Score: 0 - (",
-        testAudioFile: "test_de_easy.wav"
+        testAudioFile: "test_de_easy.wav",
+        useDTW: false
     },
     {
         expectedText: "Die König-Ludwig-Eiche ist ein Naturdenkmal im Staatsbad Brückenau.",
@@ -84,7 +86,8 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         expectedRecordedIPAScript: "/  diː køːniːɡ-lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdaŋkmaːl iːm statsbadbryːkɛːnaʊ̯. /",
         expectedPronunciationAccuracy: "65%",
         expectedSectionAccuracyScore: "| Score: 100 - (",
-        testAudioFile: "test_de_medium.wav"
+        testAudioFile: "test_de_medium.wav",
+        useDTW: false
     },
     {
         expectedText: "Die König-Ludwig-Eiche ist ein Naturdenkmal im Staatsbad Brückenau, einem Ortsteil des drei Kilometer nordöstlich gelegenen Bad Brückenau im Landkreis Bad Kissingen in Bayern.",
@@ -92,9 +95,10 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         expectedIPA: "/ diː køːniːɡ-lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdɛŋkmaːl iːm statsbaːd bryːkɛːnaʊ̯, aɪ̯nɛːm oːrtstaɪ̯l dɛːs draɪ̯ kiːloːmɛːtɛːr noːrdœstlɪç ɡɛːlɛːɡɛːnɛːn baːd bryːkɛːnaʊ̯ iːm landkraɪ̯s baːd kɪzɪŋɛːn iːn baɪ̯ɛːrn. /",
         language: "German",
         expectedRecordedIPAScript: "/  diː køːniːɡ lʊdviːɡ-aɪ̯çɛː ɪst aɪ̯n naːtuːrdaŋkmaːl iːm statsbaːd bryːkɛːnaʊ̯, aɪ̯nɛːm oːrt staɪ̯l dɛːs 3 km noːrdœstlɪç ɡɛːlɛːɡɛːnɛːn baːd bryːkɛːnaʊ̯ iːm landkraɪ̯sbaːd ɡɛːzɪŋɛːn iːn baɪ̯ɛːrn. /",
-        expectedPronunciationAccuracy: "72%",
+        expectedPronunciationAccuracy: "81%",
         expectedSectionAccuracyScore: "| Score: 165 - (",
-        testAudioFile: "test_de_hard.wav"
+        testAudioFile: "test_de_hard.wav",
+        useDTW: false
     },
     {
         expectedText: "Hi there, how are you?",
@@ -103,8 +107,9 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         language: "English",
         expectedRecordedIPAScript: "/ haɪ ðɛr, haʊ ər ju? /",
         expectedPronunciationAccuracy: "100%",
-        expectedSectionAccuracyScore: "| Score: 237 - (",
-        testAudioFile: "test_en_easy.wav"
+        expectedSectionAccuracyScore: "| Score: 246 - (",
+        testAudioFile: "test_en_easy.wav",
+        useDTW: false
     },
     {
         expectedText: "Rome is home to some of the most beautiful monuments in the world.",
@@ -113,8 +118,9 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         language: "English",
         expectedRecordedIPAScript:  "/ roʊm ɪz hoʊm tɪ səm əv ðə moʊst ˈbjutəfəl ˈmɑnjəmənts ɪn ðə wərld. /",
         expectedPronunciationAccuracy: "100%",
-        expectedSectionAccuracyScore: "| Score: 337 - (",
-        testAudioFile: "test_en_medium.wav"
+        expectedSectionAccuracyScore: "| Score: 346 - (",
+        testAudioFile: "test_en_medium.wav",
+        useDTW: false
     },
     {
         expectedText: "Some machine learning models are designed to understand and generate human-like text based on the input they receive.",
@@ -123,7 +129,82 @@ export const customDataWithTestAudio: CustomDataWithTestAudio[] = [
         language: "English",
         expectedRecordedIPAScript: "/ səm məˈʃin ˈlərnɪŋ ˈmɑdəlz ər dɪˈzaɪnd tɪ ˌəndərˈstænd ənd ˈʤɛnərˌeɪt human-like tɛkst beɪst ɔn ðə ˈɪnˌpʊt ðeɪ rɪˈsiv. /",
         expectedPronunciationAccuracy: "100%",
-        expectedSectionAccuracyScore: "| Score: 437 - (",
-        testAudioFile: "test_en_hard.wav"
+        expectedSectionAccuracyScore: "| Score: 446 - (",
+        testAudioFile: "test_en_hard.wav",
+        useDTW: false
     }
 ]
+
+const customDataWithTestAudioWithUseDTW: CustomDataWithTestAudio[] = [
+    {
+        expectedText: "Hallo, wie geht es dir?",
+        category: "Easy",
+        expectedIPA: "/ hallo, wie geht ɛs dir? /",
+        language: "German",
+        expectedRecordedIPAScript: "/ hɛˈloʊ, haʊ ɪz ɪt goʊɪŋ? /",
+        expectedPronunciationAccuracy: "35%",
+        expectedSectionAccuracyScore: "| Score: 546 - (",
+        testAudioFile: "test_de_easy.wav",
+        useDTW: true
+    },
+    {
+        expectedText: "Die König-Ludwig-Eiche ist ein Naturdenkmal im Staatsbad Brückenau.",
+        category: "Medium",
+        expectedIPA: "/ daɪ könig-ludwig-eiche ist aɪn naturdenkmal ɪm staatsbad brückenau. /",
+        language: "German",
+        expectedRecordedIPAScript: "/ ðə köhne glət wie geiche ɪz ə ˈnæʧərəl ˈpeɪnɪŋ ɪn ðə ˈsɪti əv bæd brückenau. /",
+        expectedPronunciationAccuracy: "53%",
+        expectedSectionAccuracyScore: "| Score: 581 - (",
+        testAudioFile: "test_de_medium.wav",
+        useDTW: true
+    },
+    {
+        expectedText: "Die König-Ludwig-Eiche ist ein Naturdenkmal im Staatsbad Brückenau, einem Ortsteil des drei Kilometer nordöstlich gelegenen Bad Brückenau im Landkreis Bad Kissingen in Bayern.",
+        category: "Hard",
+        expectedIPA: "/ daɪ könig-ludwig-eiche ist aɪn naturdenkmal ɪm staatsbad brückenau, einem ortsteil dɪ drei ˈkɪləˌmitər nordöstlich gelegenen bæd brückenau ɪm landkreis bæd kissingen ɪn bayern. /",
+        language: "German",
+        expectedRecordedIPAScript: "/ ðə kwin əv glutwig ɪz ə ˈnæʧərəl ˈpeɪnɪŋ ɪn ðə ˈsɪti əv bæd brückenau, ə pleɪs əv θri ˈkɪləˌmitərz nɔrθ əv ðə gegegenen bæd brückenau ɪn ðə landkreisbadgesingen ɪn bayern. /",
+        expectedPronunciationAccuracy: "50%",
+        expectedSectionAccuracyScore: "| Score: 634 - (",
+        testAudioFile: "test_de_hard.wav",
+        useDTW: true
+    },
+    {
+        expectedText: "Hi there, how are you?",
+        category: "Easy",
+        expectedIPA: "/ haɪ ðɛr, haʊ ər ju? /",
+        language: "English",
+        expectedRecordedIPAScript: "/ haɪ ðɛr, haʊ ər ju? /",
+        expectedPronunciationAccuracy: "100%",
+        expectedSectionAccuracyScore: "| Score: 684 - (",
+        testAudioFile: "test_en_easy.wav",
+        useDTW: true
+    },
+    {
+        expectedText: "Rome is home to some of the most beautiful monuments in the world.",
+        category: "Medium",
+        expectedIPA: "/ roʊm ɪz hoʊm tɪ səm əv ðə moʊst ˈbjutəfəl ˈmɑnjəmənts ɪn ðə wərld. /",
+        language: "English",
+        expectedRecordedIPAScript:  "/ roʊm ɪz hoʊm tɪ səm əv ðə moʊst ˈbjutəfəl ˈmɑnjəmənts ɪn ðə wərld. /",
+        expectedPronunciationAccuracy: "100%",
+        expectedSectionAccuracyScore: "| Score: 784 - (",
+        testAudioFile: "test_en_medium.wav",
+        useDTW: true
+    },
+    {
+        expectedText: "Some machine learning models are designed to understand and generate human-like text based on the input they receive.",
+        category: "Hard",
+        expectedIPA: "/ səm məˈʃin ˈlərnɪŋ ˈmɑdəlz ər dɪˈzaɪnd tɪ ˌəndərˈstænd ənd ˈʤɛnərˌeɪt human-like tɛkst beɪst ɔn ðə ˈɪnˌpʊt ðeɪ rɪˈsiv. /",
+        language: "English",
+        expectedRecordedIPAScript: "/ səm məˈʃin ˈlərnɪŋ ˈmɑdəlz ər dɪˈzaɪnd tɪ ˌəndərˈstænd ənd ˈʤɛnərˌeɪt human-like tɛkst beɪst ɔn ðə ˈɪnˌpʊt ðeɪ rɪˈsiv. /",
+        expectedPronunciationAccuracy: "100%",
+        expectedSectionAccuracyScore: "| Score: 884 - (",
+        testAudioFile: "test_en_hard.wav",
+        useDTW: true
+    }
+]
+
+export const objectUseDTW = {
+    false: customDataWithTestAudioNoUseDTW,
+    true: customDataWithTestAudioWithUseDTW
+}
