@@ -12,8 +12,9 @@ pandas
 flask
 flask_cors
 pickle-mixin
-structlog
+sacremoses # suggested by marian translation model
 sqlalchemy
+structlog
 transformers
 sentencepiece
 transformers

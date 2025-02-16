@@ -70,11 +70,11 @@ def getTranslationModel(language: str) -> nn.Module:
             "Helsinki-NLP/opus-mt-de-en")
         tokenizer = AutoTokenizer.from_pretrained(
             "Helsinki-NLP/opus-mt-de-en")
-        # Cache models to avoid Hugging face processing
-        with open('translation_model_de.pickle', 'wb') as handle:
-            pickle.dump(model, handle)
-        with open('translation_tokenizer_de.pickle', 'wb') as handle:
-            pickle.dump(tokenizer, handle)
+        # Cache models to avoid Hugging face processing (not needed now)
+        # with open('translation_model_de.pickle', 'wb') as handle:
+        #     pickle.dump(model, handle)
+        # with open('translation_tokenizer_de.pickle', 'wb') as handle:
+        #     pickle.dump(tokenizer, handle)
     else:
         raise ValueError('Language not implemented')
 
