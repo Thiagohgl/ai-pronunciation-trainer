@@ -8,12 +8,12 @@ import audioread
 import numpy as np
 import torch
 from torchaudio.transforms import Resample
-from werkzeug.debug.repr import missing
 
 import WordMatching as wm
 import pronunciationTrainer
 import utilsFileIO
 from constants import app_logger, sample_rate_resample, sample_rate_start, USE_DTW, IS_TESTING
+
 
 trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunciationTrainer.getTrainer("en")}
 
@@ -30,6 +30,7 @@ def lambda_handler(event, context):
     language = data['language']
     try:
         use_dtw = data["useDTW"]
+        app_logger.info(f'use_dtw: "{type(use_dtw)}", "{use_dtw}".')
     except KeyError:
         use_dtw = USE_DTW
 

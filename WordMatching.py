@@ -127,7 +127,7 @@ def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, word
     return mapped_words, mapped_words_indices
 
 
-def get_best_mapped_words(words_estimated: list | str, words_real: list | str, use_dtw:bool = True) -> tuple[list, list]:
+def get_best_mapped_words(words_estimated: list | str, words_real: list | str, use_dtw:bool = False) -> tuple[list, list]:
     app_logger.info(f"words_estimated: '{words_estimated}', words_real: '{words_real}', use_dtw:{use_dtw}.")
     word_distance_matrix = get_word_distance_matrix(
         words_estimated, words_real)
@@ -146,7 +146,7 @@ def get_best_mapped_words(words_estimated: list | str, words_real: list | str, u
         duration_of_mapping = time.time()-start
         # In case or-tools doesn't converge, go to a faster, low-quality solution
         check_mapped_indices_or_duration = len(mapped_indices) == 0 or duration_of_mapping > TIME_THRESHOLD_MAPPING+0.5
-        app_logger.debug(f"check_mapped_indices_or_duration: '{check_mapped_indices_or_duration}'.")
+        app_logger.info(f"check_mapped_indices_or_duration: '{check_mapped_indices_or_duration}'.")
         if check_mapped_indices_or_duration:
             #mapped_indices = (dtw_from_distance_matrix(
             #    word_distance_matrix)).path[:len(words_estimated), 1]
