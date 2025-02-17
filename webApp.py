@@ -62,6 +62,7 @@ def GetAccuracyFromRecordedAudio():
 
 
 if __name__ == "__main__":
+    app_logger.info(f"IS_TESTING: {IS_TESTING}.")
     try:
         app.run(debug=IS_TESTING, host="0.0.0.0", port=3000)
     except Exception as ex:

@@ -12,15 +12,15 @@ from torchaudio.transforms import Resample
 import WordMatching as wm
 import pronunciationTrainer
 import utilsFileIO
-from constants import app_logger, sample_rate_resample, sample_rate_start, USE_DTW, IS_TESTING
+from constants import app_logger, sample_rate_resample, sample_rate_start, USE_DTW, IS_TESTING, tmp_audio_extension
 
 
 trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunciationTrainer.getTrainer("en")}
-
 transform = Resample(orig_freq=sample_rate_start, new_freq=sample_rate_resample)
 
 
 def lambda_handler(event, context):
+    from soundfile import LibsndfileError
 
     data = json.loads(event['body'])
 
@@ -38,16 +38,30 @@ def lambda_handler(event, context):
         return utilsFileIO.return_response_ok('')
 
     delete_tmp = not IS_TESTING
-    with tempfile.NamedTemporaryFile(suffix=".ogg", delete=delete_tmp) as tmp:
+    with tempfile.NamedTemporaryFile(suffix=tmp_audio_extension, delete=delete_tmp) as tmp:
         tmp.write(file_bytes)
         tmp.flush()
         tmp_name = tmp.name
-        signal, fs = audioread_load(tmp_name)
-    signal = transform(torch.Tensor(signal)).unsqueeze(0)
-    Path(tmp_name).unlink(missing_ok=True)
+        app_logger.info(f'Loading {tmp_name} file, delete it? {delete_tmp}, IS_TESTING:{IS_TESTING}.')
+        try:
+            signal, samplerate = soundfile_load(tmp_name)
+        except LibsndfileError as sfe:
+            # https://github.com/beetbox/audioread/issues/144
+            # deprecation warnings => pip install standard-aifc standard-sunau
+            app_logger.error(f"Error reading file {tmp_name}: '{sfe}', re-try with audioread...")
+            try:
+                signal, samplerate = audioread_load(tmp_name)
+            except ModuleNotFoundError as mnfe:
+                app_logger.error(f"Error reading file {tmp_name}: '{mnfe}', try read https://github.com/beetbox/audioread/issues/144")
+                raise mnfe
 
-    result = trainer_SST_lambda[language].processAudioForGivenText(
-        signal, real_text)
+    signal_transformed = transform(torch.Tensor(signal)).unsqueeze(0)
+    # Path(tmp_name).unlink(missing_ok=True)
+
+    language_trainer_sst_lambda = trainer_SST_lambda[language]
+    app_logger.info('language_trainer_sst_lambda: preparing...')
+    result = language_trainer_sst_lambda.processAudioForGivenText(signal_transformed, real_text)
+    app_logger.info(f'language_trainer_sst_lambda: result: {result}...')
 
     #start = time.time()
     #os.remove(random_file_name)
@@ -96,6 +110,44 @@ def lambda_handler(event, context):
 
     return json.dumps(res)
 
+
+def soundfile_load(path: str | Path, offset: float = 0.0, duration: float = None, dtype=np.float32) -> tuple[np.ndarray, int]:
+    """
+    Load an audio buffer using soundfile.
+
+    Parameters:
+        path (str | Path): The path to the audio file.
+        offset (float): The offset in seconds to start reading the file.
+        duration (float): The duration in seconds to read from the file.
+        dtype (np.float32): The data type of the audio buffer.
+
+    Returns:
+        tuple: A tuple containing the audio buffer and the sample rate.
+    """
+    import soundfile as sf
+
+    if isinstance(path, sf.SoundFile):
+        # If the user passed an existing soundfile object,
+        # we can use it directly
+        context = path
+    else:
+        # Otherwise, create the soundfile object
+        context = sf.SoundFile(path)
+
+    with context as sf_desc:
+        sr_native = sf_desc.samplerate
+        if offset:
+            # Seek to the start of the target read
+            sf_desc.seek(int(offset * sr_native))
+        if duration is not None:
+            frame_duration = int(duration * sr_native)
+        else:
+            frame_duration = -1
+
+        # Load the target number of frames, and transpose to match librosa form
+        y = sf_desc.read(frames=frame_duration, dtype=dtype, always_2d=False).T
+
+    return y, sr_native
 
 
 def audioread_load(path, offset=0.0, duration=None, dtype=np.float32):
