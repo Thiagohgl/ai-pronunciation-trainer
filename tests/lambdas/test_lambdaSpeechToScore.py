@@ -3,16 +3,17 @@ import os
 import platform
 import unittest
 ## permit to import from parent directory also in
-# import sys
-# from pathlib import Path
-# parent = Path(__file__).parent.parent.parent
-# sys.path.append(str(parent))
-# print(f"## sys.path:{sys.path}.")
+import sys
+from pathlib import Path
+
+parent = Path(__file__).parent.parent.parent
+sys.path.append(str(parent))
+print(f"## sys.path:{sys.path}.")
 
 import lambdaSpeechToScore
 from constants import ALLOWED_ORIGIN, app_logger
 from tests import EVENTS_FOLDER, set_seed
-from tests.lambdas.constants_lambdaSpeechToScore import expected_GetAccuracyFromRecordedAudio
+from tests.lambdas.constants_test_lambdaSpeechToScore import expected_GetAccuracyFromRecordedAudio
 
 
 def helper_get_accuracy_from_recorded_audio(cls, expected_output, source, use_dtw):
@@ -31,7 +32,7 @@ def helper_get_accuracy_from_recorded_audio(cls, expected_output, source, use_dt
         output = lambdaSpeechToScore.lambda_handler(event_content, {})
         output = json.loads(output)
         app_logger.info(
-            f"output type:{type(output)}, expected_output type:{type(current_expected_output)}."
+            f"source:{source}, language:{language}, useDTW:{use_dtw}, output type:{type(output)}, expected_output type:{type(current_expected_output)}."
         )
         try:
             cls.assertDictEqual(output, current_expected_output)

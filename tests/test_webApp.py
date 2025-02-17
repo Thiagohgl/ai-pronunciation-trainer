@@ -79,8 +79,6 @@ class TestWebApp(unittest.TestCase):
             inputs_by_language = inputs["en"]
             loaded_body = inputs_by_language["body"]
         input_data = json.loads(loaded_body)
-        app_logger.info(f"input_data: {input_data} ...")
-        pass
         response = self.app.post('/GetAccuracyFromRecordedAudio', json=input_data, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         output_data = response.data.decode("utf-8")
