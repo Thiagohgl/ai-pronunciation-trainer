@@ -205,7 +205,7 @@ class TestSoundFileLoad(unittest.TestCase):
         from tests.lambdas.constants_test_lambdaSpeechToScore import expected_GetAccuracyFromRecordedAudio
 
         soundfile_load_mock.side_effect = LibsndfileError(3, prefix="error:")
-        audioread_load_mock.side_effect = ModuleNotFoundError("error2")
+        audioread_load_mock.side_effect = ModuleNotFoundError("ModuleNotFoundError error2")
         with self.assertRaises(ModuleNotFoundError):
             try:
                 try:
@@ -213,8 +213,8 @@ class TestSoundFileLoad(unittest.TestCase):
                 except AssertionError:
                     helper_get_accuracy_from_recorded_audio(self, expected_GetAccuracyFromRecordedAudio, "gui", False)
             except ModuleNotFoundError as mnfe:
-                app_logger.info("## ModuleNotFoundError raised.")
-                assert str(mnfe) == "error2"
+                app_logger.error("## ModuleNotFoundError raised.")
+                assert str(mnfe) == "ModuleNotFoundError error2"
                 raise mnfe
 
 

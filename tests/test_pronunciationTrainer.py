@@ -52,11 +52,8 @@ class TestScore(unittest.TestCase):
             try:
                 pronunciationTrainer.getTrainer("it")
             except ValueError as ve:
-                assert str(ve) == 'Language not implemented'
+                assert str(ve) == "Language 'it' not implemented"
                 raise ve
-
-    def test_getWordsRelativeIntonation(self):
-        pass
 
     def test_exact_transcription_de(self):
         set_seed()
@@ -86,7 +83,6 @@ class TestScore(unittest.TestCase):
         phrase_partial = phrases["de"]["partial"]
         real_and_transcribed_words, real_and_transcribed_words_ipa, mapped_words_indices = trainer_SST_lambda_de.matchSampleAndRecordedWords(phrase_real, phrase_partial)
         pronunciation_accuracy, current_words_pronunciation_accuracy= trainer_SST_lambda_de.getPronunciationAccuracy(real_and_transcribed_words)
-        app_logger.info(f"real_and_transcribed_words_ipa:{real_and_transcribed_words_ipa}.")
         self.assertEqual(real_and_transcribed_words_ipa, [('haloː,', 'haloː'), ('viː', 'viː'), ('ɡeːt', 'ɡeːt'), ('ɛːs', '-'), ('diːr?', '-')] )
         self.assertEqual(mapped_words_indices, [0, 1, 2, -1, -1])
         self.assertEqual(int(pronunciation_accuracy), 71)
@@ -131,7 +127,6 @@ class TestScore(unittest.TestCase):
         phrase_real = phrases["en"]["real"]
         phrase_partial = phrases["en"]["partial"]
         real_and_transcribed_words, real_and_transcribed_words_ipa, mapped_words_indices = trainer_SST_lambda_en.matchSampleAndRecordedWords(phrase_real, phrase_partial)
-        app_logger.info(f"real_and_transcribed_words_ipa:{real_and_transcribed_words_ipa}.")
         self.assertEqual(real_and_transcribed_words_ipa, [('haɪ', 'aɪ'), ('ðɛr,', 'ðɛr'), ('haʊ', 'haʊ'), ('ər', ''), ('ju?', '')])
         self.assertEqual(mapped_words_indices, [0, 1, 2, -1, -1])
         pronunciation_accuracy, current_words_pronunciation_accuracy= trainer_SST_lambda_en.getPronunciationAccuracy(real_and_transcribed_words)
@@ -149,6 +144,16 @@ class TestScore(unittest.TestCase):
         self.assertEqual(int(pronunciation_accuracy), 69)
         for accuracy, expected_accuracy in zip(current_words_pronunciation_accuracy, [50.0, 80.0, 100.0, 66.666666, 33.333333]):
             self.assertAlmostEqual(accuracy, expected_accuracy, places=2)
+
+    def test_empty_phrase_real(self):
+        set_seed()
+        phrase_transcribed = phrases["de"]["transcribed"]
+        with self.assertRaises(ValueError):
+            try:
+                trainer_SST_lambda_de.matchSampleAndRecordedWords(None, phrase_transcribed)
+            except ValueError as ve:
+                assert str(ve) == "Real text is None, but should be a string."
+                raise ve
 
     def test_processAudioForGivenText_getTranscriptAndWordsLocations_de(self):
         set_seed()

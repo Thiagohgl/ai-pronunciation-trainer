@@ -1,42 +1,37 @@
 import unittest
 
-import torch
-from torchaudio.transforms import Resample
-
+import models as mo
 import pronunciationTrainer
-from constants import sample_rate_start, sample_rate_resample
-from lambdaSpeechToScore import audioread_load
-from tests import EVENTS_FOLDER, set_seed
 
 
 trainer_sst_lambda = {
     'de': pronunciationTrainer.getTrainer("de"),
     'en': pronunciationTrainer.getTrainer("en")
 }
-transform = Resample(orig_freq=sample_rate_start, new_freq=sample_rate_resample)
 
 
-def helper_neural_asr(language: str, trainer_sst_lambda_dict: dict):
-    set_seed()
-    signal, _ = audioread_load(EVENTS_FOLDER / f"test_{language}_easy.wav")
-    signal_transformed = transform(torch.Tensor(signal)).unsqueeze(0)
-    signal_transformed_preprocessed = pronunciationTrainer.preprocessAudioStandalone(signal_transformed)
+class TestModels(unittest.TestCase):
 
-    asr_model = trainer_sst_lambda_dict[language].asr_model
-    asr_model.processAudio(signal_transformed_preprocessed)
-    audio_transcript = asr_model.getTranscript()
-    word_locations_in_samples = asr_model.getWordLocations()
-    return audio_transcript, word_locations_in_samples
-
-
-class TestNeuralASR(unittest.TestCase):
     def setUp(self):
-        import platform, os
-        if platform.system() == "Windows" or platform.system() == "Win32":
-            os.environ["PYTHONUTF8"] = "1"
+        self.language_de = "de"
+        self.language_en = "en"
 
-    def test_neural_asr_de(self):
-        self.maxDiff = None
+    def test_getASRModel_de_whisper(self):
+        from whisper_wrapper import WhisperASRModel
+        asr = mo.getASRModel(self.language_de)
+        self.assertIsInstance(asr, WhisperASRModel)
+        asr_explicit = mo.getASRModel(self.language_de, model_name="whisper")
+        self.assertIsInstance(asr_explicit, WhisperASRModel)
+
+    def test_getASRModel_en_whisper(self):
+        from whisper_wrapper import WhisperASRModel
+        asr = mo.getASRModel(self.language_en)
+        self.assertIsInstance(asr, WhisperASRModel)
+        asr_explicit = mo.getASRModel(self.language_en, model_name="whisper")
+        self.assertIsInstance(asr_explicit, WhisperASRModel)
+
+    def test_whisper_wrapper_processAudio_and_get_outputs_de(self):
+        from tests.models.test_aimodels import helper_neural_asr
         audio_transcript, word_locations_in_samples = helper_neural_asr("de", trainer_sst_lambda)
         assert audio_transcript == ' Hallo, wie geht es dir?'
         assert word_locations_in_samples == [
@@ -47,8 +42,8 @@ class TestNeuralASR(unittest.TestCase):
             {'end_ts': 20160.0, 'start_ts': 16640.0, 'word': ' dir?'}
         ]
 
-    def test_neural_asr_en(self):
-        self.maxDiff = None
+    def test_whisper_wrapper_processAudio_and_get_outputs_en(self):
+        from tests.models.test_aimodels import helper_neural_asr
         audio_transcript, word_locations_in_samples = helper_neural_asr("en", trainer_sst_lambda)
         assert audio_transcript == ' Hi there, how are you?'
         assert word_locations_in_samples == [
@@ -58,3 +53,8 @@ class TestNeuralASR(unittest.TestCase):
             {'end_ts': 11200.0, 'start_ts': 9280.0, 'word': ' are'},
             {'end_ts': 13760.0, 'start_ts': 11200.0, 'word': ' you?'}
         ]
+
+
+if __name__ == '__main__':
+    unittest.main()
+

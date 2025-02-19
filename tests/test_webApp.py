@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 
+
 parent = Path(__file__).parent.parent
 sys.path.append(str(parent))
 from tests import EVENTS_FOLDER, set_seed
@@ -36,9 +37,8 @@ class TestWebApp(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         output_data = response.data.decode("utf-8")
         output_data = json.loads(output_data)
-        body_content = json.loads(output_data['body'])
-        self.assertIn('wavBase64', body_content)
-        self.assertNotEqual(body_content['wavBase64'], '')
+        self.assertIn('wavBase64', output_data)
+        self.assertNotEqual(output_data['wavBase64'], '')
 
     def test_getAudioFromText_empty(self):
         data = {'value': ''}
@@ -47,15 +47,7 @@ class TestWebApp(unittest.TestCase):
         output_data = response.data.decode("utf-8")
         output_data = json.loads(output_data)
         app.logger.info(f"output_data: {output_data} ...")
-        self.assertEqual(output_data, {
-            'body': '{}',
-            'headers': {
-                'Access-Control-Allow-Headers': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-            },
-            'statusCode': 200
-        })
+        self.assertEqual(output_data, {})
 
     def test_getNext(self):
         set_seed()
@@ -102,15 +94,25 @@ class TestWebApp(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         output_data = response.data.decode("utf-8")
         output_data = json.loads(output_data)
-        self.assertEqual(output_data, {
-            'body': '',
-            'headers': {
-                'Access-Control-Allow-Headers': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-            },
-            'statusCode': 200
-        })
+        self.assertEqual(output_data, {})
+
+    def test_change_model(self):
+        from constants import MODEL_NAME_TESTING
+        set_seed()
+        input_data = {"modelName": MODEL_NAME_TESTING}
+        response = self.app.post('/changeModel', json=input_data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        output_data = response.data.decode("utf-8")
+        self.assertEqual(output_data, f'Model changed to {input_data["modelName"]}!')
+
+    def test_change_model_raises_exception(self):
+        set_seed()
+        input_data = {"modelName": "wrong_model"}
+        response = self.app.post('/changeModel', json=input_data, content_type='application/json')
+        self.assertEqual(response.status_code, 500)
+        output_data = response.data.decode("utf-8")
+        self.assertEqual(output_data, 'Internal server error')
+
 
 if __name__ == '__main__':
     unittest.main()

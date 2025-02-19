@@ -8,7 +8,7 @@ import pandas as pd
 
 import lambdaGetSample
 from constants import PROJECT_ROOT_FOLDER, app_logger
-from tests import EVENTS_FOLDER, set_seed, TEST_ROOT_FOLDER
+from tests import EVENTS_FOLDER, set_seed
 
 
 def helper_category(cls, category: int, language: str, expected_output: dict):
@@ -102,6 +102,21 @@ class TestDataset(unittest.TestCase):
             except ValueError as ve:
                 assert str(ve) == "category not assigned for sentence '' ..."
                 raise ve
+
+    def test_textdataset_len(self):
+        from lambdaGetSample import TextDataset
+        lang = "de"
+        df = pd.read_csv(PROJECT_ROOT_FOLDER / "databases" / f'data_{lang}.csv', delimiter='|')
+        df_de = TextDataset(df, lang)
+        self.assertEqual(len(df_de), len(df))
+
+    def test_textdataset_getitem(self):
+        from lambdaGetSample import TextDataset
+        lang = "de"
+        df = pd.read_csv(PROJECT_ROOT_FOLDER / "databases" / f'data_{lang}.csv', delimiter='|')
+        textdataframe_de = TextDataset(df, lang)
+        expected = df["sentence"].iloc[0]
+        self.assertListEqual(textdataframe_de[0], [expected])
 
 
 if __name__ == "__main__":
