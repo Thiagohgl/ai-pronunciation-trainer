@@ -10,12 +10,11 @@ import torch
 from torchaudio.transforms import Resample
 
 import WordMatching as wm
-import pronunciationTrainer
+import lambdaChangeModel
 import utilsFileIO
 from constants import app_logger, sample_rate_resample, sample_rate_start, USE_DTW, IS_TESTING, tmp_audio_extension
 
 
-trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunciationTrainer.getTrainer("en")}
 transform = Resample(orig_freq=sample_rate_start, new_freq=sample_rate_resample)
 
 
@@ -32,13 +31,14 @@ def lambda_handler(event, context):
         use_dtw = data["useDTW"]
         app_logger.info(f'use_dtw: "{type(use_dtw)}", "{use_dtw}".')
     except KeyError:
+        app_logger.info(f"useDTW key not found, use its default value '{USE_DTW}' ('{type(USE_DTW)}').")
         use_dtw = USE_DTW
 
     if len(real_text) == 0:
-        return utilsFileIO.return_response_ok('')
+        return utilsFileIO.return_response_ok("{}")
 
     delete_tmp = not IS_TESTING
-    with tempfile.NamedTemporaryFile(suffix=tmp_audio_extension, delete=delete_tmp) as tmp:
+    with tempfile.NamedTemporaryFile(suffix=tmp_audio_extension, delete=False) as tmp:
         tmp.write(file_bytes)
         tmp.flush()
         tmp_name = tmp.name
@@ -49,16 +49,12 @@ def lambda_handler(event, context):
             # https://github.com/beetbox/audioread/issues/144
             # deprecation warnings => pip install standard-aifc standard-sunau
             app_logger.error(f"Error reading file {tmp_name}: '{sfe}', re-try with audioread...")
-            try:
-                signal, samplerate = audioread_load(tmp_name)
-            except ModuleNotFoundError as mnfe:
-                app_logger.error(f"Error reading file {tmp_name}: '{mnfe}', try read https://github.com/beetbox/audioread/issues/144")
-                raise mnfe
+            signal, samplerate = audioread_load(tmp_name)
 
     signal_transformed = transform(torch.Tensor(signal)).unsqueeze(0)
     # Path(tmp_name).unlink(missing_ok=True)
 
-    language_trainer_sst_lambda = trainer_SST_lambda[language]
+    language_trainer_sst_lambda = lambdaChangeModel.trainer_SST_lambda[language]
     app_logger.info('language_trainer_sst_lambda: preparing...')
     result = language_trainer_sst_lambda.processAudioForGivenText(signal_transformed, real_text)
     app_logger.info(f'language_trainer_sst_lambda: result: {result}...')

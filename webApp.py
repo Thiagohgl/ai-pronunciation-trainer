@@ -3,6 +3,7 @@ import json
 from flask import Flask, render_template, request
 from flask_cors import CORS
 
+import lambdaChangeModel
 import lambdaGetSample
 import lambdaSpeechToScore
 import lambdaTTS
@@ -56,9 +57,20 @@ def GetAccuracyFromRecordedAudio():
         lambda_correct_output = lambdaSpeechToScore.lambda_handler(event, {})
     except Exception as e:
         app_logger.error(f"error: {e} ...")
-        return utilsFileIO.return_response_ok('')
+        return utilsFileIO.return_response_ok('{}')
 
     return lambda_correct_output
+
+
+@app.route(rootPath+'/changeModel', methods=['POST'])
+def change_model():
+    try:
+        event = {'body': json.dumps(request.get_json(force=True))}
+        lambda_correct_output = lambdaChangeModel.lambda_handler(event, {})
+    except Exception as e:
+        app_logger.error(f"error: {e} ...")
+        return utilsFileIO.return_response('Internal server error', mimetype="application/json", status=500)
+    return utilsFileIO.return_response_ok(lambda_correct_output, mimetype='text/plain')
 
 
 if __name__ == "__main__":

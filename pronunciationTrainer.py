@@ -10,23 +10,18 @@ import RuleBasedModels
 import WordMatching as wm
 import WordMetrics
 import models as mo
-from constants import sample_rate_resample, app_logger
+from constants import app_logger, MODEL_NAME_DEFAULT, sample_rate_resample
 
 
-def getTrainer(language: str):
-
-    asr_model = mo.getASRModel(language,use_whisper=True)
-    
+def getTrainer(language: str, model_name: str = MODEL_NAME_DEFAULT):
+    asr_model = mo.getASRModel(language, model_name=model_name)
     if language == 'de':
-        phonem_converter = RuleBasedModels.EpitranPhonemConverter(
-            epitran.Epitran('deu-Latn'))
+        phonem_converter = RuleBasedModels.EpitranPhonemConverter(epitran.Epitran('deu-Latn'))
     elif language == 'en':
         phonem_converter = RuleBasedModels.EngPhonemConverter()
     else:
-        raise ValueError('Language not implemented')
-
-    trainer = PronunciationTrainer(
-        asr_model, phonem_converter)
+        raise ValueError(f"Language '{language}' not implemented")
+    trainer = PronunciationTrainer(asr_model, phonem_converter)
 
     return trainer
 
@@ -65,20 +60,20 @@ class PronunciationTrainer:
 
         return audio_transcript, word_locations_in_samples
 
-    def getWordsRelativeIntonation(self, Audio: torch.tensor, word_locations: list):
-        intonations = torch.zeros((len(word_locations), 1))
-        intonation_fade_samples = 0.3*self.sampling_rate
-        app_logger.info(f"intonations.shape: {intonations.shape}.")
-        for word in range(len(word_locations)):
-            intonation_start = int(np.maximum(
-                0, word_locations[word][0]-intonation_fade_samples))
-            intonation_end = int(np.minimum(
-                Audio.shape[1]-1, word_locations[word][1]+intonation_fade_samples))
-            intonations[word] = torch.sqrt(torch.mean(
-                Audio[0][intonation_start:intonation_end]**2))
-
-        intonations = intonations/torch.mean(intonations)
-        return intonations
+    # def getWordsRelativeIntonation(self, Audio: torch.tensor, word_locations: list):
+    #     intonations = torch.zeros((len(word_locations), 1))
+    #     intonation_fade_samples = 0.3*self.sampling_rate
+    #     app_logger.info(f"intonations.shape: {intonations.shape}.")
+    #     for word in range(len(word_locations)):
+    #         intonation_start = int(np.maximum(
+    #             0, word_locations[word][0]-intonation_fade_samples))
+    #         intonation_end = int(np.minimum(
+    #             Audio.shape[1]-1, word_locations[word][1]+intonation_fade_samples))
+    #         intonations[word] = torch.sqrt(torch.mean(
+    #             Audio[0][intonation_start:intonation_end]**2))
+    #
+    #     intonations = intonations/torch.mean(intonations)
+    #     return intonations
 
     ##################### ASR Functions ###########################
 
@@ -144,10 +139,10 @@ class PronunciationTrainer:
     def matchSampleAndRecordedWords(self, real_text, recorded_transcript):
         words_estimated = recorded_transcript.split()
 
-        if real_text is None:
-            words_real = self.current_transcript[0].split()
-        else:
+        try:
             words_real = real_text.split()
+        except AttributeError:
+            raise ValueError("Real text is None, but should be a string.")
 
         mapped_words, mapped_words_indices = wm.get_best_mapped_words(
             words_estimated, words_real)
@@ -201,7 +196,3 @@ class PronunciationTrainer:
 
     def preprocessAudio(self, audio: torch.tensor) -> torch.tensor:
         return preprocessAudioStandalone(audio)
-
-
-def log_errors(s, name, caller):
-    app_logger.error(f"args => caller:{caller}, {name}: {len(s)}, {s} ...")
