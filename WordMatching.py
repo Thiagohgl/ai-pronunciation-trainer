@@ -162,17 +162,17 @@ def get_best_mapped_words(words_estimated: list | str, words_real: list | str, u
     return mapped_words, mapped_words_indices
 
 
-# Faster, but not optimal
-def get_best_mapped_words_dtw(words_estimated: list, words_real: list) -> list:
-    from dtwalign import dtw_from_distance_matrix
-    word_distance_matrix = get_word_distance_matrix(
-        words_estimated, words_real)
-    mapped_indices = dtw_from_distance_matrix(
-        word_distance_matrix).path[:-1, 0]
-
-    mapped_words, mapped_words_indices = get_resulting_string(
-        mapped_indices, words_estimated, words_real)
-    return mapped_words, mapped_words_indices
+## Faster, but not optimal
+# def get_best_mapped_words_dtw(words_estimated: list, words_real: list) -> list:
+#     from dtwalign import dtw_from_distance_matrix
+#     word_distance_matrix = get_word_distance_matrix(
+#         words_estimated, words_real)
+#     mapped_indices = dtw_from_distance_matrix(
+#         word_distance_matrix).path[:-1, 0]
+#
+#     mapped_words, mapped_words_indices = get_resulting_string(
+#         mapped_indices, words_estimated, words_real)
+#     return mapped_words, mapped_words_indices
 
 
 def getWhichLettersWereTranscribedCorrectly(real_word, transcribed_word):
@@ -187,15 +187,15 @@ def getWhichLettersWereTranscribedCorrectly(real_word, transcribed_word):
     return is_leter_correct
 
 
-def parseLetterErrorsToHTML(word_real, is_leter_correct):
-    word_colored = ''
-    correct_color_start = '*'
-    correct_color_end = '*'
-    wrong_color_start = '-'
-    wrong_color_end = '-'
-    for idx, letter in enumerate(word_real):
-        if is_leter_correct[idx] == 1:
-            word_colored += correct_color_start + letter + correct_color_end
-        else:
-            word_colored += wrong_color_start + letter + wrong_color_end
-    return word_colored
+# def parseLetterErrorsToHTML(word_real, is_leter_correct):
+#     word_colored = ''
+#     correct_color_start = '*'
+#     correct_color_end = '*'
+#     wrong_color_start = '-'
+#     wrong_color_end = '-'
+#     for idx, letter in enumerate(word_real):
+#         if is_leter_correct[idx] == 1:
+#             word_colored += correct_color_start + letter + correct_color_end
+#         else:
+#             word_colored += wrong_color_start + letter + wrong_color_end
+#     return word_colored
