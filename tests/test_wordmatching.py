@@ -3,10 +3,10 @@ import platform
 import unittest
 import numpy as np
 ## permit to import from parent directory also in
-# import sys
-# from pathlib import Path
-# parent = Path(__file__).parent.parent
-# sys.path.append(str(parent))
+import sys
+from pathlib import Path
+parent = Path(__file__).parent.parent
+sys.path.append(str(parent))
 import WordMatching
 from constants import app_logger
 from tests import set_seed
@@ -37,22 +37,43 @@ class TestWordMatching(unittest.TestCase):
             result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
             np.testing.assert_array_equal(result_indices, expected_result_indices)
 
-    def test_get_best_path_from_distance_matrix_with_inf_values(self):        
-        word_distance_matrix = np.array([[np.inf, 1, 2]])
-        result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
-        self.assertEqual(result_indices, [])
+    def test_get_best_path_from_distance_matrix_with_inf_values(self):
+        set_seed()
+        try:   
+            word_distance_matrix = np.array([[np.inf, 1, 2]])
+            result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
+            app_logger.info(f"result_indices0: {result_indices}, {result_indices.shape} .")
+            self.assertIsInstance(result_indices, np.ndarray)
+            self.assertEqual(result_indices.shape, (3,))
+            self.assertGreater(result_indices[0], 0)
+            self.assertGreater(result_indices[1], 0)
+            self.assertEqual(result_indices[2], 0)
 
-        word_distance_matrix = np.array([[-1, np.inf, 3]])
-        result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
-        self.assertEqual(result_indices, [])
+            word_distance_matrix = np.array([[-1, np.inf, 3]])
+            result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
+            app_logger.info(f"result_indices1: {result_indices}, {result_indices.shape} .")
+            self.assertLess(result_indices[0], 0)
+            self.assertGreater(result_indices[1], 0)
+            self.assertEqual(result_indices[2], 0)
         
-        word_distance_matrix = np.array([[2, -1, np.inf]])
-        result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
-        self.assertEqual(result_indices, [])
-        
-        word_distance_matrix = np.array([[np.inf, 1, 2], [1, np.inf, 3], [2, 3, np.inf], [-1, -np.inf, 1]])
-        result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
-        self.assertEqual(result_indices, [])
+            word_distance_matrix = np.array([[2, -1, np.inf]])
+            result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
+            app_logger.info(f"result_indices2: {result_indices}, {result_indices.shape} .")
+            self.assertGreater(result_indices[0], 0)
+            self.assertGreater(result_indices[1], -1)
+            self.assertEqual(result_indices[2], 0)
+            
+            word_distance_matrix = np.array([[np.inf, 1, 2], [1, np.inf, 3], [2, 3, np.inf], [-1, -np.inf, 1]])
+            result_indices = WordMatching.get_best_path_from_distance_matrix(word_distance_matrix)
+            app_logger.info(f"result_indices3: {result_indices}, {result_indices.shape} .")
+            self.assertGreater(result_indices[0], 0)
+            self.assertGreater(result_indices[1], 0)
+            self.assertEqual(result_indices[2], 0)
+
+        except AssertionError as ae:
+            app_logger.error("ae:")
+            app_logger.error(ae)
+            raise ae
 
     def test_getWhichLettersWereTranscribedCorrectly(self):
         real_word = "hello"

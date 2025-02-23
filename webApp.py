@@ -29,12 +29,6 @@ def main():
     return render_template('main.html', data=data)
 
 
-@app.route(rootPath+'/getAudioFromText', methods=['POST'])
-def getAudioFromText():
-    event = {'body': json.dumps(request.get_json(force=True))}
-    return lambdaTTS.lambda_handler(event, {})
-
-
 @app.route(rootPath+'/getSample', methods=['POST'])
 def getNext():
     if IS_TESTING:

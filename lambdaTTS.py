@@ -1,40 +1,55 @@
 import base64
 import json
 import os
+import tempfile
+from pathlib import Path
 
 import soundfile as sf
 
 import AIModels
 import models
 import utilsFileIO
-from constants import sample_rate_resample
+from constants import app_logger, sample_rate_resample
 
 
-model_TTS_lambda = AIModels.NeuralTTS(models.getTTSModel('de'), sample_rate_resample)
+def get_tts(text: str, language: str, tmp_prefix="audio_", tmp_suffix=".wav") -> str:
+    """
+    Generate text-to-speech (TTS) audio for the given text and language.
 
+    Args:
+        text (str): The text to be converted to speech.
+        language (str): The language of the text. Supported languages are "en" (English) and "de" (German).
+        tmp_prefix (str, optional): The temporary directory to use for temporary files.
+        tmp_suffix (str, optional): The temporary directory to use for temporary files.
 
-def lambda_handler(event, context):
+    Returns:
+        str: The path to the generated audio file.
 
-    body = json.loads(event['body'])
+    Raises:
+        NotImplementedError: If the provided language is not supported.
 
-    text_string = body['value']
+    Notes:
+        This function uses the Silero TTS model to generate the audio. The model and speaker are selected based on the provided language.
+    """
 
-    if len(text_string) == 0:
-        return utilsFileIO.return_response_ok('{}')
+    if text is None or len(text) == 0:
+        raise ValueError(f"cannot read an empty/None text: '{text}'...")
+    if language is None or len(language) == 0:
+        raise NotImplementedError(f"Not tested/supported with '{language}' language...")
 
-    linear_factor = 0.2
-    audio = model_TTS_lambda.getAudioFromSentence(
-        text_string).detach().numpy()*linear_factor
-    random_file_name = utilsFileIO.generateRandomString(20)+'.wav'
+    tmp_dir = Path(tempfile.gettempdir())
+    try:
+        model, _, speaker, sample_rate = models.silero_tts(
+            language, output_folder=tmp_dir
+        )
+    except ValueError:
+        model, _, sample_rate, _, _, speaker = models.silero_tts(
+            language, output_folder=tmp_dir
+        )
+    app_logger.info(f"model speaker #0: {speaker} ...")
 
-    sf.write('./'+random_file_name, audio, sample_rate_resample)
-
-    with open(random_file_name, "rb") as f:
-        audio_byte_array = f.read()
-
-    os.remove(random_file_name)
-
-    body = json.dumps({
-        "wavBase64": str(base64.b64encode(audio_byte_array))[2:-1],
-    })
-    return utilsFileIO.return_response_ok(body)
+    with tempfile.NamedTemporaryFile(prefix=tmp_prefix, suffix=tmp_suffix, delete=False) as tmp_audio_file:
+        app_logger.info(f"tmp_audio_file output: {tmp_audio_file.name} ...")
+        audio_paths = model.save_wav(text=text, speaker=speaker, sample_rate=sample_rate, audio_path=str(tmp_audio_file.name))
+        app_logger.info(f"audio_paths output: {audio_paths} ...")
+        return audio_paths

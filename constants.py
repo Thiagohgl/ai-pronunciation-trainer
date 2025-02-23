@@ -18,4 +18,5 @@ session_logger.setup_logging(json_logs=LOG_JSON_FORMAT, log_level=log_level)
 app_logger = structlog.stdlib.get_logger(__name__)
 sample_rate_start = int(os.getenv('SAMPLE_RATE', 48000))
 sample_rate_resample = 16000
+samplerate_tts = 16000
 language_not_implemented = "Language '{}' not implemented. Supported languages: 'de', 'en'."

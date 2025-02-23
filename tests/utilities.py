@@ -1,5 +1,8 @@
 """Various utilities (Serialize objects, time benchmark, args dump, numerical and stats info)"""
+from pathlib import Path
 from typing import Mapping
+
+import numpy as np
 
 from constants import app_logger
 
@@ -81,12 +84,14 @@ def _serialize_exception(e: Exception) -> dict[str, str]:
 
 
 
-def hash_calculate(arr_or_path, is_file: bool, read_mode: str = "rb") -> str | bytes:
+def hash_calculate(arr_or_path: np.ndarray | str | Path, is_file: bool, read_mode: str = "rb") -> str | bytes:
     """
     Return computed hash from input variable (typically a numpy array).
 
     Args:
-        arr: input variable
+        arr_or_path: variable to hash (numpy array, string, Path-like object, dict, bytes)
+        is_file: read the variable from a file
+        read_mode: used when is_file is True to read the file in binary or text mode
 
     Returns:
         computed hash from input variable

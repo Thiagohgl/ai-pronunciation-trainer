@@ -31,24 +31,6 @@ class TestWebApp(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'<html', response.data)
 
-    def test_getAudioFromText(self):
-        data = {'value': 'Hello, how are you?'}
-        response = self.app.post('/getAudioFromText', json=data, content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        output_data = response.data.decode("utf-8")
-        output_data = json.loads(output_data)
-        self.assertIn('wavBase64', output_data)
-        self.assertNotEqual(output_data['wavBase64'], '')
-
-    def test_getAudioFromText_empty(self):
-        data = {'value': ''}
-        response = self.app.post('/getAudioFromText', json=data, content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        output_data = response.data.decode("utf-8")
-        output_data = json.loads(output_data)
-        app.logger.info(f"output_data: {output_data} ...")
-        self.assertEqual(output_data, {})
-
     def test_getNext(self):
         set_seed()
         input_data = {"category": "1", "language": "de"}

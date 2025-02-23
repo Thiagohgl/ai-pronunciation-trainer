@@ -19,3 +19,6 @@ transformers
 sentencepiece
 transformers
 openai-whisper
+faster-whisper
+ortools
+silero

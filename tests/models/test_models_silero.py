@@ -1,6 +1,7 @@
 import unittest
 import torch
 import torch.package
+from silero.utils import Decoder
 from transformers import MarianTokenizer
 
 import models as mo
@@ -59,25 +60,6 @@ class TestModels(unittest.TestCase):
                 self.assertEqual(str(ve), language_not_implemented.format(lang))
                 raise ve
 
-    def test_getTTSModel_de(self):
-        tts_module = mo.getTTSModel('de')
-        model = tts_module.model
-        assert isinstance(model, torch.nn.Module)
-
-    def test_getTTSModel_en(self):
-        # for some reason this English TTS model doesn't work, in fact only the author uses only the German TTS model (lambdaTTS.py)
-        model = mo.getTTSModel('en')
-        assert isinstance(model, torch.nn.Module)
-
-    def test_getTTSModel_not_implemented(self):
-        with self.assertRaises(ValueError):
-            lang = "it"
-            try:
-                mo.getTTSModel("it")
-            except ValueError as ve:
-                assert str(ve) == language_not_implemented.format(lang)
-                raise ve
-
     def test_whisper_wrapper_parse_word(self):
         from whisper_wrapper import parse_word_info
 
@@ -103,7 +85,36 @@ class TestModels(unittest.TestCase):
             print(f"output: {output} .")
             self.assertEqual(output, expected_output)
 
+    def test_silero_tts_en2(self):
+        model, example, speaker, sample_rate = mo.silero_tts(language=self.language_en, output_folder=self.tmp_dir)
+        assert model is not None
+        self.assertIsInstance(model, object)
+        self.assertIsInstance(example, str)
+        self.assertIsInstance(speaker, str)
+        self.assertIsInstance(sample_rate, int)
+        assert speaker == 'en_0'
+        assert sample_rate == 48000
+        assert example == 'Can you can a canned can into an un-canned can like a canner can can a canned can into an un-canned can?'
+
+    def test_silero_tts_de(self):
+        model, example, speaker, sample_rate = mo.silero_tts(language=self.language_de, output_folder=self.tmp_dir)
+        assert model is not None
+        self.assertIsInstance(model, object)
+        self.assertIsInstance(example, str)
+        self.assertIsInstance(speaker, str)
+        self.assertIsInstance(sample_rate, int)
+        assert speaker == 'karlsson'
+        assert sample_rate == 48000
+        assert example == 'Fischers Fritze fischt frische Fische, Frische Fische fischt Fischers Fritze.'
+
+    def test_get_models_de(self):
+        models_de = mo.get_models(self.language_de, self.tmp_dir, "latest", "stt_models")
+        self.assertIn(self.language_de, models_de.stt_models)
+
+    def test_get_models_en(self):
+        models_en = mo.get_models(self.language_en, self.tmp_dir, "latest", "stt_models")
+        self.assertIn(self.language_en, models_en.stt_models)
+
 
 if __name__ == '__main__':
     unittest.main()
-

@@ -120,6 +120,7 @@ class PronunciationTrainer:
         current_recorded_ipa = self.ipa_converter.convertToPhonem(
             current_recorded_transcript)
 
+        # time.sleep(10000)
         return current_recorded_transcript, current_recorded_ipa, current_recorded_word_locations
 
     def getWordLocationsFromRecordInSeconds(self, word_locations, mapped_words_indices) -> list:

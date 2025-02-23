@@ -1,9 +1,9 @@
 [run]
 source = ./*.py
-omit = ./tests/*,./tests/**/*,./*venv*/*,__version__.py,*tests*,*apps.py,*manage.py,*__init__.py,*migrations*,*asgi*,*wsgi*,*admin.py,*urls.py
+omit = ./tests/*,./tests/**/*,./*venv*/*,__version__.py,*tests*,*app.py,js.py,*manage.py,*__init__.py,*migrations*,*asgi*,*wsgi*,*admin.py,*urls.py
 
 [report]
-omit = ./*venv*/*,*tests*,*apps.py,*manage.py,*__init__.py,*migrations*,*asgi*,*wsgi*,*admin.py,*urls.py
+omit = ./*venv*/*,*tests*,*app.py,*manage.py,*__init__.py,*migrations*,js.py,*asgi*,*wsgi*,*admin.py,*urls.py
 
 exclude_lines =
      if __name__ == .__main__.:
