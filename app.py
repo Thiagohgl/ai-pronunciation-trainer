@@ -1,8 +1,9 @@
+import os
 from pathlib import Path
 import gradio as gr
 
 import js
-from constants import PROJECT_ROOT_FOLDER, app_logger, sample_rate_start
+from constants import PROJECT_ROOT_FOLDER, app_logger, sample_rate_start, MODEL_NAME_DEFAULT, model_urls
 import lambdaGetSample
 import lambdaSpeechToScore
 import lambdaTTS
@@ -43,7 +44,12 @@ with gr.Blocks(css=css, head=js.head_driver_tour) as gradio_app:
     project_root_folder = Path(PROJECT_ROOT_FOLDER)
     with open(project_root_folder / "app_description.md", "r", encoding="utf-8") as app_description_src:
         md_app_description = app_description_src.read()
-        gr.Markdown(md_app_description.format(sample_rate_start=sample_rate_start))
+        model_url = model_urls[MODEL_NAME_DEFAULT]
+        gr.Markdown(md_app_description.format(
+            sample_rate_start=sample_rate_start,
+            model_name=MODEL_NAME_DEFAULT,
+            model_url=model_url
+        ))
     with gr.Row():
         with gr.Column(scale=4, min_width=300):
             with gr.Row(elem_id="id-choose-random-phrase-by-language-and-difficulty"):

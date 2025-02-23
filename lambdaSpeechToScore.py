@@ -68,7 +68,6 @@ def get_speech_to_score_dict(
         real_text (str): The text to be matched with the audio.
         file_bytes_or_audiotmpfile (str | bytes | dict): The audio file in bytes or a temporary file.
         language (str): The language of the audio.
-        remove_random_file (bool): Whether to remove the temporary file after processing.
         extension (str): The file extension of the audio file.
 
     Returns:

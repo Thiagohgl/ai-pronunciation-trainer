@@ -20,3 +20,11 @@ sample_rate_start = int(os.getenv('SAMPLE_RATE', 48000))
 sample_rate_resample = 16000
 samplerate_tts = 16000
 language_not_implemented = "Language '{}' not implemented. Supported languages: 'de', 'en'."
+SILERO_VERSION_DE = "v4"
+SILERO_VERSION_EN = "latest"
+silero_versions_dict = {"de": SILERO_VERSION_DE, "en": SILERO_VERSION_EN}
+model_urls = {
+    "faster_whisper": "https://pypi.org/project/faster-whisper/",
+    "silero": "https://pypi.org/project/silero/",
+    "whisper": "https://pypi.org/project/openai-whisper/",
+}
