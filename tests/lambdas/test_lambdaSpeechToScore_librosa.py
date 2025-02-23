@@ -17,70 +17,70 @@ from tests import EVENTS_FOLDER
 from tests.utilities import hash_calculate
 
 
-input_file_test_de = EVENTS_FOLDER / "test_de.wav"
+input_file_test_de = EVENTS_FOLDER / "test_de_hard.wav"
 hash_input = hash_calculate(input_file_test_de, is_file=True)
-assert hash_input == b'tGNDknDQRwCAx4LJ88Ft3y2+YAxcqXW7GAqasxxZoBw='
+assert hash_input == b'y6chMKPOgfUks58nYElkvc8yimVYAACgpUq/vPQmd0Q='
 
 
 class TestAudioReadLoad(unittest.TestCase):
 
     def test_audioread_load_full_file(self):
         signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de)
-        self.assertEqual(sr_native, 44100)
+        self.assertEqual(sr_native, 48000)
         self.assertEqual(
-            signal.shape, (129653,)
-        )  # Assuming the audio file is ~2,93 seconds long (107603 / 44100)
+            signal.shape, (509400,)
+        )  # Assuming the audio file is ~2,93 seconds long (107603 / 48000)
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'3bfNuuMk0ov5+E77cUZmzjijfBUaMxuy1mrPmyjFyeo=')
-        
+        self.assertEqual(hash_output, b'07vLXZadk3b6rmTHFH5F2Ap1X1PidivdRBkcXvNtmW0=')
+
     def test_audioread_load_with_offset(self):
         signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=0.5)
-        self.assertEqual(sr_native, 44100)
-        self.assertAlmostEqual(signal.shape, (107603,))  # audio file is ~2.44 seconds long (107603 / 44100), offset is 0.5 seconds
+        self.assertEqual(sr_native, 48000)
+        self.assertAlmostEqual(signal.shape, (485400,))  # audio file is ~2.44 seconds long (107603 / 48000), offset is 0.5 seconds
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'QiDTDSZ4xAUniANNz4M43oa2FwpTSjvzW3IsKyqCVeE=')
+        self.assertEqual(hash_output, b'RbY4C3tJU7HAiZbfZ8ldNXMAvjSgOL9A62IBW8/b/JE=')
 
     def test_audioread_load_with_duration(self):
-        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, duration=129653 / 44100)
-        self.assertEqual(sr_native, 44100)
-        self.assertEqual(signal.shape, (129653,))  # Assuming the duration is ~2,93 seconds long (129653 / 44100)
+        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, duration=509400 / 48000)
+        self.assertEqual(sr_native, 48000)
+        self.assertEqual(signal.shape, (509400,))  # Assuming the duration is ~2,93 seconds long (509400 / 48000)
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'3bfNuuMk0ov5+E77cUZmzjijfBUaMxuy1mrPmyjFyeo=')
+        self.assertEqual(hash_output, b'07vLXZadk3b6rmTHFH5F2Ap1X1PidivdRBkcXvNtmW0=')
 
     def test_audioread_load_with_offset_and_duration(self):
-        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=0.5, duration=129653 / 44100)
-        self.assertEqual(sr_native, 44100)
-        self.assertEqual(signal.shape, (107603,))
+        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=0.5, duration=509400 / 48000)
+        self.assertEqual(sr_native, 48000)
+        self.assertEqual(signal.shape, (485400,))
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'QiDTDSZ4xAUniANNz4M43oa2FwpTSjvzW3IsKyqCVeE=')
-    
+        self.assertEqual(hash_output, b'RbY4C3tJU7HAiZbfZ8ldNXMAvjSgOL9A62IBW8/b/JE=')
+
     def test_audioread_load_with_big_offset_and_duration(self):
-        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=10, duration=129653 / 44100)
-        self.assertEqual(sr_native, 44100)
+        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=30, duration=509400 / 48000)
+        self.assertEqual(sr_native, 48000)
         self.assertEqual(signal.shape, (0,))
         hash_output = hash_calculate(signal, is_file=False)
         self.assertEqual(hash_output, b'47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=')
 
     def test_audioread_load_with_big_offset_no_duration(self):
-        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=10)
-        self.assertEqual(sr_native, 44100)
+        signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=30)
+        self.assertEqual(sr_native, 48000)
         self.assertEqual(signal.shape, (0,))
         hash_output = hash_calculate(signal, is_file=False)
         self.assertEqual(hash_output, b'47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=')
-    
+
     def test_audioread_load_with_small_very_small_duration(self):
         signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, duration=0.000001)
-        self.assertEqual(sr_native, 44100)
+        self.assertEqual(sr_native, 48000)
         self.assertEqual(signal.shape, (0,))
         hash_output = hash_calculate(signal, is_file=False)
         self.assertEqual(hash_output, b'47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=')
 
     def test_audioread_load_with_small_offset_and_no_duration(self):
         signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=0.02)
-        self.assertEqual(sr_native, 44100)
-        self.assertEqual(signal.shape, (128771,))
+        self.assertEqual(sr_native, 48000)
+        self.assertEqual(signal.shape, (508440,))
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'twAqaV+NNszPT6DwMOC2zL0mCx+BZ51CcoESmULfWRQ=')
+        self.assertEqual(hash_output, b'SCWSo23U1EBXHyNE+bBsKLZNISmcG06z8g+Jc5w3yxg=')
 
     def test_audioread_load_empty_file(self):
         """
@@ -88,9 +88,9 @@ class TestAudioReadLoad(unittest.TestCase):
         ```
         import soundfile as sf
         import numpy as np
-        duration = 129653 / 44100  # ~2.93 seconds
+        duration = 509400 / 48000  # ~2.93 seconds
         signal, sr_native = lambdaSpeechToScore.audioread_load(input_file_test_de, offset=5, duration=duration)
-        sf.write(EVENTS_FOLDER / "test_empty.wav", data=signal, samplerate=44100)
+        sf.write(EVENTS_FOLDER / "test_empty.wav", data=signal, samplerate=48000)
         ```
         """
         input_empty = EVENTS_FOLDER / "test_empty.wav"
@@ -107,7 +107,7 @@ class TestAudioReadLoad(unittest.TestCase):
         self.assertEqual(sr_native, 44100)
         self.assertEqual(
             signal.shape, (2, 264600)
-        )  # Assuming the audio file is ~6 seconds long (264600 / 44100)
+        )  # Assuming the audio file is ~6 seconds long (264600 / 48000)
         signal_contiguous = np.ascontiguousarray(signal)
         hash_output = hash_calculate(signal_contiguous, is_file=False)
         self.assertEqual(hash_output, b'NBLPhDBmZSTv844S3oDf4lMbQt1x+JbRckub/3rSEJI=')
@@ -117,33 +117,53 @@ class TestSoundFileLoad(unittest.TestCase):
 
     def test_soundfile_load_full_file(self):
         signal, sr_native = lambdaSpeechToScore.soundfile_load(input_file_test_de)
-        self.assertEqual(sr_native, 44100)
+        self.assertEqual(sr_native, 48000)
         self.assertEqual(
-            signal.shape, (129653,)
-        )  # Assuming the audio file is ~2,93 seconds long (107603 / 44100)
+            signal.shape, (509400,)
+        )  # Assuming the audio file is ~2,93 seconds long (107603 / 48000)
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'3bfNuuMk0ov5+E77cUZmzjijfBUaMxuy1mrPmyjFyeo=')
-        
+        self.assertEqual(hash_output, b'07vLXZadk3b6rmTHFH5F2Ap1X1PidivdRBkcXvNtmW0=')
+
     def test_soundfile_load_with_offset(self):
         signal, sr_native = lambdaSpeechToScore.soundfile_load(input_file_test_de, offset=0.5)
-        self.assertEqual(sr_native, 44100)
-        self.assertAlmostEqual(signal.shape, (107603,))  # audio file is ~2.44 seconds long (107603 / 44100), offset is 0.5 seconds
+        self.assertEqual(sr_native, 48000)
+        self.assertAlmostEqual(signal.shape, (485400,))  # audio file is ~2.44 seconds long (107603 / 48000), offset is 0.5 seconds
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'QiDTDSZ4xAUniANNz4M43oa2FwpTSjvzW3IsKyqCVeE=')
+        self.assertEqual(hash_output, b'RbY4C3tJU7HAiZbfZ8ldNXMAvjSgOL9A62IBW8/b/JE=')
 
     def test_soundfile_load_with_duration(self):
-        signal, sr_native = lambdaSpeechToScore.soundfile_load(input_file_test_de, duration=129653 / 44100)
-        self.assertEqual(sr_native, 44100)
-        self.assertEqual(signal.shape, (129653,))  # Assuming the duration is ~2,93 seconds long (129653 / 44100)
+        signal, sr_native = lambdaSpeechToScore.soundfile_load(input_file_test_de, duration=509400 / 48000)
+        self.assertEqual(sr_native, 48000)
+        self.assertEqual(signal.shape, (509400,))  # Assuming the duration is ~2,93 seconds long (509400 / 48000)
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'3bfNuuMk0ov5+E77cUZmzjijfBUaMxuy1mrPmyjFyeo=')
+        self.assertEqual(hash_output, b'07vLXZadk3b6rmTHFH5F2Ap1X1PidivdRBkcXvNtmW0=')
 
     def test_soundfile_load_with_offset_and_duration(self):
-        signal, sr_native = lambdaSpeechToScore.soundfile_load(input_file_test_de, offset=0.5, duration=129653 / 44100)
-        self.assertEqual(sr_native, 44100)
-        self.assertEqual(signal.shape, (107603,))  # Assuming the duration is 5 seconds starting from 2 seconds offset
+        signal, sr_native = lambdaSpeechToScore.soundfile_load(input_file_test_de, offset=0.5, duration=509400 / 48000)
+        self.assertEqual(sr_native, 48000)
+        self.assertEqual(signal.shape, (485400,))  # Assuming the duration is 5 seconds starting from 2 seconds offset
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'QiDTDSZ4xAUniANNz4M43oa2FwpTSjvzW3IsKyqCVeE=')
+        self.assertEqual(hash_output, b'RbY4C3tJU7HAiZbfZ8ldNXMAvjSgOL9A62IBW8/b/JE=')
+
+    def test_soundfile_load_with_big_offset_and_duration(self):
+        import soundfile as sf
+        with self.assertRaises(sf.LibsndfileError):
+            try:
+                lambdaSpeechToScore.soundfile_load(input_file_test_de, offset=30, duration=1)
+            except sf.LibsndfileError as le:
+                app_logger.error("## LibsndfileError raised.")
+                assert str(le) == "Internal psf_fseek() failed."
+                raise le
+
+    def test_soundfile_load_with_big_offset_no_duration(self):
+        import soundfile as sf
+        with self.assertRaises(sf.LibsndfileError):
+            try:
+                lambdaSpeechToScore.soundfile_load(input_file_test_de, offset=30)
+            except sf.LibsndfileError as le:
+                app_logger.error("## LibsndfileError raised.")
+                assert str(le) == "Internal psf_fseek() failed."
+                raise le
 
     def test_soundfile_load_empty_file(self):
         """
@@ -151,9 +171,9 @@ class TestSoundFileLoad(unittest.TestCase):
         ```
         import soundfile as sf
         import numpy as np
-        duration = 129653 / 44100  # ~2.93 seconds
+        duration = 509400 / 48000  # ~2.93 seconds
         signal, sr_native = lambdaSpeechToScore.soundfile_load(input_file_test_de, offset=5, duration=duration)
-        sf.write(EVENTS_FOLDER / "test_empty.wav", data=signal, samplerate=44100)
+        sf.write(EVENTS_FOLDER / "test_empty.wav", data=signal, samplerate=48000)
         ```
         """
         input_empty = EVENTS_FOLDER / "test_empty.wav"
@@ -170,7 +190,7 @@ class TestSoundFileLoad(unittest.TestCase):
         self.assertEqual(sr_native, 44100)
         self.assertEqual(
             signal.shape, (2, 264600)
-        )  # Assuming the audio file is ~6 seconds long (264600 / 44100)
+        )  # Assuming the audio file is ~6 seconds long (264600 / 48000)
         signal_contiguous = np.ascontiguousarray(signal)
         hash_output = hash_calculate(signal_contiguous, is_file=False)
         self.assertEqual(hash_output, b'NBLPhDBmZSTv844S3oDf4lMbQt1x+JbRckub/3rSEJI=')
@@ -178,40 +198,38 @@ class TestSoundFileLoad(unittest.TestCase):
     def test_soundfile_load_soundfile_object(self):
         import soundfile as sf
         signal, sr_native = lambdaSpeechToScore.soundfile_load(sf.SoundFile(input_file_test_de))
-        self.assertEqual(sr_native, 44100)
+        self.assertEqual(sr_native, 48000)
         self.assertEqual(
-            signal.shape, (129653,)
-        )  # Assuming the audio file is ~2,93 seconds long (107603 / 44100)
+            signal.shape, (509400,)
+        )  # Assuming the audio file is ~2,93 seconds long (107603 / 48000)
         hash_output = hash_calculate(signal, is_file=False)
-        self.assertEqual(hash_output, b'3bfNuuMk0ov5+E77cUZmzjijfBUaMxuy1mrPmyjFyeo=')
+        self.assertEqual(hash_output, b'07vLXZadk3b6rmTHFH5F2Ap1X1PidivdRBkcXvNtmW0=')
 
     @patch.object(lambdaSpeechToScore, "soundfile_load")
     def test_soundfile_load_LibsndfileError1(self, soundfile_load_mock):
         from soundfile import LibsndfileError
         from tests.lambdas.test_lambdaSpeechToScore import helper_get_accuracy_from_recorded_audio
-        from tests.lambdas.constants_test_lambdaSpeechToScore import expected_GetAccuracyFromRecordedAudio
 
         soundfile_load_mock.side_effect = LibsndfileError(3, prefix="Exc:")
         try:
-            helper_get_accuracy_from_recorded_audio(self, expected_GetAccuracyFromRecordedAudio, "cmd", False)
+            helper_get_accuracy_from_recorded_audio(self, "cmd", False)
         except AssertionError:
-            helper_get_accuracy_from_recorded_audio(self, expected_GetAccuracyFromRecordedAudio, "gui", False)
+            helper_get_accuracy_from_recorded_audio(self, "gui", False)
 
     @patch.object(lambdaSpeechToScore, "soundfile_load")
     @patch.object(lambdaSpeechToScore, "audioread_load")
     def test_soundfile_load_LibsndfileError1_ModuleNotFoundError2(self, soundfile_load_mock, audioread_load_mock):
         from soundfile import LibsndfileError
         from tests.lambdas.test_lambdaSpeechToScore import helper_get_accuracy_from_recorded_audio
-        from tests.lambdas.constants_test_lambdaSpeechToScore import expected_GetAccuracyFromRecordedAudio
 
         soundfile_load_mock.side_effect = LibsndfileError(3, prefix="error:")
         audioread_load_mock.side_effect = ModuleNotFoundError("ModuleNotFoundError error2")
         with self.assertRaises(ModuleNotFoundError):
             try:
                 try:
-                    helper_get_accuracy_from_recorded_audio(self, expected_GetAccuracyFromRecordedAudio, "cmd", False)
+                    helper_get_accuracy_from_recorded_audio(self, "cmd", False)
                 except AssertionError:
-                    helper_get_accuracy_from_recorded_audio(self, expected_GetAccuracyFromRecordedAudio, "gui", False)
+                    helper_get_accuracy_from_recorded_audio(self, "gui", False)
             except ModuleNotFoundError as mnfe:
                 app_logger.error("## ModuleNotFoundError raised.")
                 assert str(mnfe) == "ModuleNotFoundError error2"

@@ -1,0 +1,13 @@
+{
+  "real_transcript": " Hallo, wie geht es dir?",
+  "ipa_transcript": " halo\u02d0, vi\u02d0 \u0261e\u02d0t \u025b\u02d0s di\u02d0r?",
+  "pronunciation_accuracy": "100",
+  "real_transcripts": "Hallo, wie geht es dir?",
+  "matched_transcripts": "Hallo, wie geht es dir?",
+  "real_transcripts_ipa": "halo\u02d0, vi\u02d0 \u0261e\u02d0t \u025b\u02d0s di\u02d0r?",
+  "matched_transcripts_ipa": "halo\u02d0, vi\u02d0 \u0261e\u02d0t \u025b\u02d0s di\u02d0r?",
+  "pair_accuracy_category": "0 0 0 0 0",
+  "start_time": "0.0 0.49 0.59 0.77 0.99",
+  "end_time": "0.37 0.69 0.87 1.09 1.31",
+  "is_letter_correct_all_words": "111111 111 1111 11 1111 "
+}
