@@ -5,10 +5,11 @@ from typing import Union, Callable
 import torch
 import torch.nn as nn
 from omegaconf import DictConfig, ListConfig
+from silero.utils import Decoder
 
 from AIModels import NeuralASR
 from ModelInterfaces import IASRModel
-from constants import MODEL_NAME_DEFAULT, language_not_implemented, app_logger, samplerate_tts, sample_rate_start
+from constants import MODEL_NAME_DEFAULT, language_not_implemented, app_logger, sample_rate_start, silero_versions_dict
 
 
 default_speaker_dict = {
@@ -41,15 +42,23 @@ def __get_model_faster_whisper(language: str) -> IASRModel:
 
 
 def __get_model_silero(language: str) -> IASRModel:
-    if language not in ['de', 'en']:
-        raise ValueError(language_not_implemented.format(language))
-    model, decoder, utils = torch.hub.load(
-        repo_or_dir='snakers4/silero-models',
-        model='silero_stt',
-        language=language,
-        device=torch.device('cpu')
-    )
+    import tempfile
+    tmp_dir = tempfile.gettempdir()
+    if language == "de":
+        model, decoder, _ = __silero_stt(
+            language="de", version="v4", jit_model="jit_large", output_folder=tmp_dir
+        )
+        return __eval_apply_neural_asr(model, decoder, language)
+    elif language == "en":
+        model, decoder, _ = __silero_stt(language="en", output_folder=tmp_dir)
+        return __eval_apply_neural_asr(model, decoder, language)
+    raise ValueError(language_not_implemented.format(language))
+
+
+def __eval_apply_neural_asr(model: nn.Module, decoder: Decoder, language: str):
+    app_logger.info(f"LOADED silero model language: {language}, version: '{silero_versions_dict[language]}'")
     model.eval()
+    app_logger.info(f"EVALUATED silero model language: {language}, version: '{silero_versions_dict[language]}'")
     return NeuralASR(model, decoder)
 
 
@@ -72,7 +81,7 @@ def getTranslationModel(language: str) -> nn.Module:
     return model, tokenizer
 
 
-def silero_tts(language: str = "en", version: str = "latest", output_folder: Path | str = None, **kwargs) -> tuple[nn.Module, str, int, str, dict, Callable, str]:
+def __silero_tts(language: str = "en", version: str = "latest", output_folder: Path | str = None, **kwargs) -> tuple[nn.Module, str, int, str, dict, Callable, str]:
     """
     Modified function to create instances of Silero Text-To-Speech Models.
     Please see https://github.com/snakers4/silero-models?tab=readme-ov-file#text-to-speech for usage examples.
@@ -102,7 +111,7 @@ def silero_tts(language: str = "en", version: str = "latest", output_folder: Pat
     if language in default_speaker_dict:
         model_id = current_model_lang["model_id"]
 
-    models = get_models(language, output_folder, version, model_type="tts_models")
+    models = __get_models(language, output_folder, version, model_type="tts_models")
     available_languages = list(models.tts_models.keys())
     assert (
             language in available_languages
@@ -143,8 +152,7 @@ def silero_tts(language: str = "en", version: str = "latest", output_folder: Pat
         return model, symbols, sample_rate, example_text, apply_tts, model_id
 
 
-
-def get_models(language: str, output_folder: str | Path, version: str, model_type: str) -> Union[DictConfig, ListConfig]:
+def __get_models(language: str, output_folder: str | Path, version: str, model_type: str) -> Union[DictConfig, ListConfig]:
     """
     Retrieve and load the model configuration for a specified language and model type.
 
@@ -172,6 +180,7 @@ def get_models(language: str, output_folder: str | Path, version: str, model_typ
         else Path(os.path.dirname(__file__)).parent.parent
     )
     models_list_file = output_folder / f"latest_silero_model_{language}.yml"
+    app_logger.info(f"models_list_file:{models_list_file}.")
     if not os.path.exists(models_list_file):
         app_logger.info(
             f"model {model_type} yml for '{language}' language, '{version}' version not found, download it in folder {output_folder}..."
@@ -183,3 +192,117 @@ def get_models(language: str, output_folder: str | Path, version: str, model_typ
         )
     assert os.path.exists(models_list_file)
     return OmegaConf.load(models_list_file)
+
+
+def __get_latest_stt_model(language: str, output_folder: str | Path, version: str, model_type: str, jit_model: str, **kwargs) -> tuple[nn.Module, Decoder]:
+    """
+    Retrieve the latest Speech-to-Text (STT) model for a given language and model type.
+
+    Args:
+        language (str): The language for which the STT model is required.
+        output_folder (str): The directory where the model will be saved.
+        version (str): The version of the model to retrieve.
+        model_type (str): The type of the model (e.g., 'large', 'small').
+        jit_model (str): The specific JIT model to use.
+        **kwargs: Additional keyword arguments to pass to the model initialization function.
+
+    Returns:
+        tuple: A tuple containing the model and the decoder.
+
+    Raises:
+        AssertionError: If the specified language is not available in the model type.
+    """
+    models = __get_models(language, output_folder, version, model_type)
+    available_languages = list(models[model_type].keys())
+    assert language in available_languages
+
+    model, decoder = init_jit_model(
+        model_url=models[model_type].get(language).get(version).get(jit_model),
+        output_folder=output_folder,
+        **kwargs,
+    )
+    return model, decoder
+
+
+def init_jit_model(
+        model_url: str,
+        device: torch.device = torch.device("cpu"),
+        output_folder: Path | str = None,
+) -> tuple[torch.nn.Module, Decoder]:
+    """
+    Initialize a JIT model from a given URL.
+
+    Args:
+        model_url (str): The URL to download the model from.
+        device (torch.device, optional): The device to load the model on. Defaults to CPU.
+        output_folder (Path | str, optional): The folder to save the downloaded model.
+            If None, defaults to a 'model' directory in the current file's directory.
+
+    Returns:
+        Tuple[torch.jit.ScriptModule, Decoder]: The loaded JIT model and its corresponding decoder.
+    """
+    torch.set_grad_enabled(False)
+
+    app_logger.info(
+        f"model output_folder exists? '{output_folder is None}' => '{output_folder}' ..."
+    )
+    model_dir = (
+        Path(output_folder)
+        if output_folder is not None
+        else Path(torch.hub.get_dir())
+    )
+    os.makedirs(model_dir, exist_ok=True)
+    app_logger.info(f"downloading the models to model_dir: '{model_dir}' ...")
+    model_path = model_dir / os.path.basename(model_url)
+    app_logger.info(
+        f"model_path exists? '{os.path.isfile(model_path)}' => '{model_path}' ..."
+    )
+
+    if not os.path.isfile(model_path):
+        app_logger.info(f"downloading model_path: '{model_path}' ...")
+        torch.hub.download_url_to_file(model_url, str(model_path), progress=True)
+    app_logger.info(f"model_path {model_path} downloaded!")
+    model = torch.jit.load(model_path, map_location=device)
+    model.eval()
+    return model, Decoder(model.labels)
+
+
+def __silero_stt(
+        language: str = "en",
+        version: str = "latest",
+        jit_model: str = "jit",
+        output_folder: Path | str = None,
+        **kwargs,
+) -> tuple[nn.Module, Decoder, set[Callable, Callable, Callable, Callable]]:
+    """
+    Modified function to create instances of Silero Speech-To-Text Model(s).
+    Please see https://github.com/snakers4/silero-models?tab=readme-ov-file#speech-to-text for usage examples.
+
+    Args:
+        language (str): Language of the model. Available options are ['en', 'de', 'es'].
+        version (str): Version of the model to use. Default is "latest".
+        jit_model (str): Type of JIT model to use. Default is "jit".
+        output_folder (Path | str, optional): Output folder needed in case of docker build. Default is None.
+        **kwargs: Additional keyword arguments.
+
+    Returns:
+        tuple: A tuple containing the model, decoder object, and a set of utility functions.
+    """
+    from silero.utils import (
+        read_audio,
+        read_batch,
+        split_into_batches,
+        prepare_model_input,
+    )
+
+    model, decoder = __get_latest_stt_model(
+        language,
+        output_folder,
+        version,
+        model_type="stt_models",
+        jit_model=jit_model,
+        **kwargs,
+    )
+    utils = (read_batch, split_into_batches, read_audio, prepare_model_input)
+
+    return model, decoder, utils

@@ -39,11 +39,11 @@ def get_tts(text: str, language: str, tmp_prefix="audio_", tmp_suffix=".wav") ->
 
     tmp_dir = Path(tempfile.gettempdir())
     try:
-        model, _, speaker, sample_rate = models.silero_tts(
+        model, _, speaker, sample_rate = models.__silero_tts(
             language, output_folder=tmp_dir
         )
     except ValueError:
-        model, _, sample_rate, _, _, speaker = models.silero_tts(
+        model, _, sample_rate, _, _, speaker = models.__silero_tts(
             language, output_folder=tmp_dir
         )
     app_logger.info(f"model speaker #0: {speaker} ...")

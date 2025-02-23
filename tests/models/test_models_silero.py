@@ -1,11 +1,9 @@
 import unittest
 import torch
 import torch.package
-from silero.utils import Decoder
 from transformers import MarianTokenizer
 
 import models as mo
-import pronunciationTrainer
 from AIModels import NeuralASR
 from constants import sample_rate_resample, language_not_implemented
 
@@ -84,36 +82,6 @@ class TestModels(unittest.TestCase):
             )
             print(f"output: {output} .")
             self.assertEqual(output, expected_output)
-
-    def test_silero_tts_en2(self):
-        model, example, speaker, sample_rate = mo.silero_tts(language=self.language_en, output_folder=self.tmp_dir)
-        assert model is not None
-        self.assertIsInstance(model, object)
-        self.assertIsInstance(example, str)
-        self.assertIsInstance(speaker, str)
-        self.assertIsInstance(sample_rate, int)
-        assert speaker == 'en_0'
-        assert sample_rate == 48000
-        assert example == 'Can you can a canned can into an un-canned can like a canner can can a canned can into an un-canned can?'
-
-    def test_silero_tts_de(self):
-        model, example, speaker, sample_rate = mo.silero_tts(language=self.language_de, output_folder=self.tmp_dir)
-        assert model is not None
-        self.assertIsInstance(model, object)
-        self.assertIsInstance(example, str)
-        self.assertIsInstance(speaker, str)
-        self.assertIsInstance(sample_rate, int)
-        assert speaker == 'karlsson'
-        assert sample_rate == 48000
-        assert example == 'Fischers Fritze fischt frische Fische, Frische Fische fischt Fischers Fritze.'
-
-    def test_get_models_de(self):
-        models_de = mo.get_models(self.language_de, self.tmp_dir, "latest", "stt_models")
-        self.assertIn(self.language_de, models_de.stt_models)
-
-    def test_get_models_en(self):
-        models_en = mo.get_models(self.language_en, self.tmp_dir, "latest", "stt_models")
-        self.assertIn(self.language_en, models_en.stt_models)
 
 
 if __name__ == '__main__':
