@@ -6,11 +6,11 @@ import torch
 from faster_whisper import WhisperModel
 
 from ModelInterfaces import IASRModel
-from constants import sample_rate_resample, app_logger, IS_TESTING
-
+from constants import sample_rate_resample, app_logger, IS_TESTING, DEVICE
 
 device = onnxruntime.get_device()
-device = "cpu" if IS_TESTING or device in ["GPU", "cuda"] else device
+device = "cpu" if IS_TESTING or device.lower() == DEVICE.lower() else device
+app_logger.info(f"device: {device} #")
 device_compute = "int8_float16" if device == "cuda" else "int8"
 app_logger.info(f"device: {device}, device_compute: {device_compute} #")
 

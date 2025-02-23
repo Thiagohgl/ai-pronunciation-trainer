@@ -13,6 +13,7 @@ USE_DTW = bool(os.getenv("USE_DTW"))
 MODEL_NAME_TESTING = "whisper"
 _MODEL_NAME_DEFAULT = os.getenv("MODEL_NAME_DEFAULT", MODEL_NAME_TESTING)
 MODEL_NAME_DEFAULT = MODEL_NAME_TESTING if IS_TESTING else _MODEL_NAME_DEFAULT
+DEVICE = os.getenv("DEVICE", "cpu")
 tmp_audio_extension = os.getenv('TMP_AUDIO_EXTENSION', '.wav')
 session_logger.setup_logging(json_logs=LOG_JSON_FORMAT, log_level=log_level)
 app_logger = structlog.stdlib.get_logger(__name__)
