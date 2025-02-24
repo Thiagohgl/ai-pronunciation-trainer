@@ -1,24 +1,23 @@
+audioread
+dtwalign
+eng_to_ipa
+epitran 
+faster-whisper
+flask
+flask_cors
+omegaconf
+openai-whisper
+ortools
+pandas
+pickle-mixin
+requests
+sacremoses # suggested by marian translation model
+sentencepiece
+silero
+soundfile 
+sqlalchemy
+structlog
 -f https://download.pytorch.org/whl/torch_stable.html
 torch 
 torchaudio 
-soundfile 
-omegaconf
-epitran 
-audioread
-requests
-dtwalign
-eng_to_ipa
-pandas
-flask
-flask_cors
-pickle-mixin
-sacremoses # suggested by marian translation model
-sqlalchemy
-structlog
 transformers
-sentencepiece
-transformers
-openai-whisper
-faster-whisper
-ortools
-silero
