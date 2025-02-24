@@ -1,74 +1,171 @@
+---
+title: AI Pronunciation Trainer
+emoji: 🎤
+colorFrom: red
+colorTo: blue
+sdk: gradio
+sdk_version: 5.11.0
+app_file: app.py
+pinned: false
+license: mit
+---
 
-# AI Pronunciation Trainer 
-This tool uses AI to evaluate your pronunciation so you can improve it and be understood more clearly. You can go straight test the tool at https://aipronunciationtr.com (please use the chrome browser for desktop and have some patience for it to "warm-up" :) ). 
+# AI Pronunciation Trainer
 
-![](images/MainScreen.jpg)
+This repository refactor [Thiagohgl](https://github.com/Thiagohgl)'s [AI Pronunciation Trainer](https://github.com/Thiagohgl/ai-pronunciation-trainer) project, a tool that uses AI to evaluate your pronunciation so you can improve it and be understood more clearly.
+You can try my [refactored version](https://github.com/trincadev/ai-pronunciation-trainer) both locally or online, using my [HuggingFace Space](https://huggingface.co/spaces/aletrn/ai-pronunciation-trainer):
 
-## !! Update !! 
+[![<https://aletrn-ai-pronunciation-trainer.hf.space/>](images/MainScreen.png)](https://aletrn-ai-pronunciation-trainer.hf.space/)
 
-I'm happy (and surprised!) that apparently a considerable amount of people are using this tool, and this made -even more- clear that many things could be improved. I tried to solve the most critical issues with small changes on the code base, so that now: 
-* Requirements are relaxed and should work with modern python versions (tested with 3.12)
-* Whisper is used as standard ASR model 
-* You can edit the text you want to speak by clicking on it and typing (please do before an evaluation)
-* Code does not dependent on OR-Tools anymore, which makes is somewhat lighter and faster 
-* Code is slightly changed so it is now easier to add more languages and change the database. 
-* Errors will be shown on the console for easier debugging. 
+My [HuggingFace Space](https://huggingface.co/spaces/aletrn/ai-pronunciation-trainer) is free of charge: for this reason is the less powerful version and the speech recognition could take some seconds.
 
-I hope this facilitates the use of the tool and you have more fun (and learning!) with it. I plan to add those changes to the server in the coming weeks when I find some more time.
+## Installation
 
-## Installation 
-To run the program locally, you need to install the requirements and run the main python file:
-```
+To run the program locally, you need to install the requirements and run the main python file.
+These commands assume you have an active virtualenv (locally I'm using python 3.12, on HuggingFace the gradio SDK - version 5.6.0 at the moment - uses python 3.10):
+
+```bash
 pip install -r requirements.txt
 python webApp.py
 ```
-You'll also need ffmpeg, which you can download from here https://ffmpeg.org/download.html. On Windows, it may be needed to add the ffmpeg "bin" folder to your PATH environment variable. On Mac, you can also just run "brew install ffmpeg".
+
+On Windows you can also use WSL2 to spin a Linux instance on your installation, then you don't need any particular requirements to work on it.
+You'll also need ffmpeg, which you can download from here <https://ffmpeg.org/download.html>. You can install it on base Windows using the command `winget install ffmpeg`, it may be needed to add the ffmpeg "bin" folder to your PATH environment variable. On Mac, you can also just run "brew install ffmpeg".
 
 You should be able to run it locally without any major issues as long as you’re using a recent python 3.X version.  
 
-## Online version
-For the people who don’t feel comfortable running code or just want to have a quick way to use the tool, I hosted an online version of it at https://aipronunciationtr.com. It should work well in desktop-chrome, any other browser is not officially supported, although most of the functionality should work fine. 
- 
-Please be aware that the usage is limited by day (I’m still not rich ;)). If, for some reason, you would like to avoid the daily usage limit, just enter in contact and we see what we can do. 
+## Changes on [trincadev's](https://github.com/trincadev/) [repository](https://github.com/trincadev/ai-pronunciation-trainer)
+
+Currently the best way to exec the project is using the Gradio frontend:
+
+```bash
+python app.py
+```
+
+I upgraded the old custom frontend (iQuery@3.7.1, Bootstrap@5.3.3) and backend (pytorch==2.5.1, torchaudio==2.5.1) libraries. On macOS intel it's possible to install from [pypi.org](https://pypi.org/project/torch/) only until the library version [2.2.2](https://pypi.org/project/torch/2.2.2/)
+(see [this github issue](https://github.com/instructlab/instructlab/issues/1469) and [this deprecation notice](https://dev-discuss.pytorch.org/t/pytorch-macos-x86-builds-deprecation-starting-january-2024/1690)).
+
+In case of missing TTS voices needed by the Text-to-Speech in-browser SpeechSynthesis feature (e.g. on Windows 11 you need to install manually the TTS voices for the languages you need), right now the Gradio frontend raises an alert message with a JavaScript message.
+In this case the TTS in-browser feature isn't usable and the users should use the backend TTS feature.
+
+## Python test cases (also enhanced with a mutation test suite)
+
+After reaching a test coverage of 89%, I tried the [`cosmic-ray`](https://cosmic-ray.readthedocs.io/) [mutant test suite](https://en.wikipedia.org/wiki/Mutation_testing) and I found out that I missed some spots.
+For this reason I started to improve my test cases (one module at time to avoid waiting too long):
+
+```bash
+python .venv312/bin/cosmic-ray init cosmic_ray_config.toml cosmic_ray.sqlite
+python .venv312/bin/cosmic-ray --verbosity=INFO baseline cosmic_ray_config.toml
+python .venv312/bin/cosmic-ray exec cosmic_ray_config.toml cosmic_ray.sqlite
+cr-html cosmic_ray.sqlite > tmp/cosmic-ray-speechtoscore.html
+```
+
+The `cosmic_ray_config.toml` I'm using now (the tests for the `lambdaSpeechToScore` module are in two different files to avoid too code in only one):
+
+```toml
+[cosmic-ray]
+module-path = "aip_trainer/lambdas/lambdaSpeechToScore.py"
+timeout = 30.0
+excluded-modules = []
+test-command = "python -m pytest tests/lambdas/test_lambdaSpeechToScore.py tests/lambdas/test_lambdaSpeechToScore_librosa.py"
+
+[cosmic-ray.distributor]
+name = "local"
+```
+
+In this case my 'mutant' test coverage progression (Total jobs: 377 / Complete: 377, 100.00%):
+
+1. Surviving mutants: 181 (48.01%)
+2. Surviving mutants: 74 (19.63%)
+3. Surviving mutants: 3 (0.80%)
+
+In case of errors on executing the `pytest` files remove the python cache before re-run the tests:
+
+```bash
+find tests -name "__pycache__" -exec rm -rf {} \;
+find aip_trainer -name "__pycache__" -exec rm -rf {} \;
+```
+
+Then execute the tests again:
+
+```bash
+python -m pytest tests/models/test_models_faster_whisper.py; echo "# start pytest complete test suite #"; IS_TESTING=TRUE python -m pytest tests --cov="." --cov-report=term-missing && coverage html
+```
+
+### Backend tests execution on Windows
+
+On Windows the tests suite needs the env variable `PYTHONUTF8=1` to avoid an UnicodeDecodeError:
+
+```cmd
+PYTHONUTF8=1 pytest --cov=aip_trainer --cov-report=term-missing && coverage html
+```
+
+### E2E tests with playwright
+
+Normally I use Visual Studio Code to write and execute my playwright tests, however it's always possible to run them from cli (from the `static` folder, using a node package manager like `npm` or `pnpm`):
+
+```bash
+pnpm install
+pnpm playwright test --workers 1 --retries 4 --project=chromium
+```
+
+### Unused classes and functions (now removed)
+
+- `aip_trainer.pronunciationTrainer.getWordsRelativeIntonation`
+- `aip_trainer.lambdas.lambdaTTS.*`
+- `aip_trainer.models.models.getTTSModel()`
+- `aip_trainer.models.models.getTranslationModel()`
+- `aip_trainer.models.AllModels.NeuralTTS`
+- `aip_trainer.models.AllModels.NeuralTranslator`
+
+### DONE
+
+- Original frontend - upgrade iQuery@3.7.1, Bootstrap@5.3.3
+- Upgraded Speech-to-Text German [Silero](https://github.com/snakers4/silero-models) model that blocked the upgrade to PyTorch > 2.x
+- Upgraded PyTorch > 2.x
+- Improved backend tests with the [mutation test suite](https://en.wikipedia.org/wiki/Mutation_testing) [Cosmic Ray](https://cosmic-ray.readthedocs.io)
+- E2E [playwright](https://playwright.dev) tests
+- Added a new frontend based on [Gradio](https://gradio.app)
+- add an updated online version ([HuggingFace Space](https://huggingface.co/spaces/aletrn/ai-pronunciation-trainer))
+- Only on the Gradio frontend version - it's possible to insert custom sentences to read and evaluate
+- Gradio frontend version - play the isolated words in the recordings, to compare the 'ideal' pronunciation with the learner pronunciation
+- Gradio frontend version - re-added the Text-to-Speech in-browser (it works only if there are installed the required language packages. In case of failures there is the backend Text-to-Speech feature)
+
+### TODO
+
+- improve documentation (especially function docstrings), backend tests
+- move from pytorch to onnxruntime (if possible)
+- add more e2e tests with playwright
+
+## Docker version
+
+Build the docker image this way (right now this version uses the old custom frontend with jQuery):
+
+```bash
+# clean any old active containers
+docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
+
+# build the base docker image
+docker build . -f dockerfiles/dockerfile-base --progress=plain -t registry.gitlab.com/aletrn/ai-pronunciation-trainer:0.5.0
+
+# build the final docker image
+docker build . --progress=plain --name 
+```
+
+Run the container (keep it on background) and show logs
+
+```bash
+docker run -d -p 3000:3000 --name aip-trainer aip-trainer;docker logs -f aip-trainer
+```
 
 ## Motivation
 
-Often, when we want to improve our pronunciation, it is very difficult to self-assess how good we’re speaking. Asking a native, or language instructor, to constantly correct us is either impractical, due to monetary constrains, or annoying due to simply being too boring for this other person. Additionally, they may often say “it sounds good” after your 10th try to not discourage you, even though you may still have some mistakes in your pronunciation. 
+Often, when we want to improve our pronunciation, it is very difficult to self-assess how good we’re speaking. Asking a native, or language instructor, to constantly correct us is either impractical, due to monetary constrains, or annoying due to simply being too boring for this other person. Additionally, they may often say “it sounds good” after your 10th try to not discourage you, even though you may still have some mistakes in your pronunciation.
 
-The AI pronunciation trainer is a way to provide objective feedback on how well your pronunciation is in an automatic and scalable fashion, so the only limit to your improvement is your own dedication. 
+The AI pronunciation trainer is a way to provide objective feedback on how well your pronunciation is in an automatic and scalable fashion, so the only limit to your improvement is your own dedication.
 
-This project originated from a small program that I did to improve my own pronunciation.  When I finished it, I believed it could be a useful tool also for other people trying to be better understood, so I decided to make a simple, more user-friendly version of it. 
+This project originated from a small program that I did to improve my own pronunciation.  When I finished it, I believed it could be a useful tool also for other people trying to be better understood, so I decided to make a simple, more user-friendly version of it.
 
-## Disclaimer 
+## Disclaimer
+
 This is a simple project that I made in my free time with the goal to be useful to some people. It is not perfect, thus be aware that some small bugs may be present. In case you find something is not working, all feedback is welcome, and issues may be addressed depending on their severity.
-
-## FAQ
-
-### How do I add a new language?
-
-There's definitely a code architecture that would allow this to be easier, but I have limited time and I think the current solution is doable with relative ease. What you need to do is: 
-#### Backend 
-As long as your language is supported by Whisper, you need only a database and small changes in key files:
-
-1. Add your language identifier to the "lambdaGetSample.py" file
-2. Add a .csv file with your text database in the "./databases" folder, following the naming convention 
-3. Add a corresponding phonem model in the "RuleBasedModels.py", you likely need only to give the language code to Epitran and possibly correct some characters with a wrapper 
-4. Add your trainer to "lambdaSpeechToScore.py" with the correct language code
-
-If you language is not supported by Whisper, you need to have an Speech-To-Text model and add it to the "getASRModel" function in "models.py", and it needs to implement the "IASRModel" interface. Besides this, you need to do the same as above.
-
-#### Frontend 
-
-1. In the "callback.js" function, add a case for your language 
-2. In the "main.html", add your language in the "languageBox" with corresponding call to the javascript function. 
-
-#### About the frontend refactor
-
-- Updated jquery@3.7.1
-- Updated css bootstrap@5.3.3
-- Removed the STScoreAPIKey constant from callback.js, reading it instead from a python/Flask env variable and saving it in a cookie
-- Get the IPA transcript from a custom written sentence using the `getCustomText()` javascript function; this post a request /getSample with 'language', 'transcript' keys 
-- Handle custom message errors (useful in case of `getCustomText()` error messages)
-- Added aria-labels to prepare playwright E2E tests
-- split single_word_ipa_pair element into three to improve the frontend testability
-- fixed some XSS vulnerabilities, g. use .innerText instead of .innerHTML

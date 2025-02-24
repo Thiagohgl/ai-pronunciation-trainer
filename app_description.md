@@ -1,6 +1,11 @@
-# AI Pronunciation Trainer
+## Models and variables 
 
-See [my fork](https://github.com/trincadev/ai-pronunciation-trainer) of [AI Pronunciation Trainer](https://github.com/Thiagohgl/ai-pronunciation-trainer) repository
-for more details.
+Right now this tool uses:
 
-Right now this tool uses [{model_name}]({model_url}) as STT (speech-to-text) model and {sample_rate_start} as sample rate value (from empirical tests the best sample rate value is 48000).
+- [{model_name}]({model_url}) as STT (speech-to-text) model; other supported models are:
+{models_names_urls_list}
+- <u>{sample_rate_start}</u> as input samplerate value (from empirical tests the best sample rate value is 48000)
+- <u>{sample_rate_resample}</u> as resampled samplerate value
+- <u>{samplerate_tts}</u> as TTS (text-to-speech) samplerate value
+
+

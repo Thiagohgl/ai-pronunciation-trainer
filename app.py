@@ -1,9 +1,9 @@
-import os
 from pathlib import Path
 import gradio as gr
 
 import js
-from constants import PROJECT_ROOT_FOLDER, app_logger, sample_rate_start, MODEL_NAME_DEFAULT, model_urls
+from constants import (PROJECT_ROOT_FOLDER, app_logger, sample_rate_start, MODEL_NAME_DEFAULT, model_urls,
+    sample_rate_resample, samplerate_tts, silero_versions_dict)
 import lambdaGetSample
 import lambdaSpeechToScore
 import lambdaTTS
@@ -42,14 +42,34 @@ with gr.Blocks(css=css, head=js.head_driver_tour) as gradio_app:
     app_logger.info("start gradio app building...")
 
     project_root_folder = Path(PROJECT_ROOT_FOLDER)
+    with open(project_root_folder / "app_headline.md", "r", encoding="utf-8") as app_headline_src:
+        md_app_headline = app_headline_src.read()
+        gr.Markdown(md_app_headline)
     with open(project_root_folder / "app_description.md", "r", encoding="utf-8") as app_description_src:
         md_app_description = app_description_src.read()
         model_url = model_urls[MODEL_NAME_DEFAULT]
-        gr.Markdown(md_app_description.format(
-            sample_rate_start=sample_rate_start,
-            model_name=MODEL_NAME_DEFAULT,
-            model_url=model_url
-        ))
+        app_logger.info(f"model_urls:{model_urls} ...")
+        models_names_urls_list = ""
+        other_supported_models = {k: v for k, v in model_urls.items() if k != MODEL_NAME_DEFAULT}
+        for model_name, model_url in other_supported_models.items():
+            app_logger.info(f"model_name: {model_name}, model_url: {model_url} ...")
+            models_names_urls_list += """\n  - [{model_name}]({model_url})""".format(model_name=model_name, model_url=model_url)
+            if model_name == "silero":
+                models_names_urls_list += " (German version: {}, English version: {})".format(silero_versions_dict["de"], silero_versions_dict["en"])
+        app_logger.info(f"models_names_urls_list: '{models_names_urls_list}' ...")
+        with gr.Accordion(
+                "Click here for expand and show current env variables samplerate values, the selected model and the supported ones",
+                open=False,
+                elem_id="accordion-models-env-variables-id-element"
+            ):
+            gr.Markdown(md_app_description.format(
+                sample_rate_start=sample_rate_start,
+                model_name=MODEL_NAME_DEFAULT,
+                model_url=model_url,
+                models_names_urls_list=models_names_urls_list,
+                sample_rate_resample=sample_rate_resample,
+                samplerate_tts=samplerate_tts
+            ))
     with gr.Row():
         with gr.Column(scale=4, min_width=300):
             with gr.Row(elem_id="id-choose-random-phrase-by-language-and-difficulty"):
