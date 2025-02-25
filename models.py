@@ -19,6 +19,16 @@ default_speaker_dict = {
 
 
 def getASRModel(language: str, model_name: str = MODEL_NAME_DEFAULT) -> IASRModel:
+    """Wrapper function to get the ASR model based on the model name and language.
+    Currently supported models are 'whisper', 'faster_whisper', and 'silero'.
+
+    Args:
+        language: str: The language of the model.
+        model_name: str: The name of the model to use. Default is 'whisper'.
+
+    Returns:
+        IASRModel: The ASR model instance.
+    """
     models_dict = {
         "whisper": __get_model_whisper,
         "faster_whisper": __get_model_faster_whisper,
@@ -63,6 +73,7 @@ def __eval_apply_neural_asr(model: nn.Module, decoder: Decoder, language: str):
 
 
 def getTranslationModel(language: str) -> nn.Module:
+    """Wrapper function to get the translation model based on the language."""
     from transformers import AutoTokenizer
     from transformers import AutoModelForSeq2SeqLM
     if language == 'de':

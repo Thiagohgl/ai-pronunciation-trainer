@@ -24,16 +24,16 @@ trainer_SST_lambda = {'de': pronunciationTrainer.getTrainer("de"), 'en': pronunc
 transform = Resample(orig_freq=sample_rate_start, new_freq=sample_rate_resample)
 
 
-def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
+def lambda_handler(event: dict[str], context: Any) -> str:
     """
     Lambda handler for speech-to-score.
 
-    Parameters:
+    Args:
         event (Dict[str, Any]): The event data containing the request body.
         context (Any): The context in which the lambda function is executed.
 
     Returns:
-        Dict[str, Any]: The response containing the speech-to-score results.
+        str: The json response containing the speech-to-score results.
     """
     body = event['body']
     data = json.loads(body)
@@ -67,7 +67,7 @@ def get_speech_to_score_dict(
     """
     Process the audio file and return a dictionary with speech-to-score results.
 
-    Parameters:
+    Args:
         use_dtw:
         real_text (str): The text to be matched with the audio.
         file_bytes_or_audiotmpfile (str | bytes | dict): The audio file in bytes or a temporary file.
@@ -184,7 +184,7 @@ def get_speech_to_score_tuple(real_text: str, file_bytes_or_audiotmpfile: str | 
     """
     Process the audio file and return a tuple with speech-to-score results.
 
-    Parameters:
+    Args:
         real_text (str): The text to be matched with the audio.
         file_bytes_or_audiotmpfile (str | dict): The audio file in bytes or a temporary file.
         language (str): The language of the audio.
@@ -227,7 +227,7 @@ def soundfile_write(audiofile: str | Path, data: np.ndarray, samplerate: int) ->
     """
     Write audio data to a file using soundfile.
 
-    Parameters:
+    Args:
         audiofile (str | Path): The path to the audio file.
         data (np.ndarray): The audio data to write.
         samplerate (int): The sample rate of the audio data.
@@ -243,7 +243,7 @@ def get_selected_word(idx_recorded_word: int, raw_json_output: str) -> tuple[str
     """
     Get the selected word, its audio file, and duration from the recognition output.
 
-    Parameters:
+    Args:
         idx_recorded_word (int): The index of the recorded word.
         raw_json_output (str): The JSON output from the recognition process.
 
@@ -267,7 +267,7 @@ def get_splitted_audio_file(audiotmpfile: str | Path, start_time: list[float], e
     """
     Split the audio file into segments based on start and end times.
 
-    Parameters:
+    Args:
         audiotmpfile (str | Path): The path to the audio file.
         start_time (list[float]): The start times of the segments.
         end_time (list[float]): The end times of the segments.
@@ -296,7 +296,7 @@ def get_file_with_custom_suffix(basefile: str | Path, custom_suffix: str) -> Pat
     """
     Generate a file path with a custom suffix.
 
-    Parameters:
+    Args:
         basefile (str | Path): The base file path.
         custom_suffix (str): The custom suffix to add to the file name.
 
@@ -315,7 +315,7 @@ def calc_start_end(sr_native: int, time_position: float, n_channels: int) -> int
     """
     Calculate the start or end position in samples.
 
-    Parameters:
+    Args:
         sr_native (int): The native sample rate.
         time_position (float): The time position in seconds.
         n_channels (int): The number of audio channels.
@@ -330,7 +330,7 @@ def soundfile_load(path: str | Path, offset: float = 0.0, duration: float = None
     """
     Load an audio buffer using soundfile.
 
-    Parameters:
+    Args:
         path (str | Path): The path to the audio file.
         offset (float): The offset in seconds to start reading the file.
         duration (float): The duration in seconds to read from the file.
@@ -369,7 +369,7 @@ def audioread_load(path: str | Path, offset: float = 0.0, duration: float = None
     """
     This loads one block at a time, and then concatenates the results.
 
-    Parameters:
+    Args:
         path (str | Path): The path to the audio file.
         offset (float): The offset in seconds to start reading the file.
         duration (float): The duration in seconds to read from the file.

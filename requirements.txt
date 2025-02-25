@@ -1,3 +1,4 @@
+annotated-types
 audioread
 dtwalign
 eng_to_ipa

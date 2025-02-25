@@ -14,6 +14,16 @@ TIME_THRESHOLD_MAPPING = 5.0
 
 
 def get_word_distance_matrix(words_estimated: list, words_real: list) -> np.ndarray:
+    """
+    Calculate the word distance matrix using Levenshtein distance.
+
+    Args:
+        words_estimated (list): List of estimated words.
+        words_real (list): List of real words.
+
+    Returns:
+        np.ndarray: The word distance matrix.
+    """
     number_of_real_words = len(words_real)
     number_of_estimated_words = len(words_estimated)
 
@@ -32,6 +42,15 @@ def get_word_distance_matrix(words_estimated: list, words_real: list) -> np.ndar
 
 
 def get_best_path_from_distance_matrix(word_distance_matrix):
+    """
+    Get the best path from the word distance matrix using constraint programming.
+
+    Args:
+        word_distance_matrix (np.ndarray): The word distance matrix.
+
+    Returns:
+        np.ndarray: The best path indices.
+    """
     modelCpp = cp_model.CpModel()
 
     number_of_real_words = word_distance_matrix.shape[1]
@@ -86,6 +105,17 @@ def get_best_path_from_distance_matrix(word_distance_matrix):
 
 
 def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, words_real: list) -> Tuple[List, List]:
+    """
+    Get the resulting string and indices from the mapped indices.
+
+    Args:
+        mapped_indices (np.ndarray): The mapped indices.
+        words_estimated (list): List of estimated words.
+        words_real (list): List of real words.
+
+    Returns:
+        Tuple[List, List]: The mapped words and their indices.
+    """
     mapped_words = []
     mapped_words_indices = []
     WORD_NOT_FOUND_TOKEN = '-'
@@ -128,6 +158,17 @@ def get_resulting_string(mapped_indices: np.ndarray, words_estimated: list, word
 
 
 def get_best_mapped_words(words_estimated: list | str, words_real: list | str, use_dtw:bool = False) -> tuple[list, list]:
+    """
+    Get the best mapped words using either DTW or constraint programming.
+
+    Args:
+        words_estimated (list | str): List of estimated words or a single estimated word.
+        words_real (list | str): List of real words or a single real word.
+        use_dtw (bool, optional): Whether to use DTW for mapping. Defaults to False.
+
+    Returns:
+        tuple[list, list]: The mapped words and their indices.
+    """
     app_logger.info(f"words_estimated: '{words_estimated}', words_real: '{words_real}', use_dtw:{use_dtw}.")
     word_distance_matrix = get_word_distance_matrix(
         words_estimated, words_real)
@@ -175,7 +216,17 @@ def get_best_mapped_words(words_estimated: list | str, words_real: list | str, u
 #     return mapped_words, mapped_words_indices
 
 
-def getWhichLettersWereTranscribedCorrectly(real_word, transcribed_word):
+def getWhichLettersWereTranscribedCorrectly(real_word: str, transcribed_word: list) -> list:
+    """
+    Determine which letters were transcribed correctly.
+
+    Args:
+        real_word (str): The real word.
+        transcribed_word (str): The transcribed word.
+
+    Returns:
+        list: A list indicating whether each letter was transcribed correctly (1 for correct, 0 for incorrect).
+    """
     is_leter_correct = [None] * len(real_word)
     for idx, letter in enumerate(real_word):
         letter = letter.lower()

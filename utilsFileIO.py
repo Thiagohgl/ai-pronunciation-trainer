@@ -1,5 +1,6 @@
 import string
 import random
+from flask import Response
 
 from constants import ALLOWED_ORIGIN
 
@@ -11,14 +12,13 @@ headers = {
 }
 
 
-def generateRandomString(str_length: int = 20):
+def generateRandomString(str_length: int = 20) -> str:
     # printing lowercase
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(str_length))
 
 
-def return_response(body, mimetype="application/json", status=200):
-    from flask import Response
+def return_response(body, mimetype="application/json", status=200) -> Response:
     return Response(
         response=body,
         status=status,
@@ -27,5 +27,5 @@ def return_response(body, mimetype="application/json", status=200):
     )
 
 
-def return_response_ok(body, mimetype="application/json"):
+def return_response_ok(body, mimetype="application/json") -> Response:
     return return_response(body, mimetype, 200)

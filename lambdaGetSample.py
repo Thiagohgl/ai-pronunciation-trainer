@@ -5,26 +5,44 @@ import pandas as pd
 
 import RuleBasedModels
 from constants import app_logger
+from typing_hints import Category
 
 
 class TextDataset:
-    def __init__(self, table, language):
+    """Sentences dataset."""
+    def __init__(self, table: pd.DataFrame, language: str):
         self.table_dataframe = table
         self.language = language
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> list[str]:
         line = [self.table_dataframe['sentence'].iloc[idx]]
         return line
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.table_dataframe)
 
-    def get_category_from_df(self, category_value:int):
+    def get_category_from_df(self, category_value:Category) -> pd.DataFrame:
+        """Filter the sentence dataframe by category returning
+
+        Args:
+            category_value (int): The category value to filter the dataframe.
+
+        Returns:
+            pd.DataFrame: The filtered dataframe.
+        """
         selector = self.table_dataframe["category"] == category_value
         df_by_category = self.table_dataframe[selector]
         return df_by_category
 
-    def get_random_sample_from_df(self, category_value:int):
+    def get_random_sample_from_df(self, category_value:Category) -> list[str]:
+        """Get a random sentence from the category filtered dataframe.
+
+        Args:
+            category_value (int): The category value to filter the dataframe.
+
+        Returns:
+            list: A list with the selected sentence.
+        """
         app_logger.info(f"language={self.language}, category_value={category_value}.")
         choice = self.table_dataframe.sample(n=1)
         if category_value !=0:
@@ -49,11 +67,11 @@ for lang in available_languages:
 lambda_translate_new_sample = False
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: dict[str], context) -> str:
     """
     lambda handler to return a random text sample from the dataset.
 
-    Parameters:
+    Args:
         event (dict): The event data passed to the Lambda function.
         context (dict): The context in which the Lambda function is called.
 
@@ -87,20 +105,20 @@ def lambda_handler(event, context):
         raise ex
 
 
-def get_random_selection(language: str, category: int) -> str:
+def get_random_selection(language: str, category_value: Category) -> str:
     """
     Get a random text sample from the dataset.
 
-    Parameters:
+    Args:
         language (str): The language code.
-        category (int): The category value to filter the dataset.
+        category_value (int): The category value to filter the dataset.
 
     Returns:
         str: The selected text sample.
     """
     lambda_df_lang = lambda_database[language]
-    current_transcript = lambda_df_lang.get_random_sample_from_df(category)
-    app_logger.info(f"category={category}, language={language}, current_transcript={current_transcript}.")
+    current_transcript = lambda_df_lang.get_random_sample_from_df(category_value)
+    app_logger.info(f"category_value={category_value}, language={language}, current_transcript={current_transcript}.")
     return current_transcript[0]
 
 
@@ -121,7 +139,7 @@ def get_enriched_dataframe_csv(
     """
     Read a csv dataframe adding a 'category' column.
 
-    Parameters:
+    Args:
         language (str): The language code (e.g. "de" for German).
         custom_dataframe_csv_filename_no_ext (str): The csv dataframe without extension.
         custom_folder (Path): The folder containing the csv dataframe.

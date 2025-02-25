@@ -4,6 +4,7 @@ import numpy as np
 
 
 class IASRModel(metaclass=abc.ABCMeta):
+    """Automatic Speech Recognition Model Interface"""
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'getTranscript') and
@@ -30,6 +31,7 @@ class IASRModel(metaclass=abc.ABCMeta):
 
 
 class ITranslationModel(metaclass=abc.ABCMeta):
+    """Translation model"""
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'translateSentence') and
@@ -42,6 +44,7 @@ class ITranslationModel(metaclass=abc.ABCMeta):
 
 
 class ITextToSpeechModel(metaclass=abc.ABCMeta):
+    """Text to Speech model"""
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'getAudioFromSentence') and
@@ -54,6 +57,7 @@ class ITextToSpeechModel(metaclass=abc.ABCMeta):
 
 
 class ITextToPhonemModel(metaclass=abc.ABCMeta):
+    """Text to Phonem model, needed to evaluate the correctness of speech pronunciation"""
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'convertToPhonem') and

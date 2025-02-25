@@ -8,7 +8,12 @@ from ModelInterfaces import IASRModel
 from constants import sample_rate_resample, app_logger
 
 
-def parse_word_info(word_info, sample_rate):
+def parse_word_info(word_info: dict, sample_rate: int) -> dict:
+    """Parse a word info object from WhisperModel into a dictionary with start and end timestamps.
+
+    Args:
+        word_info (dict): Word dictionary object
+    """
     word = word_info["word"]
     start_ts = float(word_info["start"]) * sample_rate
     end_ts = float(word_info["end"]) * sample_rate
@@ -16,6 +21,7 @@ def parse_word_info(word_info, sample_rate):
 
 
 class WhisperASRModel(IASRModel):
+    """Whisper ASR model wrapper class. This class is used to transcribe audio and store the transcript and word locations."""
     def __init__(self, model_name="base", language=None):
         self.asr = whisper.load_model(model_name)
         self._transcript = ""
@@ -24,6 +30,15 @@ class WhisperASRModel(IASRModel):
         self.language = language
 
     def processAudio(self, audio:Union[np.ndarray, torch.Tensor]):
+        """Transcribe audio and store the transcript and word locations updating self._transcript and self._word_locations,
+        get these values using getTranscript() and getWordLocations() respectively.
+
+        Args:
+            audio (np.ndarray or torch.Tensor): Audio samples to transcribe.
+
+        Returns:
+            None
+        """
         # 'audio' can be a path to a file or a numpy array of audio samples.
         if isinstance(audio, torch.Tensor):
             audio = audio.detach().cpu().numpy()
@@ -41,7 +56,9 @@ class WhisperASRModel(IASRModel):
             app_logger.info(f"elaborated segment {segment['id']}/{len_segments-1}: type={type(segment)}, len(words):{len(words)}, text:{segment['text']} #")
 
     def getTranscript(self) -> str:
+        """Get the transcript of the audio."""
         return self._transcript
 
-    def getWordLocations(self) -> list:
+    def getWordLocations(self) -> list[dict]:
+        """Get the word locations of the audio."""
         return self._word_locations
