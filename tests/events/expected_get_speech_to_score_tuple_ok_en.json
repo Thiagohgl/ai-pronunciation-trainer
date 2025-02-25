@@ -1,25 +1,11 @@
 {
   "real_transcripts": "Hi there, how are you?",
   "is_letter_correct_all_words": "11 111111 111 111 1111 ",
-  "pronunciation_accuracy": "100.00",
+  "pronunciation_accuracy": 100.0,
   "ipa_transcript": "ha\u026a \u00f0\u025br, ha\u028a \u0259r ju?",
   "real_transcripts_ipa": "ha\u026a \u00f0\u025br, ha\u028a \u0259r ju?",
   "num_words": 5,
   "dumped": {
-    "audio_files": [
-      "test2_en_easy__part0_start0.0_end0.19..wav",
-      "test2_en_easy__part1_start0.09_end0.35..wav",
-      "test2_en_easy__part2_start0.41_end0.63..wav",
-      "test2_en_easy__part3_start0.53_end0.75..wav",
-      "test2_en_easy__part4_start0.65_end0.91..wav"
-    ],
-    "audio_durations": [
-      0.19,
-      0.26,
-      0.22000000000000003,
-      0.21999999999999997,
-      0.26
-    ],
     "real_transcript": " Hi there, how are you?",
     "ipa_transcript": "ha\u026a \u00f0\u025br, ha\u028a \u0259r ju?",
     "pronunciation_accuracy": "100.00",

@@ -1,10 +1,13 @@
 import base64
 import json
-import os
 from pathlib import Path
 import tempfile
 import time
-from typing import Dict, Any, LiteralString
+from typing import Dict, Any
+try:
+    from typing import LiteralString
+except ImportError:
+    from typing_extensions import LiteralString
 
 import audioread
 import numpy as np
@@ -51,7 +54,8 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     output = get_speech_to_score_dict(
         real_text=real_text, file_bytes_or_audiotmpfile=file_bytes_or_audiotmpfile, language=language, use_dtw=use_dtw
     )
-    output["pronunciation_accuracy"] = f"{int(output["pronunciation_accuracy"])}"
+    pronunciation_accuracy = int(output["pronunciation_accuracy"])
+    output["pronunciation_accuracy"] = f"{pronunciation_accuracy}"
     output = json.dumps(output)
     app_logger.debug(f"output: {output} ...")
     return output
@@ -59,7 +63,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
 def get_speech_to_score_dict(
         real_text: str, file_bytes_or_audiotmpfile: str | bytes | dict, language: str = "en", extension: str = tmp_audio_extension, use_dtw: bool = False
-    ) -> Dict[str | Any, float | LiteralString | str | Any]:
+) -> Dict[str | Any, float | LiteralString | str | Any]:
     """
     Process the audio file and return a dictionary with speech-to-score results.
 
@@ -197,8 +201,8 @@ def get_speech_to_score_tuple(real_text: str, file_bytes_or_audiotmpfile: str | 
     del output["random_file_name"]
     real_transcripts = output['real_transcripts']
     is_letter_correct_all_words = output['is_letter_correct_all_words']
-    pronunciation_accuracy = f"{output["pronunciation_accuracy"]:.2f}"
-    output["pronunciation_accuracy"] = pronunciation_accuracy
+    pronunciation_accuracy = output['pronunciation_accuracy']
+    output["pronunciation_accuracy"] = f"{pronunciation_accuracy:.2f}"
     ipa_transcript = output['ipa_transcript']
     real_transcripts_ipa = output['real_transcripts_ipa']
     end_time = [float(x) for x in output['end_time'].split(" ")]

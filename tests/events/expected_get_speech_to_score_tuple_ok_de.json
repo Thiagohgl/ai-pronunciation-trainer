@@ -1,7 +1,7 @@
 {
   "real_transcripts": "Hallo, wie geht es dir?",
   "is_letter_correct_all_words": "111111 111 1111 11 1111 ",
-  "pronunciation_accuracy": "100.00",
+  "pronunciation_accuracy": 100.0,
   "ipa_transcript": " halo\u02d0, vi\u02d0 \u0261e\u02d0t \u025b\u02d0s di\u02d0r?",
   "real_transcripts_ipa": "halo\u02d0, vi\u02d0 \u0261e\u02d0t \u025b\u02d0s di\u02d0r?",
   "num_words": 5,
