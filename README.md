@@ -4,7 +4,7 @@ emoji: 🎤
 colorFrom: red
 colorTo: blue
 sdk: gradio
-sdk_version: 5.11.0
+sdk_version: 5.18.0
 app_file: app.py
 pinned: false
 license: mit
@@ -32,7 +32,7 @@ python webApp.py
 On Windows you can also use WSL2 to spin a Linux instance on your installation, then you don't need any particular requirements to work on it.
 You'll also need ffmpeg, which you can download from here <https://ffmpeg.org/download.html>. You can install it on base Windows using the command `winget install ffmpeg`, it may be needed to add the ffmpeg "bin" folder to your PATH environment variable. On Mac, you can also just run "brew install ffmpeg".
 
-You should be able to run it locally without any major issues as long as you’re using a recent python 3.X version.  
+You should be able to run it locally without any major issues as long as you’re using a recent python 3.X version.
 
 ## Changes on [trincadev's](https://github.com/trincadev/) [repository](https://github.com/trincadev/ai-pronunciation-trainer)
 
@@ -111,12 +111,10 @@ pnpm playwright test --workers 1 --retries 4 --project=chromium
 
 ### Unused classes and functions (now removed)
 
-- `aip_trainer.pronunciationTrainer.getWordsRelativeIntonation`
-- `aip_trainer.lambdas.lambdaTTS.*`
-- `aip_trainer.models.models.getTTSModel()`
-- `aip_trainer.models.models.getTranslationModel()`
-- `aip_trainer.models.AllModels.NeuralTTS`
-- `aip_trainer.models.AllModels.NeuralTranslator`
+- `models.getTTSModel()`
+- `pronunciationTrainer.getWordsRelativeIntonation()`
+- `WordMatching.get_best_mapped_words_dtw()`
+- `WordMatching.parseLetterErrorsToHTML()`
 
 ### DONE
 
@@ -130,33 +128,16 @@ pnpm playwright test --workers 1 --retries 4 --project=chromium
 - Only on the Gradio frontend version - it's possible to insert custom sentences to read and evaluate
 - Gradio frontend version - play the isolated words in the recordings, to compare the 'ideal' pronunciation with the learner pronunciation
 - Gradio frontend version - re-added the Text-to-Speech in-browser (it works only if there are installed the required language packages. In case of failures there is the backend Text-to-Speech feature)
+- Fixed a [bug](https://github.com/Thiagohgl/ai-pronunciation-trainer/issues/14) with [whisper](https://huggingface.co/docs/transformers/model_doc/whisper) not properly transcribing the end timestamp for the last word in the recorded audio (in the end I solved it switching to [whisper python pip package](https://pypi.org/project/openai-whisper/))
+- Added [faster whisper](https://pypi.org/project/faster-whisper/) model support:
+    - it avoid `None` values on `end_ts` timestamps for the last elements, unlike the HuggingFace Whisper's output
+    - it uses silero-vad to detect long silences within the audio
 
 ### TODO
 
 - improve documentation (especially function docstrings), backend tests
 - move from pytorch to onnxruntime (if possible)
-- add more e2e tests with playwright
-
-## Docker version
-
-Build the docker image this way (right now this version uses the old custom frontend with jQuery):
-
-```bash
-# clean any old active containers
-docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
-
-# build the base docker image
-docker build . -f dockerfiles/dockerfile-base --progress=plain -t registry.gitlab.com/aletrn/ai-pronunciation-trainer:0.5.0
-
-# build the final docker image
-docker build . --progress=plain --name 
-```
-
-Run the container (keep it on background) and show logs
-
-```bash
-docker run -d -p 3000:3000 --name aip-trainer aip-trainer;docker logs -f aip-trainer
-```
+- re-add the docker container (if possible)
 
 ## Motivation
 
