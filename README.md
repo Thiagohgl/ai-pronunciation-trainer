@@ -130,7 +130,7 @@ pnpm playwright test --workers 1 --retries 4 --project=chromium
 - Gradio frontend version - re-added the Text-to-Speech in-browser (it works only if there are installed the required language packages. In case of failures there is the backend Text-to-Speech feature)
 - Fixed a [bug](https://github.com/Thiagohgl/ai-pronunciation-trainer/issues/14) with [whisper](https://huggingface.co/docs/transformers/model_doc/whisper) not properly transcribing the end timestamp for the last word in the recorded audio (in the end I solved it switching to [whisper python pip package](https://pypi.org/project/openai-whisper/))
 - Added [faster whisper](https://pypi.org/project/faster-whisper/) model support:
-    - it avoid `None` values on `end_ts` timestamps for the last elements, unlike the HuggingFace Whisper's output
+    - it avoids `None` values on `end_ts` timestamps for the last elements, unlike the HuggingFace Whisper's output
     - it uses silero-vad to detect long silences within the audio
 
 ### TODO
