@@ -122,16 +122,15 @@ pnpm playwright test --workers 1 --retries 4 --project=chromium
 - Upgraded Speech-to-Text German [Silero](https://github.com/snakers4/silero-models) model that blocked the upgrade to PyTorch > 2.x
 - Upgraded PyTorch > 2.x
 - Improved backend tests with the [mutation test suite](https://en.wikipedia.org/wiki/Mutation_testing) [Cosmic Ray](https://cosmic-ray.readthedocs.io)
-- E2E [playwright](https://playwright.dev) tests
-- Added a new frontend based on [Gradio](https://gradio.app)
-- add an updated online version ([HuggingFace Space](https://huggingface.co/spaces/aletrn/ai-pronunciation-trainer))
-- Only on the Gradio frontend version - it's possible to insert custom sentences to read and evaluate
-- Gradio frontend version - play the isolated words in the recordings, to compare the 'ideal' pronunciation with the learner pronunciation
-- Gradio frontend version - re-added the Text-to-Speech in-browser (it works only if there are installed the required language packages. In case of failures there is the backend Text-to-Speech feature)
+- Added E2E [playwright](https://playwright.dev) tests
+- Added a new frontend based on [Gradio](https://gradio.app) with an updated online version ([HuggingFace Space](https://huggingface.co/spaces/aletrn/ai-pronunciation-trainer))
+- It's possible to insert custom sentences to read and evaluate
+- Play the isolated words in the recordings, to compare the 'ideal' pronunciation with the learner pronunciation
+- re-added the Text-to-Speech in-browser (it works only if there are installed the required language packages; in case of failures there is the backend Text-to-Speech feature - Gradio frontend version)
 - Fixed a [bug](https://github.com/Thiagohgl/ai-pronunciation-trainer/issues/14) with [whisper](https://huggingface.co/docs/transformers/model_doc/whisper) not properly transcribing the end timestamp for the last word in the recorded audio (in the end I solved it switching to [whisper python pip package](https://pypi.org/project/openai-whisper/))
 - Added [faster whisper](https://pypi.org/project/faster-whisper/) model support:
-    - it avoids `None` values on `end_ts` timestamps for the last elements, unlike the HuggingFace Whisper's output
-    - it uses silero-vad to detect long silences within the audio
+  - it avoids `None` values on `end_ts` timestamps for the last elements, unlike the HuggingFace Whisper's output
+  - it uses silero-vad to detect long silences within the audio
 
 ### TODO
 
