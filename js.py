@@ -95,10 +95,9 @@ function playAudio(text, language, sleepTime = 0) {
 """
 
 head_driver_tour = """
-<script src="https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.3.1/driver.js.iife.js" integrity="sha512-8EdV4D5VlQLX0dJFcdx6h/oJ/NanAIMlaViz57NDkhzwbQsxabgpFua0gzM4f5vdk60CfRAydhlbfbDThMfh3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.3.1/driver.css" integrity="sha512-jRsM62XMRl33ewZ0Si7yX6ANq+ZiWwUcvPk4H2DKr417W80rPMXzbD/towhs2YEoux/dfOuVRkLB+5Tfzmfolg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://cdn.jsdelivr.net/npm/driver.js@1.3.5/dist/driver.min.css" rel="stylesheet">
 <script type="module">
-const driver = window.driver.js.driver;
+import { driver } from 'https://cdn.jsdelivr.net/npm/driver.js@1.3.5/+esm'
 
 const driverSteps = [
     { element: "id-ai-pronunciation-trainer-gradio-app-container", popover: { title: "AI Pronunciation Trainer Gradio App", description: "A quick tour of the features of the Gradio app 'AI Pronunciation Trainer'." } },
@@ -110,6 +109,7 @@ const driverSteps = [
     { element: "#btn-clear-tts-backend-id-element", popover: { title: "Clear Text-to-Speech", description: "Clear the synthetic audio output of the text-to-speech synthesis." } },
     { element: ".speech-output-group", popover: { title: "Detailed Speech Accuracy Output", description: "Detailed output of speech accuracy, word by word." } },
     { element: "#id-replay-splitted-audio-by-words", popover: { title: "Replay Split Audio by Words", description: "Replay your recorded audio split into single words followed by the 'ideal' pronunciation spelled by the text-to-speech audio output for the same word." } },
+    { element: "#accordion-models-env-variables-id-element", popover: { title: "Environment variables in use now", description: "Show the environment variables in use right now (e.g. speech-to-text models, samplerate values, etc)." } },
 ];
 const driverObj = driver({
   showProgress: true,
