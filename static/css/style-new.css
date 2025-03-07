@@ -75,6 +75,12 @@ a.disabled {
 	white-space: normal;
 }
 
+#radio-difficulty {
+	position: fixed;
+	top: 95%;
+	left: 2%;
+}
+
 /* ############## Next button ##### */
 .button-next {
 	border-radius: 4px;
@@ -129,6 +135,9 @@ a.disabled {
 
 
 /* ############# Texts ##############  */
+#use-it-in-landscape {
+	display: none;
+}
 
 .main-text {
 	font-size: 2.5em;
@@ -156,6 +165,14 @@ a.disabled {
 	font-size: 2em;
 	margin-left: 2%;
 	left: 0%;
+}
+
+#pronunciation_accuracy {
+	color: black;
+	position: absolute;
+	top: 27%;
+	font-size: 2em;
+	left: -1%;
 }
 
 .main-text-div {
@@ -197,6 +214,20 @@ a.disabled {
 }
 
 /* ############# Icon Button ##############  */
+
+.playButton {
+	color:white;
+	text-align:center;
+	position: absolute;
+}
+
+#playRecordedAudio {
+	top: 2%;
+}
+#playRecordedAudio {
+	top: 15%;
+}
+/* color:white; text-align:center; position: absolute; top: 15%;  */
 
 .round-button {
 	box-sizing: border-box;
@@ -484,25 +515,27 @@ a.disabled {
 
 /* ######## Switch ############## */
 @media only screen and (max-width: 1200px) {
+	.main-container {
+		font-size: 0.75em;
+	}
+
+	.container-dtw-div {
+		font-size: 0.75em;
+	}
+
 	.round-button {
-		box-sizing: border-box;
-		display: block;
 		width: 2em;
 		/* 80px */
 		height: 2em;
-		left: -2.5%;
+		left: 1%;
 		padding-top: 0.3em;
-		padding-left: 0px;
-		line-height: 0px;
-		border: 6px solid #fff;
-		border-radius: 50%;
-		color: #f5f5f5;
-		text-align: center;
-		text-decoration: none;
-		background-color: #467387;
-		font-size: 1em;
-		font-weight: bold;
-		transition: all 0.3s ease;
+		padding-left: 0;
+		line-height: 0;
+		font-size: 1.2em;
+	}
+
+	.playButton {
+		font-size: 2em;
 	}
 
 	.container {
@@ -580,6 +613,10 @@ a.disabled {
 		font-size: 2.5em !important;
 	}
 
+	#pronunciation_accuracy {
+		left: -1%;
+	}
+
 	.accuracy-text {
 		font-family: "Dank Mono", ui-monospace, monospace;
 		background: linear-gradient(to right,
@@ -593,4 +630,57 @@ a.disabled {
 		font-size: 0.8em;
 	}
 
+}
+
+@media only screen and (max-width: 950px) and (max-aspect-ratio: 0.7) and (orientation: portrait) {
+	#use-it-in-landscape {
+		display: block;
+		background-color: #467387;
+		color: white;
+		font-size: 2em;
+	}
+}
+
+/* DON'T show the warning message on big devices in portrait mode */
+@media only screen and (min-height: 930px) and (max-aspect-ratio: 0.7) and (orientation: portrait) {
+	#use-it-in-landscape {
+		display: none;
+	}
+}
+@media only screen and (min-width: 930px) and (max-aspect-ratio: 0.7) and (orientation: portrait) {
+	#use-it-in-landscape {
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 950px) {
+	.container-dtw-div {
+		top: 80%;
+	}
+
+	.playButton {
+		font-size: 1.5em;
+	}
+
+	#pronunciation_accuracy {
+		margin-top: 4px;
+		font-size: 1.3em;
+		left: 0;
+	}
+
+	.main-text-div {
+		left: 14%;
+	}
+
+	#container-uploader-player-audio {
+		left: 27%;
+	}
+
+	#radio-difficulty {
+		top: 90%;
+	}
+
+	.credits-icon-div {
+		top: 88%;
+	}
 }
