@@ -131,6 +131,7 @@ pnpm playwright test --workers 1 --retries 4 --project=chromium
 - Added [faster whisper](https://pypi.org/project/faster-whisper/) model support:
   - it avoids `None` values on `end_ts` timestamps for the last elements, unlike the HuggingFace Whisper's output
   - it uses silero-vad to detect long silences within the audio
+- webApp frontend - improved css on mobile devices
 
 ### TODO
 
