@@ -19,6 +19,10 @@ You can try my [refactored version](https://github.com/trincadev/ai-pronunciatio
 
 My [HuggingFace Space](https://huggingface.co/spaces/aletrn/ai-pronunciation-trainer) is free of charge: for this reason is the less powerful version and the speech recognition could take some seconds.
 
+That's the custom webApp frontend refactored by me (currently I only support this for local execution):
+
+![](images/refactored_frontend.jpg)
+
 ## Installation
 
 To run the program locally, you need to install the requirements and run the main python file.
