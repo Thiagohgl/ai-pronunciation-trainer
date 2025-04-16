@@ -12,6 +12,10 @@ import numpy as np
 from torchaudio.transforms import Resample
 import io
 import tempfile
+import librosa 
+import shutil
+import torchaudio
+import torchaudio.transforms as T
 
 trainer_SST_lambda = {}
 trainer_SST_lambda['de'] = pronunciationTrainer.getTrainer("de")
@@ -41,21 +45,17 @@ def lambda_handler(event, context):
             'body': ''
         }
 
-    
     with tempfile.NamedTemporaryFile(suffix=".ogg", delete=True) as tmp:
         tmp.write(file_bytes)
         tmp.flush()
         tmp_name = tmp.name
-        signal, fs = audioread_load(tmp_name)
-    signal = transform(torch.Tensor(signal)).unsqueeze(0)
-
+        signal, sr = torchaudio.load(tmp_name)
+        if sr != 16000:
+            resampler = T.Resample(orig_freq=sr, new_freq=16000)
+            signal = resampler(signal)
 
     result = trainer_SST_lambda[language].processAudioForGivenText(
         signal, real_text)
-
-    #start = time.time()
-    #os.remove(random_file_name)
-    #print('Time for deleting file: ', str(time.time()-start))
 
     start = time.time()
     real_transcripts_ipa = ' '.join(
@@ -100,8 +100,15 @@ def lambda_handler(event, context):
     return json.dumps(res)
 
 
-
 def audioread_load(path, offset=0.0, duration=None, dtype=np.float32):
+
+    audio_data, sample_rate = audioread_load_original(path, offset, duration, dtype)
+    if sample_rate != 16000:
+        audio_data = librosa.resample(audio_data, orig_sr=sample_rate, target_sr=16000)
+        sample_rate = 16000    
+    return audio_data, sample_rate
+
+def audioread_load_original(path, offset=0.0, duration=None, dtype=np.float32):
     """Load an audio buffer using audioread.
 
     This loads one block at a time, and then concatenates the results.
@@ -155,8 +162,6 @@ def audioread_load(path, offset=0.0, duration=None, dtype=np.float32):
         y = np.empty(0, dtype=dtype)
 
     return y, sr_native
-
-# From Librosa
 
 
 def buf_to_float(x, n_bytes=2, dtype=np.float32):
