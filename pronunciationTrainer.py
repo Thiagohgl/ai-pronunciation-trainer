@@ -21,6 +21,8 @@ def getTrainer(language: str):
             epitran.Epitran('deu-Latn'))
     elif language == 'en':
         phonem_converter = RuleBasedModels.EngPhonemConverter()
+    elif language == 'ar':
+        phonem_converter = RuleBasedModels.EpitranPhonemConverter(epitran.Epitran('ara-Arab'))
     else:
         raise ValueError('Language not implemented')
 
