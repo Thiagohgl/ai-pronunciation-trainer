@@ -41,21 +41,25 @@ def lambda_handler(event, context):
             'body': ''
         }
 
-    
-    with tempfile.NamedTemporaryFile(suffix=".ogg", delete=True) as tmp:
+    tmp = tempfile.NamedTemporaryFile(suffix=".ogg", delete=False)
+    tmp_name = tmp.name
+
+    try:
         tmp.write(file_bytes)
         tmp.flush()
-        tmp_name = tmp.name
-        signal, fs = audioread_load(tmp_name)
-    signal = transform(torch.Tensor(signal)).unsqueeze(0)
 
+        tmp.close()
+
+        signal, fs = audioread_load(tmp_name)
+
+    finally:
+
+        os.remove(tmp_name)
+
+    signal = transform(torch.Tensor(signal)).unsqueeze(0)
 
     result = trainer_SST_lambda[language].processAudioForGivenText(
         signal, real_text)
-
-    #start = time.time()
-    #os.remove(random_file_name)
-    #print('Time for deleting file: ', str(time.time()-start))
 
     start = time.time()
     real_transcripts_ipa = ' '.join(
@@ -78,7 +82,7 @@ def lambda_handler(event, context):
             mapped_words[idx], word_real)
 
         is_letter_correct = wm.getWhichLettersWereTranscribedCorrectly(
-            word_real, mapped_letters)  # , mapped_letters_indices)
+            word_real, mapped_letters)
 
         is_letter_correct_all_words += ''.join([str(is_correct)
                                                 for is_correct in is_letter_correct]) + ' '
@@ -98,6 +102,7 @@ def lambda_handler(event, context):
            'is_letter_correct_all_words': is_letter_correct_all_words}
 
     return json.dumps(res)
+
 
 
 
