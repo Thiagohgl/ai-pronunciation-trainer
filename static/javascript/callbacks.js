@@ -251,7 +251,16 @@ const changeLanguage = (language, generateNewSample = false) => {
     AILanguage = language;
     languageFound = false;
     let languageIdentifier, languageName;
+    
+    // Set default text direction to rtl
+    document.getElementById("original_script").style["direction"] = "ltr";
+    document.getElementById("ipa_script").style["direction"] = "ltr";
+    document.getElementById("recorded_ipa_script").style["direction"] = "ltr";
+
+
+
     switch (language) {
+
         case 'de':
 
             document.getElementById("languageBox").innerHTML = "German";
@@ -264,6 +273,20 @@ const changeLanguage = (language, generateNewSample = false) => {
             document.getElementById("languageBox").innerHTML = "English";
             languageIdentifier = 'en';
             languageName = 'Daniel';
+            break;
+        
+        case 'ar':
+            document.getElementById("languageBox").innerHTML = "Arabic";
+            languageIdentifier = 'ar';
+            languageName = 'Hoda';
+
+            // Set text direction to rtl for Arabic
+            document.getElementById("original_script").style["direction"] = "rtl";
+            document.getElementById("ipa_script").style["direction"] = "rtl";
+            document.getElementById("recorded_ipa_script").style["direction"] = "rtl";
+
+
+
             break;
     };
 

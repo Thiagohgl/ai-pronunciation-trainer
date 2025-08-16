@@ -33,6 +33,14 @@ def getASRModel(language: str,use_whisper:bool=True) -> IASRModel:
                                                device=torch.device('cpu'))
         model.eval()
         return NeuralASR(model, decoder)
+    
+    elif language == 'ar':
+        model, decoder, utils = torch.hub.load(repo_or_dir='snakers4/silero-models',
+                                               model='silero_stt',
+                                               language='ar',
+                                               device=torch.device('cpu'))
+        model.eval()
+        return NeuralASR(model, decoder)
     else:
         raise ValueError('Language not implemented')
 
@@ -49,6 +57,12 @@ def getTTSModel(language: str) -> nn.Module:
 
     elif language == 'en':
         speaker = 'lj_16khz'  # 16 kHz
+        model = torch.hub.load(repo_or_dir='snakers4/silero-models',
+                               model='silero_tts',
+                               language=language,
+                               speaker=speaker)
+    elif language == 'ar':
+        speaker = 'ar_16khz'
         model = torch.hub.load(repo_or_dir='snakers4/silero-models',
                                model='silero_tts',
                                language=language,

@@ -63,6 +63,13 @@ class TestPhonemConverter(unittest.TestCase):
 
         self.assertTrue(check_phonem_converter(
             phonem_converter, 'Hallo, das ist ein Test', 'haloː, dɑːs ɪst ain tɛst'))
+        
+    def test_arabic(self):
+        phonem_converter = RuleBasedModels.EpitranPhonemConverter(
+            epitran.Epitran('ara-Arab'))
+
+        self.assertTrue(check_phonem_converter(
+            phonem_converter, 'مرحبا، هذا اختبار', 'mɑːrˤɑːbɑː, hɑːðɑː ɪkhtibɑːr'))
 
 
 trainer_SST_lambda = {}
